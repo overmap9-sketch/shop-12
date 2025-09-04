@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { AdminBulkUpdate } from '../../../src/app-pages/admin/BulkUpdate';
 import type { Metadata } from 'next';
