@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { PlaceholderPage } from '../../../src/app-pages/PlaceholderPage';
 import type { Metadata } from 'next';
