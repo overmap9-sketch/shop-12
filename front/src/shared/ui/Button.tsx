@@ -32,21 +32,18 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
   loading?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, loading, disabled, asChild = false, children, ...props }, ref) => {
-    const isSingleElementChild = React.isValidElement(children);
-    const useSlot = asChild && isSingleElementChild;
-    const Comp: any = useSlot ? Slot : 'button';
-    const compProps = useSlot
-      ? { ...props, 'aria-disabled': disabled || loading }
-      : { ...props, disabled: disabled || loading };
-
+  ({ className, variant, size, loading, disabled, children, ...props }, ref) => {
     return (
-      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...compProps}>
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={disabled || loading}
+        {...props}
+      >
         {loading && (
           <svg
             className="mr-2 h-4 w-4 animate-spin"
@@ -70,7 +67,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {children}
-      </Comp>
+      </button>
     );
   }
 );
