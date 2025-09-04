@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { ProductDetail } from '../../../../src/app-pages/product/ProductDetail';
 import type { Metadata } from 'next';
