@@ -73,8 +73,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const unreadNotifications = notifications.filter(n => n.unread).length;
 
   const isActiveRoute = (href: string, exact = false) => {
-    if (exact) return location.pathname === href;
-    return location.pathname.startsWith(href);
+    const pathname = location.pathname || '';
+    if (exact) return pathname === href;
+    return pathname.startsWith(href);
   };
 
   const handleLogout = () => {
