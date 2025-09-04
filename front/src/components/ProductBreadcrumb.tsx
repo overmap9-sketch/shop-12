@@ -56,11 +56,9 @@ export function ProductBreadcrumb({
         
         {/* Catalog */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/catalog">
-              {t('navigation.catalog', 'Catalog')}
-            </Link>
-          </BreadcrumbLink>
+          <Link to="/catalog" className="transition-colors hover:text-foreground">
+            {t('navigation.catalog', 'Catalog')}
+          </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         
@@ -146,11 +144,9 @@ export function CategoryBreadcrumb({
         
         {/* Catalog */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/catalog">
-              {t('navigation.catalog', 'Catalog')}
-            </Link>
-          </BreadcrumbLink>
+          <Link to="/catalog" className="transition-colors hover:text-foreground">
+            {t('navigation.catalog', 'Catalog')}
+          </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         
