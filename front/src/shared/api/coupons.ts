@@ -1,6 +1,5 @@
 import { Storage, STORAGE_KEYS } from '../lib/storage';
 import type { CartItem } from '../../entities';
-import { Storage, STORAGE_KEYS } from '../lib/storage';
 import { AuditAPI } from './audit';
 
 export type CouponType = 'percentage' | 'fixed';
