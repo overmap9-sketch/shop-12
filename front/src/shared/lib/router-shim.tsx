@@ -4,9 +4,9 @@ import NextLink from 'next/link';
 import { usePathname, useRouter, useSearchParams as useNextSearchParams, useParams as useNextParams } from 'next/navigation';
 
 // Link shim: supports `to` (react-router) and `href` (Next)
-export const Link = forwardRef<HTMLAnchorElement, React.ComponentProps<typeof NextLink> & { to?: string }>(
+export const Link = forwardRef<HTMLAnchorElement, Omit<React.ComponentProps<typeof NextLink>, 'href'> & { to?: string; href?: string }>(
   ({ to, href, ...props }, ref) => {
-    const finalHref = (to ?? (href as string)) || '/';
+    const finalHref = (to ?? href) || '/';
     // @ts-expect-error NextLink accepts ref
     return <NextLink ref={ref as any} href={finalHref} {...props} />;
   }
