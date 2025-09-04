@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Catalog } from '../../../src/app-pages/catalog/Catalog';
 import type { Metadata } from 'next';
