@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { AdminCoupons } from '../../../src/app-pages/admin/Coupons';
 import type { Metadata } from 'next';
