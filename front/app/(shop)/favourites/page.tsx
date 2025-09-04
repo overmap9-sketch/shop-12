@@ -1,5 +1,5 @@
 import React from 'react';
-import { Favourites } from '../../../src/pages/favourites/Favourites';
+import { Favourites } from '../../../src/app-pages/favourites/Favourites';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
