@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { AdminProducts } from '../../../src/app-pages/admin/Products';
 import type { Metadata } from 'next';
