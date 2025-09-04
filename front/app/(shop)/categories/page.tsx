@@ -1,5 +1,5 @@
 import React from 'react';
-import { Categories } from '../../../src/pages/categories/Categories';
+import { Categories } from '../../../src/app-pages/categories/Categories';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
