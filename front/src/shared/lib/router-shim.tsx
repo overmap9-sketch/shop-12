@@ -89,3 +89,11 @@ export function BrowserRouter({ children }: { children: React.ReactNode }) {
 export function Outlet() {
   return null;
 }
+
+// Routes and Route shims for compatibility
+export function Routes({ children }: { children?: React.ReactNode }) {
+  return <>{children}</>;
+}
+export function Route(_: any) {
+  return null;
+}
