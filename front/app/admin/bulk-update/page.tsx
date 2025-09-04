@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminBulkUpdate } from '../../../src/pages/admin/BulkUpdate';
+import { AdminBulkUpdate } from '../../../src/app-pages/admin/BulkUpdate';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
