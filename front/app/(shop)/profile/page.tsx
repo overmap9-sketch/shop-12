@@ -1,5 +1,5 @@
 import React from 'react';
-import { Profile } from '../../../src/pages/profile/Profile';
+import { Profile } from '../../../src/app-pages/profile/Profile';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
