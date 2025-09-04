@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Favourites } from '../../../src/app-pages/favourites/Favourites';
 import type { Metadata } from 'next';
