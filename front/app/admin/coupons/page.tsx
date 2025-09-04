@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminCoupons } from '../../../src/pages/admin/Coupons';
+import { AdminCoupons } from '../../../src/app-pages/admin/Coupons';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
