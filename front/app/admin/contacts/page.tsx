@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { AdminContacts } from '../../../src/app-pages/admin/Contacts';
 import type { Metadata } from 'next';
