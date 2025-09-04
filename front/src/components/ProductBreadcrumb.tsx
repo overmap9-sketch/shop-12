@@ -45,12 +45,10 @@ export function ProductBreadcrumb({
         {includeHome && (
           <>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">
-                  <Home className="h-4 w-4" />
-                  <span className="sr-only">{t('navigation.home', 'Home')}</span>
-                </Link>
-              </BreadcrumbLink>
+              <Link to="/" className="transition-colors hover:text-foreground inline-flex items-center gap-1">
+                <Home className="h-4 w-4" />
+                <span className="sr-only">{t('navigation.home', 'Home')}</span>
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
           </>
@@ -137,12 +135,10 @@ export function CategoryBreadcrumb({
         {includeHome && (
           <>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">
-                  <Home className="h-4 w-4" />
-                  <span className="sr-only">{t('navigation.home', 'Home')}</span>
-                </Link>
-              </BreadcrumbLink>
+              <Link to="/" className="transition-colors hover:text-foreground inline-flex items-center gap-1">
+                <Home className="h-4 w-4" />
+                <span className="sr-only">{t('navigation.home', 'Home')}</span>
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
           </>
