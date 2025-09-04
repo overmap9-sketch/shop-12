@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminContacts } from '../../../src/pages/admin/Contacts';
+import { AdminContacts } from '../../../src/app-pages/admin/Contacts';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
