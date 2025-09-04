@@ -1,5 +1,5 @@
 import React from 'react';
-import { Login } from '../../../src/pages/auth/Login';
+import { Login } from '../../../src/app-pages/auth/Login';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
