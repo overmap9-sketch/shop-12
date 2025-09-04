@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Home } from '../../src/app-pages/home/Home';
 import type { Metadata } from 'next';
