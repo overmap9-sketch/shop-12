@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { Button } from "../shared/ui/Button";
+import { buttonVariants } from "../shared/ui/Button";
 
 const NotFound = () => {
   const location = useLocation();
@@ -28,9 +28,9 @@ const NotFound = () => {
         </p>
 
         <div className="space-y-4">
-          <Button size="lg" asChild>
-            <Link to="/">Return to Home</Link>
-          </Button>
+          <Link to="/" className={buttonVariants({ size: 'lg' })}>
+            Return to Home
+          </Link>
 
           <div className="text-sm text-foreground-subtle">
             <p>If you believe this is an error, please contact support.</p>
