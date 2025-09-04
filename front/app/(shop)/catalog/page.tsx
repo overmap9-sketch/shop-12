@@ -1,5 +1,5 @@
 import React from 'react';
-import { Catalog } from '../../../src/pages/catalog/Catalog';
+import { Catalog } from '../../../src/app-pages/catalog/Catalog';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
