@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { Categories } from '../../../src/app-pages/categories/Categories';
 import type { Metadata } from 'next';
