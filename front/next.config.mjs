@@ -9,6 +9,8 @@ const nextConfig = {
   webpack: (config) => {
     // Align with tsconfig paths: "@/*" -> repo root
     config.resolve.alias['@'] = path.resolve(__dirname, '..');
+    // Shim react-router-dom to Next navigation for migration
+    config.resolve.alias['react-router-dom'] = path.resolve(__dirname, 'src/shared/lib/router-shim.tsx');
     return config;
   },
 };
