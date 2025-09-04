@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="520" viewBox="0 0 980 520">
+  <defs>
+    <style>
+      .box{fill:#ffffff;stroke:#1f2937;stroke-width:2;rx:8;ry:8}
+      .title{font:bold 14px sans-serif;fill:#111827}
+      .text{font:12px sans-serif;fill:#374151}
+      .arrow{stroke:#6b7280;stroke-width:2;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- Client -->
+  <rect class="box" x="60" y="40" width="280" height="90"/>
+  <text class="title" x="80" y="66">Client Browser</text>
+  <text class="text" x="80" y="90">SPA Runtime, Cache, Cookies</text>
+
+  <!-- UI -->
+  <rect class="box" x="60" y="170" width="380" height="160"/>
+  <text class="title" x="80" y="196">React UI (TypeScript)</text>
+  <text class="text" x="80" y="220">Tailwind + shadcn/ui</text>
+  <text class="text" x="80" y="240">Routing: React Router v6</text>
+  <text class="text" x="80" y="260">i18next (en, es)</text>
+  <text class="text" x="80" y="280">Widgets/Pages/Shared UI</text>
+
+  <!-- State -->
+  <rect class="box" x="470" y="170" width="200" height="160"/>
+  <text class="title" x="490" y="196">State: Redux Toolkit</text>
+  <text class="text" x="490" y="220">features/*Slice.ts</text>
+  <text class="text" x="490" y="240">cart, auth, catalog, currency</text>
+
+  <!-- API Layer -->
+  <rect class="box" x="700" y="160" width="220" height="180"/>
+  <text class="title" x="720" y="186">API Layer (shared/api)</text>
+  <text class="text" x="720" y="210">Products, Categories, Cart</text>
+  <text class="text" x="720" y="230">Settings, Coupons, Audit</text>
+  <text class="text" x="720" y="250">Mock delay, validation</text>
+
+  <!-- Storage -->
+  <rect class="box" x="700" y="380" width="220" height="110"/>
+  <text class="title" x="720" y="406">Storage: localStorage</text>
+  <text class="text" x="720" y="430">shared/lib/storage.ts</text>
+  <text class="text" x="720" y="450">STORAGE_KEYS.*</text>
+
+  <!-- Admin -->
+  <rect class="box" x="60" y="360" width="380" height="130"/>
+  <text class="title" x="80" y="386">Admin App (/admin)</text>
+  <text class="text" x="80" y="410">RBAC (shared/lib/permissions)</text>
+  <text class="text" x="80" y="430">ProtectedAdminRoute</text>
+  <text class="text" x="80" y="450">Dashboard, Products, Orders, Settings…</text>
+
+  <!-- Arrows -->
+  <line class="arrow" x1="340" y1="85" x2="460" y2="200"/>
+  <line class="arrow" x1="250" y1="250" x2="470" y2="250"/>
+  <line class="arrow" x1="670" y1="250" x2="700" y2="250"/>
+  <line class="arrow" x1="810" y1="340" x2="810" y2="380"/>
+  <line class="arrow" x1="250" y1="425" x2="700" y2="430"/>
+
+  <!-- Future backend box -->
+  <rect class="box" x="470" y="20" width="450" height="90" fill="#f9fafb"/>
+  <text class="title" x="490" y="46">Future Backend (optional)</text>
+  <text class="text" x="490" y="70">REST/GraphQL, DB (Neon/Supabase), Auth, Payments</text>
+  <line class="arrow" x1="700" y1="110" x2="810" y2="160"/>
+</svg>

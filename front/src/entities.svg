@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <defs>
+    <style>
+      .box{fill:#ffffff;stroke:#1f2937;stroke-width:2;rx:8;ry:8}
+      .title{font:bold 14px sans-serif;fill:#111827}
+      .text{font:12px sans-serif;fill:#374151}
+      .arrow{stroke:#6b7280;stroke-width:2;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- Category -->
+  <rect class="box" x="60" y="60" width="220" height="120"/>
+  <text class="title" x="80" y="86">Category</text>
+  <text class="text" x="80" y="110">id, slug, name</text>
+  <text class="text" x="80" y="130">parentId?, productCount</text>
+
+  <!-- Product -->
+  <rect class="box" x="340" y="40" width="260" height="160"/>
+  <text class="title" x="360" y="66">Product</text>
+  <text class="text" x="360" y="90">id, slug, title, price, currency</text>
+  <text class="text" x="360" y="110">category, tags[], stock, status</text>
+  <text class="text" x="360" y="130">features[], specifications{}</text>
+  <text class="text" x="360" y="150">isNew, isFeatured, isOnSale</text>
+
+  <!-- User -->
+  <rect class="box" x="660" y="40" width="240" height="160"/>
+  <text class="title" x="680" y="66">User</text>
+  <text class="text" x="680" y="90">id, email, role, permissions[]</text>
+  <text class="text" x="680" y="110">preferences, addresses[]</text>
+  <text class="text" x="680" y="130">isEmailVerified, isPhoneVerified</text>
+
+  <!-- Cart -->
+  <rect class="box" x="340" y="260" width="240" height="120"/>
+  <text class="title" x="360" y="286">Cart</text>
+  <text class="text" x="360" y="310">id, userId?, items[], totals</text>
+
+  <!-- CartItem -->
+  <rect class="box" x="640" y="260" width="220" height="120"/>
+  <text class="title" x="660" y="286">CartItem</text>
+  <text class="text" x="660" y="310">id, productId, product, qty, price</text>
+
+  <!-- Order -->
+  <rect class="box" x="60" y="250" width="240" height="160"/>
+  <text class="title" x="80" y="276">Order</text>
+  <text class="text" x="80" y="300">id, userId, number, status</text>
+  <text class="text" x="80" y="320">items[], totals, currency</text>
+  <text class="text" x="80" y="340">shipping/billing, payment</text>
+
+  <!-- Coupon -->
+  <rect class="box" x="920" y="60" width="140" height="120"/>
+  <text class="title" x="940" y="86">Coupon</text>
+  <text class="text" x="940" y="110">code, type, value</text>
+  <text class="text" x="940" y="130">appliesTo, limits</text>
+
+  <!-- Settings -->
+  <rect class="box" x="60" y="470" width="300" height="140"/>
+  <text class="title" x="80" y="496">AdminSettings</text>
+  <text class="text" x="80" y="520">banners[], contacts, shipping</text>
+
+  <!-- Audit -->
+  <rect class="box" x="400" y="470" width="240" height="140"/>
+  <text class="title" x="420" y="496">AuditLog</text>
+  <text class="text" x="420" y="520">id, timestamp, userId/email</text>
+  <text class="text" x="420" y="540">action, entity, before/after</text>
+
+  <!-- Relations -->
+  <line class="arrow" x1="280" y1="120" x2="340" y2="120"/>
+  <text class="text" x="290" y="110">1..*</text>
+
+  <line class="arrow" x1="580" y1="300" x2="640" y2="300"/>
+  <text class="text" x="590" y="290">1..*</text>
+
+  <line class="arrow" x1="300" y1="320" x2="340" y2="320"/>
+  <text class="text" x="305" y="310">1..1</text>
+
+  <line class="arrow" x1="180" y1="200" x2="180" y2="250"/>
+  <text class="text" x="190" y="230">User 1..* Orders</text>
+
+  <line class="arrow" x1="880" y1="120" x2="920" y2="120"/>
+  <text class="text" x="860" y="110">applies</text>
+
+  <line class="arrow" x1="520" y1="470" x2="520" y2="420"/>
+  <text class="text" x="530" y="450">audit</text>
+</svg>

@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * Updated to use our custom theme variables
+  */
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-foreground);
+
+    --card: var(--color-card);
+    --card-foreground: var(--color-card-foreground);
+
+    --popover: var(--color-popover);
+    --popover-foreground: var(--color-popover-foreground);
+
+    --primary: var(--color-primary);
+    --primary-foreground: var(--color-primary-foreground);
+
+    --secondary: var(--color-secondary);
+    --secondary-foreground: var(--color-secondary-foreground);
+
+    --muted: var(--color-muted);
+    --muted-foreground: var(--color-muted-foreground);
+
+    --accent: var(--color-accent);
+    --accent-foreground: var(--color-accent-foreground);
+
+    --destructive: var(--color-error);
+    --destructive-foreground: var(--color-error-foreground);
+
+    --border: var(--color-border);
+    --input: var(--color-input);
+    --ring: var(--color-ring);
+
+    --radius: var(--radius);
+
+    /* Sidebar variables for compatibility */
+    --sidebar-background: var(--color-surface);
+    --sidebar-foreground: var(--color-foreground);
+    --sidebar-primary: var(--color-primary);
+    --sidebar-primary-foreground: var(--color-primary-foreground);
+    --sidebar-accent: var(--color-accent);
+    --sidebar-accent-foreground: var(--color-accent-foreground);
+    --sidebar-border: var(--color-border);
+    --sidebar-ring: var(--color-ring);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: var(--font-family-sans);
+  }
+
+  /* Custom utilities for theme colors */
+  .bg-surface {
+    background-color: hsl(var(--color-surface));
+  }
+
+  .bg-surface-alt {
+    background-color: hsl(var(--color-surface-alt));
+  }
+
+  .text-foreground-muted {
+    color: hsl(var(--color-foreground-muted));
+  }
+
+  .text-foreground-subtle {
+    color: hsl(var(--color-foreground-subtle));
+  }
+
+  .border-border-hover {
+    border-color: hsl(var(--color-border-hover));
+  }
+
+  /* Custom utility classes */
+  .shadow-theme-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .shadow-theme-base {
+    box-shadow: var(--shadow-base);
+  }
+
+  .shadow-theme-md {
+    box-shadow: var(--shadow-md);
+  }
+
+  .shadow-theme-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .shadow-theme-xl {
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Smooth transitions */
+  .transition-theme {
+    transition: all var(--transition-base);
+  }
+
+  .transition-theme-fast {
+    transition: all var(--transition-fast);
+  }
+
+  .transition-theme-slow {
+    transition: all var(--transition-slow);
+  }
+}
+
+/* Skeleton loading animation */
+@layer utilities {
+  .skeleton {
+    @apply animate-pulse bg-muted rounded;
+  }
+
+  .skeleton-text {
+    @apply skeleton h-4 w-full;
+  }
+
+  .skeleton-title {
+    @apply skeleton h-6 w-3/4;
+  }
+
+  .skeleton-button {
+    @apply skeleton h-10 w-24;
+  }
+
+  .skeleton-avatar {
+    @apply skeleton h-10 w-10 rounded-full;
+  }
+
+  .skeleton-image {
+    @apply skeleton aspect-square w-full;
+  }
+
+  /* Animation utilities */
+  .animate-in {
+    animation: animate-in 200ms ease-out;
+  }
+
+  .fade-in {
+    animation: fade-in 200ms ease-out;
+  }
+
+  .slide-in-from-top-2 {
+    animation: slide-in-from-top-2 200ms ease-out;
+  }
+
+  /* Text truncation */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@keyframes animate-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-from-top-2 {
+  from {
+    transform: translateY(-8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
