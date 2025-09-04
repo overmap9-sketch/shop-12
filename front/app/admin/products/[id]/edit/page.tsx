@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { ProductForm as AdminProductForm } from '../../../../../src/app-pages/admin/ProductForm';
 import type { Metadata } from 'next';
