@@ -64,11 +64,9 @@ export function ProductBreadcrumb({
         
         {/* Main Category */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to={`/catalog?category=${product.category}`}>
-              {mainCategory?.name || product.category}
-            </Link>
-          </BreadcrumbLink>
+          <Link to={`/catalog?category=${product.category}`} className="transition-colors hover:text-foreground">
+            {mainCategory?.name || product.category}
+          </Link>
         </BreadcrumbItem>
         
         {/* Subcategory */}
@@ -76,11 +74,9 @@ export function ProductBreadcrumb({
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={`/catalog?category=${product.category}&subcategory=${product.subcategory}`}>
-                  {subcategory.name}
-                </Link>
-              </BreadcrumbLink>
+              <Link to={`/catalog?category=${product.category}&subcategory=${product.subcategory}`} className="transition-colors hover:text-foreground">
+                {subcategory.name}
+              </Link>
             </BreadcrumbItem>
           </>
         )}
@@ -153,11 +149,9 @@ export function CategoryBreadcrumb({
         {/* Main Category */}
         <BreadcrumbItem>
           {subcategory ? (
-            <BreadcrumbLink asChild>
-              <Link to={`/catalog?category=${categorySlug}`}>
-                {mainCategory?.name || categorySlug}
-              </Link>
-            </BreadcrumbLink>
+            <Link to={`/catalog?category=${categorySlug}`} className="transition-colors hover:text-foreground">
+              {mainCategory?.name || categorySlug}
+            </Link>
           ) : (
             <BreadcrumbPage>
               {mainCategory?.name || categorySlug}
