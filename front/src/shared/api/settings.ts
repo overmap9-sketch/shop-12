@@ -1,6 +1,5 @@
 import { Storage, STORAGE_KEYS } from '../lib/storage';
 import { ImageUploadAPI } from './images';
-import { Storage, STORAGE_KEYS } from '../lib/storage';
 import { AuditAPI } from './audit';
 
 export type BannerPlacement = 'home' | 'catalog' | 'all';
