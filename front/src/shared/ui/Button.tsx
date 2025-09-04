@@ -39,8 +39,10 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, loading, disabled, asChild = false, children, ...props }, ref) => {
-    const Comp: any = asChild ? Slot : 'button';
-    const compProps = asChild
+    const isSingleElementChild = React.isValidElement(children);
+    const useSlot = asChild && isSingleElementChild;
+    const Comp: any = useSlot ? Slot : 'button';
+    const compProps = useSlot
       ? { ...props, 'aria-disabled': disabled || loading }
       : { ...props, disabled: disabled || loading };
 
