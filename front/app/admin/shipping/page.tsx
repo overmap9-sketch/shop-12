@@ -1,3 +1,4 @@
+"use client";
 import React from 'react';
 import { AdminShipping } from '../../../src/app-pages/admin/Shipping';
 import type { Metadata } from 'next';
