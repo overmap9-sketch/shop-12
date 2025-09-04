@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdminShipping } from '../../../src/pages/admin/Shipping';
+import { AdminShipping } from '../../../src/app-pages/admin/Shipping';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
