@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '../../shared/lib/utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,10 @@ export function Header() {
   const favouritesCount = useAppSelector(selectFavouritesCount);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectUser);
-  
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSearch = (query: string) => {
@@ -102,7 +105,7 @@ export function Header() {
             </Link>
 
             {/* User menu */}
-            {isAuthenticated && user ? (
+            {mounted && isAuthenticated && user ? (
               <div className="relative">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
