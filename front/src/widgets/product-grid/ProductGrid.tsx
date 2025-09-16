@@ -25,6 +25,7 @@ export function ProductGrid({
   viewMode = 'grid'
 }: ProductGridProps) {
   const dispatch = useAppDispatch();
+  const favouriteIds = useAppSelector(state => new Set((state as any).favourites.items.map((i: any) => i.productId)));
 
   const handleAddToCart = async (productId: string) => {
     try {
@@ -98,7 +99,7 @@ export function ProductGrid({
           );
         }
 
-        const isFavourite = useAppSelector(selectIsFavourite(product.id));
+        const isFavourite = favouriteIds.has(product.id);
 
         return (
           <ProductCard
@@ -118,13 +119,14 @@ export function ProductGrid({
 
 // Responsive product grid that adapts to screen size
 export function ResponsiveProductGrid({ products, loading }: { products: Product[]; loading?: boolean }) {
+  const dispatch = useAppDispatch();
+  const favouriteIds = useAppSelector(state => new Set((state as any).favourites.items.map((i: any) => i.productId)));
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6">
       {loading
         ? Array.from({ length: 10 }, (_, index) => <ProductCardSkeleton key={index} />)
         : products.map((product) => {
-            const dispatch = useAppDispatch();
-            const isFavourite = useAppSelector(selectIsFavourite(product.id));
+            const isFavourite = favouriteIds.has(product.id);
             
             return (
               <ProductCard
