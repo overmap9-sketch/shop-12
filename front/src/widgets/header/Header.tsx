@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '../../shared/lib/utils';
+import { Logo } from '../../components/logo/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
@@ -53,12 +54,7 @@ export function Header() {
         {/* Main header */}
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">P</span>
-            </div>
-            <span className="text-xl font-bold text-foreground">PaintHub</span>
-          </Link>
+          <Logo />
 
           {/* Search */}
           <div className="flex-1 max-w-2xl mx-8">
