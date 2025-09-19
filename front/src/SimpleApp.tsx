@@ -5,7 +5,7 @@ function SimpleApp() {
   
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1 style={{ color: '#007bff' }}>🎉 EcoShop eCommerce App</h1>
+      <h1 style={{ color: '#007bff' }}>🎉 PaintHub eCommerce App</h1>
       <p>The app is working! This is a simple test render.</p>
       <div style={{ background: '#f8f9fa', padding: '15px', marginTop: '20px', borderRadius: '8px' }}>
         <p><strong>✅ App Status:</strong> Successfully loaded and rendering</p>
