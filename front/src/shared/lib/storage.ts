@@ -2,8 +2,11 @@
  * LocalStorage utilities for type-safe storage operations
  */
 
+const isBrowser = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
 export class Storage {
   static get<T>(key: string, defaultValue?: T): T | null {
+    if (!isBrowser) return defaultValue || null;
     try {
       const item = localStorage.getItem(key);
       if (item === null) {
@@ -17,6 +20,7 @@ export class Storage {
   }
 
   static set<T>(key: string, value: T): void {
+    if (!isBrowser) return;
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
@@ -25,6 +29,7 @@ export class Storage {
   }
 
   static remove(key: string): void {
+    if (!isBrowser) return;
     try {
       localStorage.removeItem(key);
     } catch (error) {
@@ -33,6 +38,7 @@ export class Storage {
   }
 
   static clear(): void {
+    if (!isBrowser) return;
     try {
       localStorage.clear();
     } catch (error) {

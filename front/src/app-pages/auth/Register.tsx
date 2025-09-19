@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { register, selectAuthLoading, selectAuthError, clearError } from '../../features/auth/authSlice';
 import { Button } from '../../shared/ui/Button';
 import { NotificationService } from '../../shared/lib/notifications';
+import { Logo } from '../../components/logo/Logo';
 
 export function Register() {
   const { t } = useTranslation();
@@ -115,12 +116,7 @@ export function Register() {
       <div className="max-w-md w-full space-y-8">
         {/* Header */}
         <div className="text-center">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">E</span>
-            </div>
-            <span className="text-2xl font-bold text-foreground">EcoShop</span>
-          </Link>
+          <Logo className="mb-6" size="lg" />
           
           <h2 className="text-3xl font-bold text-foreground mb-2">
             {t('auth.createAccount')}

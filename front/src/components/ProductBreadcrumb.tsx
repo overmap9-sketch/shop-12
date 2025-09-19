@@ -45,12 +45,10 @@ export function ProductBreadcrumb({
         {includeHome && (
           <>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">
-                  <Home className="h-4 w-4" />
-                  <span className="sr-only">{t('navigation.home', 'Home')}</span>
-                </Link>
-              </BreadcrumbLink>
+              <Link to="/" className="transition-colors hover:text-foreground inline-flex items-center gap-1">
+                <Home className="h-4 w-4" />
+                <span className="sr-only">{t('navigation.home', 'Home')}</span>
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
           </>
@@ -58,21 +56,17 @@ export function ProductBreadcrumb({
         
         {/* Catalog */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/catalog">
-              {t('navigation.catalog', 'Catalog')}
-            </Link>
-          </BreadcrumbLink>
+          <Link to="/catalog" className="transition-colors hover:text-foreground">
+            {t('navigation.catalog', 'Catalog')}
+          </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         
         {/* Main Category */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to={`/catalog?category=${product.category}`}>
-              {mainCategory?.name || product.category}
-            </Link>
-          </BreadcrumbLink>
+          <Link to={`/catalog?category=${product.category}`} className="transition-colors hover:text-foreground">
+            {mainCategory?.name || product.category}
+          </Link>
         </BreadcrumbItem>
         
         {/* Subcategory */}
@@ -80,11 +74,9 @@ export function ProductBreadcrumb({
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={`/catalog?category=${product.category}&subcategory=${product.subcategory}`}>
-                  {subcategory.name}
-                </Link>
-              </BreadcrumbLink>
+              <Link to={`/catalog?category=${product.category}&subcategory=${product.subcategory}`} className="transition-colors hover:text-foreground">
+                {subcategory.name}
+              </Link>
             </BreadcrumbItem>
           </>
         )}
@@ -137,12 +129,10 @@ export function CategoryBreadcrumb({
         {includeHome && (
           <>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">
-                  <Home className="h-4 w-4" />
-                  <span className="sr-only">{t('navigation.home', 'Home')}</span>
-                </Link>
-              </BreadcrumbLink>
+              <Link to="/" className="transition-colors hover:text-foreground inline-flex items-center gap-1">
+                <Home className="h-4 w-4" />
+                <span className="sr-only">{t('navigation.home', 'Home')}</span>
+              </Link>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
           </>
@@ -150,22 +140,18 @@ export function CategoryBreadcrumb({
         
         {/* Catalog */}
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/catalog">
-              {t('navigation.catalog', 'Catalog')}
-            </Link>
-          </BreadcrumbLink>
+          <Link to="/catalog" className="transition-colors hover:text-foreground">
+            {t('navigation.catalog', 'Catalog')}
+          </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         
         {/* Main Category */}
         <BreadcrumbItem>
           {subcategory ? (
-            <BreadcrumbLink asChild>
-              <Link to={`/catalog?category=${categorySlug}`}>
-                {mainCategory?.name || categorySlug}
-              </Link>
-            </BreadcrumbLink>
+            <Link to={`/catalog?category=${categorySlug}`} className="transition-colors hover:text-foreground">
+              {mainCategory?.name || categorySlug}
+            </Link>
           ) : (
             <BreadcrumbPage>
               {mainCategory?.name || categorySlug}

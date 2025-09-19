@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { cn } from '../../shared/lib/utils';
+import { Logo } from '../../components/logo/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
@@ -7,7 +9,7 @@ import { selectFavouritesCount } from '../../features/favourites/favouritesSlice
 import { selectIsAuthenticated, selectUser, logout } from '../../features/auth/authSlice';
 import { SearchInput } from '../../shared/ui/SearchInput';
 import { NotificationService } from '../../shared/lib/notifications';
-import { Button } from '../../shared/ui/Button';
+import { buttonVariants } from '../../shared/ui/Button';
 import { LanguageSwitcherDropdown } from '../../features/lang-switcher/LanguageSwitcher';
 import { ThemeSwitcher } from '../../features/theme-switcher/ThemeSwitcher';
 import { CurrencySwitcher } from '../../features/currency/CurrencySwitcher';
@@ -21,7 +23,10 @@ export function Header() {
   const favouritesCount = useAppSelector(selectFavouritesCount);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const user = useAppSelector(selectUser);
-  
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSearch = (query: string) => {
@@ -49,12 +54,7 @@ export function Header() {
         {/* Main header */}
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">P</span>
-            </div>
-            <span className="text-xl font-bold text-foreground">PaintHub</span>
-          </Link>
+          <Logo />
 
           {/* Search */}
           <div className="flex-1 max-w-2xl mx-8">
@@ -101,7 +101,7 @@ export function Header() {
             </Link>
 
             {/* User menu */}
-            {isAuthenticated && user ? (
+            {mounted && isAuthenticated && user ? (
               <div className="relative">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -159,12 +159,18 @@ export function Header() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link to="/login">{t('navigation.login')}</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link to="/register">{t('navigation.register')}</Link>
-                </Button>
+                <Link
+                  to="/login"
+                  className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+                >
+                  {t('navigation.login')}
+                </Link>
+                <Link
+                  to="/register"
+                  className={buttonVariants({ size: 'sm' })}
+                >
+                  {t('navigation.register')}
+                </Link>
               </div>
             )}
           </div>

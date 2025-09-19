@@ -2,32 +2,59 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
-
-
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-
-
+    "jsx": "preserve",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
-
     "baseUrl": "..",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": [
+        "./*"
+      ],
+      "react-router-dom": [
+        "./front/src/shared/lib/router-shim.tsx"
+      ]
+    },
+    "allowJs": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["src", "*.ts", "*.tsx",
-    "vite-env.d.ts"
+  "include": [
+    "app",
+    "src",
+    "*.ts",
+    "*.tsx",
+    "vite-env.d.ts",
+    ".next/types/**/*.ts"
   ],
-  "references": [{ "path": "./tsconfig.node.json"}]
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "exclude": [
+    "node_modules",
+    "src/App.tsx",
+    "src/AdminApp.tsx",
+    "src/AdminMain.tsx",
+    "src/main.tsx"
+  ]
 }

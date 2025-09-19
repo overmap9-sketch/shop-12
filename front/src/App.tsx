@@ -55,9 +55,6 @@ function App() {
     dispatch(initializeTheme());
 
     // Initialize mock data with a slight delay to avoid blocking initial render
-    setTimeout(() => {
-      initializeMockData();
-    }, 100);
 
     // Initialize Redux state after mock data is ready
     setTimeout(() => {
