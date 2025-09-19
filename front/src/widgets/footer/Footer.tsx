@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Logo } from '../../components/logo/Logo';
 
 export function Footer() {
   const { t } = useTranslation();
@@ -11,12 +12,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">E</span>
-              </div>
-              <span className="text-xl font-bold text-foreground">EcoShop</span>
-            </div>
+            <Logo className="mb-4" />
             <p className="text-foreground-muted mb-4">
               Your trusted partner for quality products and exceptional shopping experience.
             </p>
@@ -115,7 +111,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-foreground-muted text-sm">
-            © 2024 EcoShop. All rights reserved.
+            © 2024 PaintHub. All rights reserved.
           </p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <a href="#" className="text-foreground-muted hover:text-primary transition-colors text-sm">
