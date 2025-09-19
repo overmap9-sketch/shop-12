@@ -12,9 +12,6 @@ export function AppInit() {
   useEffect(() => {
     dispatch(initializeTheme());
     setTimeout(() => {
-      initializeMockData();
-    }, 100);
-    setTimeout(() => {
       dispatch(fetchCart());
       dispatch(fetchFavourites());
       dispatch(initializeCurrency());
