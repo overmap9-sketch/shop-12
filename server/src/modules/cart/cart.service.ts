@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { JsonDbService } from '../../persistence/json-db.service.js';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { DATA_STORE, DataStore } from '../../persistence/data-store.js';
 import type { Product } from '../products/products.service.js';
+import { randomUUID } from 'crypto';
 
 interface CartItem { id: string; productId: string; product: Product; quantity: number; price: number; dateAdded: string }
 interface Cart { id: string; userId?: string; items: CartItem[]; subtotal: number; tax: number; shipping: number; discount: number; total: number; currency: string; dateCreated: string; dateModified: string }
@@ -8,7 +9,7 @@ interface Cart { id: string; userId?: string; items: CartItem[]; subtotal: numbe
 @Injectable()
 export class CartService {
   private readonly collection = 'carts';
-  constructor(private readonly db: JsonDbService) {}
+  constructor(@Inject(DATA_STORE) private readonly db: DataStore) {}
 
   private async ensureCart(userId = 'guest'): Promise<Cart> {
     const list = await this.db.all<Cart>(this.collection);
@@ -43,7 +44,7 @@ export class CartService {
     if (existing) {
       existing.quantity += quantity;
     } else {
-      cart.items.push({ id: crypto.randomUUID(), productId: product.id, product, quantity, price: product.price, dateAdded: new Date().toISOString() });
+      cart.items.push({ id: randomUUID(), productId: product.id, product, quantity, price: product.price, dateAdded: new Date().toISOString() });
     }
     cart.dateModified = new Date().toISOString();
     this.recalc(cart);

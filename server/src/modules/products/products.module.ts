@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ProductsController } from './products.controller.js';
 import { ProductsService } from './products.service.js';
-import { JsonDbModule } from '../../persistence/json-db.module.js';
+import { DataStoreModule } from '../../persistence/data-store.module.js';
 
-@Module({ imports: [JsonDbModule], controllers: [ProductsController], providers: [ProductsService] })
+@Module({ imports: [DataStoreModule], controllers: [ProductsController], providers: [ProductsService] })
 export class ProductsModule {}

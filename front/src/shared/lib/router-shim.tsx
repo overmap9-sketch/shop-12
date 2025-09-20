@@ -1,7 +1,7 @@
 "use client";
 import React, { forwardRef, useEffect } from 'react';
 import NextLink from 'next/link';
-import { usePathname, useRouter, useSearchParams as useNextSearchParams, useParams as useNextParams } from 'next/navigation';
+import { usePathname, useSearchParams as useNextSearchParams, useParams as useNextParams } from 'next/navigation';
 
 // Link shim: supports `to` (react-router) and `href` (Next)
 export const Link = forwardRef<HTMLAnchorElement, Omit<React.ComponentProps<typeof NextLink>, 'href'> & { to?: string; href?: string }>(
@@ -15,17 +15,21 @@ Link.displayName = 'Link';
 
 // useNavigate shim
 export function useNavigate() {
-  const router = useRouter();
-  return (to: string) => router.push(to);
+  return (to: string) => {
+    if (typeof window !== 'undefined') {
+      window.location.href = to;
+    }
+  };
 }
 
 // Navigate component shim
 export function Navigate({ to, replace = false }: { to: string; replace?: boolean }) {
-  const router = useRouter();
   useEffect(() => {
-    if (replace) router.replace(to);
-    else router.push(to);
-  }, [router, to, replace]);
+    if (typeof window !== 'undefined') {
+      if (replace) window.location.replace(to);
+      else window.location.href = to;
+    }
+  }, [to, replace]);
   return null;
 }
 
@@ -41,24 +45,15 @@ export function useLocation() {
   } as const;
 }
 
-// useParams shim
+// useParams shim (always call hook to keep consistent hook order)
 export function useParams<T extends Record<string, string>>() {
-  // next/navigation useParams is only available in Server Components; on client we can read from URL
-  // For client usage, we reconstruct from the pathname as a best effort or return an empty object.
-  // Prefer components to receive params via props in Next.
-  // Here we fall back to the server-compatible hook via any.
-  try {
-    // @ts-ignore
-    const params = (useNextParams?.() as any) || {};
-    return params as T;
-  } catch {
-    return {} as T;
-  }
+  // @ts-ignore - Next's useParams returns a read-only object
+  const params = (useNextParams() as any) || {};
+  return params as T;
 }
 
 // useSearchParams shim with setter compatible with react-router-dom
 export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Record<string, string> | string) => void] {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useNextSearchParams();
 
@@ -72,7 +67,10 @@ export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Re
       const usp = new URLSearchParams(init as Record<string, string>);
       next = usp.toString() ? `?${usp.toString()}` : '';
     }
-    router.push(`${pathname}${next}`);
+    if (typeof window !== 'undefined') {
+      const url = `${pathname}${next}`;
+      window.history.pushState({}, '', url);
+    }
   };
 
   // Create a mutable URLSearchParams from Next's readonly

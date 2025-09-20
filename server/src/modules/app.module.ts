@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { JsonDbModule } from '../persistence/json-db.module.js';
+import { DataStoreModule } from '../persistence/data-store.module.js';
 import { ProductsModule } from './products/products.module.js';
 import { CategoriesModule } from './categories/categories.module.js';
 import { CartModule } from './cart/cart.module.js';
@@ -11,7 +11,7 @@ import { OrdersModule } from './orders/orders.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    JsonDbModule,
+    DataStoreModule,
     AuthModule,
     ProductsModule,
     CategoriesModule,
