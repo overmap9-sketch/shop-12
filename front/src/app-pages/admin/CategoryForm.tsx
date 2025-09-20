@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../app/hooks';
 import { selectCategories } from '../../features/catalog/catalogSlice';
 import { Category } from '../../entities';
-import { CategoriesAPI } from '../../shared/api';
+import { CategoriesAPI, ImageUploadAPI } from '../../shared/api';
 import { Button } from '../../shared/ui/Button';
 import { LoadingSpinner } from '../../shared/ui/LoadingSpinner';
 import {
