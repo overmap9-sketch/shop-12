@@ -21,7 +21,9 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "sequelize": "^6.37.3",
+    "pg": "^8.11.5"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
