@@ -15,8 +15,11 @@ Link.displayName = 'Link';
 
 // useNavigate shim
 export function useNavigate() {
-  const router = useRouter();
-  return (to: string) => router.push(to);
+  return (to: string) => {
+    if (typeof window !== 'undefined') {
+      window.location.href = to;
+    }
+  };
 }
 
 // Navigate component shim
