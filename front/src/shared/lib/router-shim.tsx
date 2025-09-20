@@ -41,19 +41,11 @@ export function useLocation() {
   } as const;
 }
 
-// useParams shim
+// useParams shim (always call hook to keep consistent hook order)
 export function useParams<T extends Record<string, string>>() {
-  // next/navigation useParams is only available in Server Components; on client we can read from URL
-  // For client usage, we reconstruct from the pathname as a best effort or return an empty object.
-  // Prefer components to receive params via props in Next.
-  // Here we fall back to the server-compatible hook via any.
-  try {
-    // @ts-ignore
-    const params = (useNextParams?.() as any) || {};
-    return params as T;
-  } catch {
-    return {} as T;
-  }
+  // @ts-ignore - Next's useParams returns a read-only object
+  const params = (useNextParams() as any) || {};
+  return params as T;
 }
 
 // useSearchParams shim with setter compatible with react-router-dom
