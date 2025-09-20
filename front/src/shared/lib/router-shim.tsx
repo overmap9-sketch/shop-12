@@ -24,11 +24,12 @@ export function useNavigate() {
 
 // Navigate component shim
 export function Navigate({ to, replace = false }: { to: string; replace?: boolean }) {
-  const router = useRouter();
   useEffect(() => {
-    if (replace) router.replace(to);
-    else router.push(to);
-  }, [router, to, replace]);
+    if (typeof window !== 'undefined') {
+      if (replace) window.location.replace(to);
+      else window.location.href = to;
+    }
+  }, [to, replace]);
   return null;
 }
 
@@ -53,7 +54,6 @@ export function useParams<T extends Record<string, string>>() {
 
 // useSearchParams shim with setter compatible with react-router-dom
 export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Record<string, string> | string) => void] {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useNextSearchParams();
 
@@ -67,7 +67,10 @@ export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Re
       const usp = new URLSearchParams(init as Record<string, string>);
       next = usp.toString() ? `?${usp.toString()}` : '';
     }
-    router.push(`${pathname}${next}`);
+    if (typeof window !== 'undefined') {
+      const url = `${pathname}${next}`;
+      window.history.pushState({}, '', url);
+    }
   };
 
   // Create a mutable URLSearchParams from Next's readonly
