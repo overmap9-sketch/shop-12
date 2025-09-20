@@ -1,9 +1,13 @@
-import { Controller, Get, Param, Query, Post, Body, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Query, Post, Body, Patch, Delete, UseGuards, UseInterceptors, UploadedFiles, BadRequestException } from '@nestjs/common';
 import { ProductsService } from './products.service.js';
+import { FilesService } from '../files/files.service.js';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { createMulterOptions } from '../files/multer.options.js';
+import { JwtGuard, Permissions, PermissionsGuard } from '../auth/guards.js';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly svc: ProductsService) {}
+  constructor(private readonly svc: ProductsService, private readonly files: FilesService) {}
 
   @Get()
   list(@Query() query: any) {
@@ -28,5 +32,18 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.svc.remove(id);
+  }
+
+  @Post(':id/images/upload')
+  @UseGuards(JwtGuard, PermissionsGuard)
+  @Permissions('files:upload')
+  @UseInterceptors(FilesInterceptor('files', 10, createMulterOptions({ allowed: ['image/*'], category: 'products' })))
+  async uploadImages(@Param('id') id: string, @UploadedFiles() files: Express.Multer.File[]) {
+    if (!files || files.length === 0) throw new BadRequestException('files are required');
+    const saved = await Promise.all(files.map(f => this.files.registerSavedFile(f, { category: 'products' })));
+    const urls = saved.map(f => f.publicPath);
+    const current = await this.svc.get(id);
+    await this.svc.update(id, { images: [ ...(current?.images || []), ...urls ] });
+    return { productId: id, files: saved };
   }
 }
