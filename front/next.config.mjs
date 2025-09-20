@@ -7,7 +7,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   async rewrites() {
-    const target = process.env.NEXT_PUBLIC_API_ORIGIN || 'http://localhost:4000';
+    const target = process.env.NEXT_PUBLIC_API_ORIGIN;
+    if (!target || target === 'internal' || target === 'self') {
+      return [];
+    }
     return [{ source: '/api/:path*', destination: `${target}/api/:path*` }];
   },
   webpack: (config) => {
