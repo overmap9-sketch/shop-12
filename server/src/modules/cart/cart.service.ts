@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { JsonDbService } from '../../persistence/json-db.service.js';
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { DATA_STORE, DataStore } from '../../persistence/data-store.js';
 import type { Product } from '../products/products.service.js';
 import { randomUUID } from 'crypto';
 
@@ -9,7 +9,7 @@ interface Cart { id: string; userId?: string; items: CartItem[]; subtotal: numbe
 @Injectable()
 export class CartService {
   private readonly collection = 'carts';
-  constructor(private readonly db: JsonDbService) {}
+  constructor(@Inject(DATA_STORE) private readonly db: DataStore) {}
 
   private async ensureCart(userId = 'guest'): Promise<Cart> {
     const list = await this.db.all<Cart>(this.collection);
