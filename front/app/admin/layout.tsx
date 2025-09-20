@@ -30,13 +30,17 @@ function AdminAuthGuard({ children }: { children: React.ReactNode }) {
   const user = useAppSelector(selectUser);
   const navigate = useNavigate();
 
-  if (!isAuthenticated) {
-    // redirect to login
-    navigate('/admin/login');
-    return null;
-  }
-  if (!user || !isAdminRole(user.role)) {
-    navigate('/');
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/admin/login');
+      return;
+    }
+    if (!user || !isAdminRole(user.role)) {
+      navigate('/');
+    }
+  }, [isAuthenticated, user, navigate]);
+
+  if (!isAuthenticated || !user || !isAdminRole(user.role)) {
     return null;
   }
   return <>{children}</>;
