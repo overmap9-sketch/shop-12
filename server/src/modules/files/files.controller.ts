@@ -6,13 +6,13 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { ensureDir } from 'fs-extra';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
 
-function createMulterOptions(cfg: ConfigService, opts?: { allowed?: string[]|"*"; maxFileSize?: number; category?: string; maxFiles?: number }) {
-  const uploadDir = cfg.get<string>('UPLOAD_DIR') || './uploads';
-  const maxFileSize = opts?.maxFileSize ?? Number(cfg.get<number>('UPLOAD_MAX_FILE_SIZE') || 5 * 1024 * 1024);
-  const allowed = opts?.allowed ?? (cfg.get<string>('UPLOAD_ALLOWED_MIME')?.split(',').map(s=>s.trim()).filter(Boolean) || '*');
+function createMulterOptions(opts?: { allowed?: string[]|"*"; maxFileSize?: number; category?: string; maxFiles?: number }) {
+  const uploadDir = process.env.UPLOAD_DIR || './uploads';
+  const maxFileSize = opts?.maxFileSize ?? Number(process.env.UPLOAD_MAX_FILE_SIZE || 5 * 1024 * 1024);
+  const envAllowed = (process.env.UPLOAD_ALLOWED_MIME || '').split(',').map(s=>s.trim()).filter(Boolean);
+  const allowed = opts?.allowed ?? (envAllowed.length ? envAllowed : '*');
   const category = opts?.category || 'general';
   const now = new Date();
   const year = String(now.getFullYear());
@@ -34,12 +34,12 @@ function createMulterOptions(cfg: ConfigService, opts?: { allowed?: string[]|"*"
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly files: FilesService, private readonly cfg: ConfigService) {}
+  constructor(private readonly files: FilesService) {}
 
   @Post()
   @UseGuards(JwtGuard, PermissionsGuard)
   @Permissions('files:upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file', createMulterOptions({ allowed: '*', category: 'general' })))
   async uploadSingle(@UploadedFile() file: Express.Multer.File, @Body('category') category?: string) {
     if (!file) throw new BadRequestException('file is required');
     return this.files.registerSavedFile(file, { category });
@@ -48,7 +48,7 @@ export class FilesController {
   @Post('many')
   @UseGuards(JwtGuard, PermissionsGuard)
   @Permissions('files:upload')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FilesInterceptor('files', 10, createMulterOptions({ allowed: '*', category: 'general' })))
   async uploadMany(@UploadedFiles() files: Express.Multer.File[], @Body('category') category?: string) {
     if (!files || files.length === 0) throw new BadRequestException('files are required');
     const out: StoredFile[] = [];
@@ -60,13 +60,13 @@ export class FilesController {
   @Post('images')
   @UseGuards(JwtGuard, PermissionsGuard)
   @Permissions('files:upload')
-  @UseInterceptors(FileInterceptor('file', createMulterOptions(new ConfigService(), { allowed: ['image/*'], category: 'images' })))
+  @UseInterceptors(FileInterceptor('file', createMulterOptions({ allowed: ['image/*'], category: 'images' })))
   async uploadImage(@UploadedFile() file: Express.Multer.File) { return this.files.registerSavedFile(file, { category: 'images' }); }
 
   @Post('images/many')
   @UseGuards(JwtGuard, PermissionsGuard)
   @Permissions('files:upload')
-  @UseInterceptors(FilesInterceptor('files', 10, createMulterOptions(new ConfigService(), { allowed: ['image/*'], category: 'images' })))
+  @UseInterceptors(FilesInterceptor('files', 10, createMulterOptions({ allowed: ['image/*'], category: 'images' })))
   async uploadImages(@UploadedFiles() files: Express.Multer.File[]) {
     const out: StoredFile[] = [];
     for (const f of files) out.push(await this.files.registerSavedFile(f, { category: 'images' }));
