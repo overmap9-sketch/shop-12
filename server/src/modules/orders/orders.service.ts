@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { JsonDbService } from '../../persistence/json-db.service.js';
+import { Injectable, Inject } from '@nestjs/common';
+import { DATA_STORE, DataStore } from '../../persistence/data-store.js';
 
 interface Order { id: string; userId: string; items: any[]; total: number; status: string; createdAt: string }
 
 @Injectable()
 export class OrdersService {
   private readonly collection = 'orders';
-  constructor(private readonly db: JsonDbService) {}
+  constructor(@Inject(DATA_STORE) private readonly db: DataStore) {}
 
   async create(userId: string, payload: any) {
     const order: Partial<Order> = { userId, items: payload.items||[], total: payload.total||0, status: 'created', createdAt: new Date().toISOString() };
