@@ -1,7 +1,7 @@
 "use client";
 import React, { forwardRef, useEffect } from 'react';
 import NextLink from 'next/link';
-import { usePathname, useRouter, useSearchParams as useNextSearchParams, useParams as useNextParams } from 'next/navigation';
+import { usePathname, useSearchParams as useNextSearchParams, useParams as useNextParams } from 'next/navigation';
 
 // Link shim: supports `to` (react-router) and `href` (Next)
 export const Link = forwardRef<HTMLAnchorElement, Omit<React.ComponentProps<typeof NextLink>, 'href'> & { to?: string; href?: string }>(
