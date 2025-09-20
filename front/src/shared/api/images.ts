@@ -15,91 +15,61 @@ export interface ImageUploadError {
 }
 
 export class ImageUploadAPI {
-  private static baseUrl = '/api/images'; // In real app, this would be your API endpoint
+  private static apiBase = '/api';
+  private static getAuthHeader() {
+    const token = localStorage.getItem('auth_token') || localStorage.getItem('admin-token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
 
   /**
    * Upload a single image file to the server
    */
   static async uploadImage(file: File): Promise<string> {
-    await delay(1000 + Math.random() * 2000); // Simulate variable upload time
-
-    // Simulate upload failure occasionally for testing
-    if (Math.random() < 0.1) { // 10% failure rate
-      throw new Error('Upload failed: Server error');
-    }
-
-    // In a real implementation, you would:
-    // 1. Create FormData with the file
-    // 2. Send POST request to your upload endpoint
-    // 3. Handle response and errors
-    // 4. Return the uploaded file URL
-
-    /*
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', 'product-image');
-    
-    const response = await fetch(`${this.baseUrl}/upload`, {
+
+    const res = await fetch(`${this.apiBase}/files/images`, {
       method: 'POST',
       body: formData,
-      headers: {
-        'Authorization': `Bearer ${getAuthToken()}`,
-      },
+      headers: { ...this.getAuthHeader() },
+      credentials: 'include',
     });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Upload failed');
+    if (!res.ok) {
+      let message = `Upload failed (${res.status})`;
+      try { const err = await res.json(); message = err.message || message; } catch {}
+      throw new Error(message);
     }
-
-    const data: ImageUploadResponse = await response.json();
-    return data.url;
-    */
-
-    // For demo purposes, we'll use a placeholder service
-    // Replace this with your actual upload implementation
-    const mockUrl = `https://picsum.photos/400/400?random=${Date.now()}&blur=0`;
-    
-    console.log('Uploading image:', {
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      mockUrl
-    });
-
-    return mockUrl;
+    const data = await res.json();
+    // Backend returns StoredFile with publicPath
+    return data.publicPath || data.url || data.downloadUrl;
   }
 
   /**
    * Upload multiple images in batch
    */
   static async uploadImages(files: File[]): Promise<string[]> {
-    const uploadPromises = files.map(file => this.uploadImage(file));
-    return Promise.all(uploadPromises);
+    // Prefer batch endpoint if available
+    const form = new FormData();
+    for (const f of files) form.append('files', f);
+    const res = await fetch(`${this.apiBase}/files/images/many`, {
+      method: 'POST',
+      body: form,
+      headers: { ...this.getAuthHeader() },
+      credentials: 'include',
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.files)) return data.files.map((f: any)=> f.publicPath || f.url);
+    }
+    // Fallback to per-file
+    return Promise.all(files.map(f=>this.uploadImage(f)));
   }
 
   /**
    * Delete an uploaded image
    */
   static async deleteImage(imageUrl: string): Promise<boolean> {
-    await delay(500);
-
-    // In a real implementation:
-    /*
-    const response = await fetch(`${this.baseUrl}/delete`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getAuthToken()}`,
-      },
-      body: JSON.stringify({ url: imageUrl }),
-    });
-
-    return response.ok;
-    */
-
-    // For demo, always return success
-    console.log('Deleting image:', imageUrl);
+    // Optional: implement real deletion if backend supports it
     return true;
   }
 
