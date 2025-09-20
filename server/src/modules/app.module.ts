@@ -11,7 +11,7 @@ import { OrdersModule } from './orders/orders.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    JsonDbModule,
+    DataStoreModule,
     AuthModule,
     ProductsModule,
     CategoriesModule,
