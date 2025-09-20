@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "removeComments": true,
-    "declaration": true,
+    "declaration": false,
     "sourceMap": false
   }
 }
