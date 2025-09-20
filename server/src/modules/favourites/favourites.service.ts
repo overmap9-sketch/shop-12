@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { JsonDbService } from '../../persistence/json-db.service.js';
+import { Injectable, Inject } from '@nestjs/common';
+import { DATA_STORE, DataStore } from '../../persistence/data-store.js';
 import type { Product } from '../products/products.service.js';
 
 interface Favourite { id: string; userId: string; productId: string; product: Product; dateAdded: string }
@@ -7,7 +7,7 @@ interface Favourite { id: string; userId: string; productId: string; product: Pr
 @Injectable()
 export class FavouritesService {
   private readonly collection = 'favourites';
-  constructor(private readonly db: JsonDbService) {}
+  constructor(@Inject(DATA_STORE) private readonly db: DataStore) {}
 
   async list(userId = 'guest') { return (await this.db.all<Favourite>(this.collection)).filter(f => f.userId === userId); }
 
