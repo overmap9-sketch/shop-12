@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { JsonDbService } from '../../persistence/json-db.service.js';
+import { Injectable, Inject } from '@nestjs/common';
+import { DATA_STORE, DataStore } from '../../persistence/data-store.js';
 
 export interface Product {
   id: string; slug: string; title: string; description: string; price: number; originalPrice?: number;
@@ -12,7 +12,7 @@ export interface Product {
 @Injectable()
 export class ProductsService {
   private readonly collection = 'products';
-  constructor(private readonly db: JsonDbService) {}
+  constructor(@Inject(DATA_STORE) private readonly db: DataStore) {}
 
   list = async (query: any) => {
     const rows = await this.db.all<Product>(this.collection);
