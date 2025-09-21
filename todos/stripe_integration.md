@@ -2,6 +2,8 @@ Stripe integration TODO
 
 Status: in_progress
 
+Env variables set: STRIPE keys configured via DevServerControl
+
 Overview
 - Integrate Stripe Checkout / PaymentIntents to accept payments from the Next.js frontend and NestJS backend.
 
