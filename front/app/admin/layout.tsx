@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from 'react';
+"use client";
+import React, { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../src/app/hooks';
+import { useAppSelector, useAppDispatch } from '../../src/app-core/hooks';
 import { useAdminAuthState } from '../../src/hooks/use-admin-auth';
 import { selectUser, selectIsAuthenticated, logout } from '../../src/features/auth/authSlice';
 import { isAdminRole, usePermissions } from '../../src/shared/lib/permissions';
@@ -57,7 +58,7 @@ const adminNavigation = [
   { name: 'Settings', href: '/admin/settings', icon: Settings }
 ] as const;
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -239,5 +240,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         )}
       </div>
     </AdminAuthGuard>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={null}>
+      <AdminLayoutInner>{children}</AdminLayoutInner>
+    </Suspense>
   );
 }
