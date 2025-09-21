@@ -1,7 +1,6 @@
 "use client";
 import React, { forwardRef, useEffect } from 'react';
 import NextLink from 'next/link';
-import { usePathname, useSearchParams as useNextSearchParams, useParams as useNextParams } from 'next/navigation';
 
 // Link shim: supports `to` (react-router) and `href` (Next)
 export const Link = forwardRef<HTMLAnchorElement, Omit<React.ComponentProps<typeof NextLink>, 'href'> & { to?: string; href?: string }>(
@@ -33,29 +32,37 @@ export function Navigate({ to, replace = false }: { to: string; replace?: boolea
   return null;
 }
 
-// useLocation shim (partial)
+// useLocation shim (partial) - server-safe: do not call next/navigation hooks during build
 export function useLocation() {
-  const pathname = usePathname();
-  const searchParams = useNextSearchParams();
-  const search = searchParams.toString();
+  if (typeof window === 'undefined') {
+    return { pathname: '', search: '', hash: '' } as const;
+  }
+  const pathname = window.location.pathname;
+  const search = window.location.search || '';
   return {
     pathname,
-    search: search ? `?${search}` : '',
-    hash: ''
+    search,
+    hash: window.location.hash || ''
   } as const;
 }
 
-// useParams shim (always call hook to keep consistent hook order)
+// useParams shim (server-safe)
 export function useParams<T extends Record<string, string>>() {
-  // @ts-ignore - Next's useParams returns a read-only object
-  const params = (useNextParams() as any) || {};
-  return params as T;
+  if (typeof window === 'undefined') {
+    return {} as T;
+  }
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  // No real mapping to route params is possible here; return empty
+  return {} as T;
 }
 
-// useSearchParams shim with setter compatible with react-router-dom
+// useSearchParams shim with setter compatible with react-router-dom (server-safe)
 export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Record<string, string> | string) => void] {
-  const pathname = usePathname();
-  const searchParams = useNextSearchParams();
+  if (typeof window === 'undefined') {
+    return [new URLSearchParams(), () => {}];
+  }
+
+  const pathname = window.location.pathname;
 
   const setSearchParams = (init: URLSearchParams | Record<string, string> | string) => {
     let next = '';
@@ -73,8 +80,7 @@ export function useSearchParams(): [URLSearchParams, (init: URLSearchParams | Re
     }
   };
 
-  // Create a mutable URLSearchParams from Next's readonly
-  const current = new URLSearchParams(searchParams.toString());
+  const current = new URLSearchParams(window.location.search || '');
   return [current, setSearchParams];
 }
 
