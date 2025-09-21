@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ensureDir, pathExists, remove } from 'fs-extra';
+import fsx from 'fs-extra';
 import { createReadStream } from 'fs';
 import { extname, join, resolve, relative } from 'path';
 import { randomUUID } from 'crypto';
@@ -65,7 +65,7 @@ export class FilesService {
   async remove(id: string) {
     const f = await this.get(id);
     if (!f) return false;
-    if (await pathExists(f.storagePath)) await remove(f.storagePath);
+    if (await fsx.pathExists(f.storagePath)) await fsx.remove(f.storagePath);
     return this.db.remove(this.collection, id);
   }
 
