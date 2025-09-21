@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../src/app/hooks';
+import { useAdminAuthState } from '../../src/hooks/use-admin-auth';
 import { selectUser, selectIsAuthenticated, logout } from '../../src/features/auth/authSlice';
 import { isAdminRole, usePermissions } from '../../src/shared/lib/permissions';
 import { Badge } from '../../src/components/ui/badge';
@@ -26,21 +27,17 @@ import {
 } from 'lucide-react';
 
 function AdminAuthGuard({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const user = useAppSelector(selectUser);
   const navigate = useNavigate();
+  const { isLoading, isAuthenticated, user } = useAdminAuthState();
 
   React.useEffect(() => {
-    if (!isAuthenticated) {
+    if (isLoading) return;
+    if (!isAuthenticated || !user || !isAdminRole(user.role as any)) {
       navigate('/admin/login');
-      return;
     }
-    if (!user || !isAdminRole(user.role)) {
-      navigate('/');
-    }
-  }, [isAuthenticated, user, navigate]);
+  }, [isLoading, isAuthenticated, user, navigate]);
 
-  if (!isAuthenticated || !user || !isAdminRole(user.role)) {
+  if (isLoading || !isAuthenticated || !user || !isAdminRole(user.role as any)) {
     return null;
   }
   return <>{children}</>;

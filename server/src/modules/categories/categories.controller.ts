@@ -19,12 +19,18 @@ export class CategoriesController {
   get(@Param('id') id: string) { return this.svc.get(id); }
 
   @Post()
+  @UseGuards(JwtGuard, PermissionsGuard)
+  @Permissions('categories:create')
   create(@Body() body: any) { return this.svc.create(body); }
 
   @Patch(':id')
+  @UseGuards(JwtGuard, PermissionsGuard)
+  @Permissions('categories:update')
   update(@Param('id') id: string, @Body() body: any) { return this.svc.update(id, body); }
 
   @Delete(':id')
+  @UseGuards(JwtGuard, PermissionsGuard)
+  @Permissions('categories:delete')
   remove(@Param('id') id: string) { return this.svc.remove(id); }
 
   @Post(':id/image/upload')

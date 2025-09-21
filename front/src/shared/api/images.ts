@@ -14,8 +14,10 @@ export interface ImageUploadError {
   code: string;
 }
 
+import { API_BASE } from './http';
+
 export class ImageUploadAPI {
-  private static apiBase = '/api';
+  private static apiBase = API_BASE;
   private static getAuthHeader() {
     let token = localStorage.getItem('ecommerce_auth_token') || localStorage.getItem('auth_token') || localStorage.getItem('admin-token');
     if (!token) return {};
