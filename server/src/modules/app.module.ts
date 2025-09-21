@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module.js';
 import { FavouritesModule } from './favourites/favourites.module.js';
 import { OrdersModule } from './orders/orders.module.js';
 import { FilesModule } from './files/files.module.js';
+import { PaymentsModule } from './payments/payments.module.js';
 
 @Module({
   imports: [
