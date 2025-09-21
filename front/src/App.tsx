@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useAppDispatch } from '@/front/src/app/hooks';
+import { useAppDispatch } from '@/front/src/app-core/hooks';
 import { initializeTheme } from '@/front/src/features/theme-switcher/themeSlice';
 import { fetchCart } from '@/front/src/features/cart/cartSlice';
 import { fetchFavourites } from '@/front/src/features/favourites/favouritesSlice';
