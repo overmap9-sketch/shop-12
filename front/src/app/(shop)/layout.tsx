@@ -1,8 +1,8 @@
 "use client";
 import React from 'react';
-import { Header } from '../../src/widgets/header/Header';
-import { Footer } from '../../src/widgets/footer/Footer';
-import { Toaster } from '../../src/components/ui/toaster';
+import { Header } from '../../widgets/header/Header';
+import { Footer } from '../../widgets/footer/Footer';
+import { Toaster } from '../../components/ui/toaster';
 import { AppInit } from '../AppInit';
 
 export default function ShopLayout({ children }: { children: React.ReactNode }) {
