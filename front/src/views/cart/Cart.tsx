@@ -14,6 +14,7 @@ import {
 } from '../../features/cart/cartSlice';
 import { Button } from '../../shared/ui/Button';
 import { LoadingSpinner } from '../../shared/ui/LoadingSpinner';
+import CheckoutButton from '../../components/CheckoutButton';
 import { NotificationService } from '../../shared/lib/notifications';
 import { useOrderTotal, useCurrency } from '../../hooks/use-currency';
 
