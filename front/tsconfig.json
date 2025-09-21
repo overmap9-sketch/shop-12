@@ -51,10 +51,6 @@
     }
   ],
   "exclude": [
-    "node_modules",
-    "src/App.tsx",
-    "src/AdminApp.tsx",
-    "src/AdminMain.tsx",
-    "src/main.tsx"
+    "node_modules"
   ]
 }

@@ -3,7 +3,7 @@ import { cn } from '../../shared/lib/utils';
 import { Logo } from '../../components/logo/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { selectCartItemCount } from '../../features/cart/cartSlice';
 import { selectFavouritesCount } from '../../features/favourites/favouritesSlice';
 import { selectIsAuthenticated, selectUser, logout } from '../../features/auth/authSlice';

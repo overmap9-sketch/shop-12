@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { selectCategories, fetchCategories } from './catalogSlice';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../shared/ui/Button';

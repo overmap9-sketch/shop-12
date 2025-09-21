@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../core/hooks';
 import { selectIsAuthenticated, selectUser } from '../../features/auth/authSlice';
 import { Button } from '../../shared/ui/Button';
 import { Package, Shield } from 'lucide-react';

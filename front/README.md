@@ -11,7 +11,7 @@
 - [Архитектура проекта](#архитектура-проекта)
 - [Потоки данных и стейт-менеджмент](#потоки-данных-и-стейт-менеджмент)
 - [Работа с API и прокси](#работа-с-api-и-прокси)
-- [Загрузка файлов/изображений](#загрузка-файловизображений)
+- [Загрузка файлов/изо��ражений](#загрузка-файловизображений)
 - [Модули фронтенда](#модули-фронтенда)
 - [Локализация и темы](#локализация-и-темы)
 - [Траблшутинг](#траблшутинг)
@@ -52,7 +52,7 @@
 sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev"
 ```
 Либо в двух терминалах:
-- Терминал А (бэкенд):
+- Терминал А (бэк��нд):
   ```sh
   cd server
   npm install
@@ -78,7 +78,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 - `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через запятую), которым разрешён dev-доступ (например, домен предпросмотра).
 - `NEXT_TELEMETRY_DISABLED` — опционально выключает телеметрию Next.js (`1` чтобы выключить).
 
-> Примечание: порт бэкенда задаётся на стороне сервера (по умолчанию 4000). В фронте он не управляется, но должен совпадать с `NEXT_PUBLIC_API_ORIGIN`.
+> Примечание: порт бэкенда задаётся на стороне сервера (по умолчанию 4000). В фронте ��н не управляется, но должен совпадать с `NEXT_PUBLIC_API_ORIGIN`.
 
 ---
 
@@ -93,9 +93,9 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 
 ## Архитектура проекта
 Ключевые папки:
-- `front/app/` — маршруты Next.js (App Router)
-- `front/src/app/` — AppProvider, Redux store и хуки
-- `front/src/app-pages/` — страницеподобные комп��ненты (Admin, Auth, �� т.д.)
+- `front/src/app/` — маршруты Next.js (App Router)
+- `front/src/core/` — Redux store, AppProvider и хуки
+- `front/src/views/` — страницы/виды (Admin, Auth и т.д.)
 - `front/src/features/` — Redux-слайсы (auth, cart, catalog, currency, theme)
 - `front/src/shared/api/` — API-слой (axios-инстанс и доменные клиенты)
 - `front/src/shared/themes/` — темы и провайдеры
@@ -103,14 +103,14 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 - `front/src/widgets/` — составные UI-блоки (Header, Footer, Grids)
 
 Маршрутизация:
-- Страницы в `front/app/*` реэкспортируют/встраивают компоненты из `front/src/app-pages/*`.
-- `react-router-dom` замаплен на shim (см. `front/next.config.mjs`) для плавной миграции.
+- Страницы в `front/src/app/*` используют компоненты из `front/src/views/*`.
+- `react-router-dom` замаплен на shim (см. `front/tsconfig.json`) дл�� плавной миграции.
 
 ---
 
 ## Потоки данных и стейт-менеджмент
 Стек: Redux Toolkit + TypeScript
-- Store: `front/src/app/store.ts`
+- Store: `front/src/core/store.ts`
 - Слайсы: `features/*` (auth, cart, catalog, currency, theme)
 - Паттерн:
   1. UI диспатчит action/async thunk
@@ -132,7 +132,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 - `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список источников, разрешённых в dev-режиме.
 
 HTTP-клиент:
-- `front/src/shared/config/api.ts` — axios-инстанс с интерцептором токена.
+- `front/src/shared/config/api.ts` — axios-инстанс с интерц��птором токена.
 
 ---
 
@@ -144,8 +144,8 @@ API-клиент: `front/src/shared/api/images.ts`
 - В ответе бэкенд возвращает метаданные файла, фронт сохраняет `publicPath` как URL
 
 Интеграции:
-- Продукты (Admin): `front/src/app-pages/admin/ProductForm.tsx` — массив изображений товара
-- Категории (Admin): `front/src/app-pages/admin/CategoryForm.tsx` — одиночное изображение
+- Продукты (Admin): `front/src/views/admin/ProductForm.tsx` — массив изображений товара
+- Категории (Admin): `front/src/views/admin/CategoryForm.tsx` — одиночное изображение
 
 Требования к доступу:
 - Для загрузки необходим валидный токен (роль `admin` или разрешение `files:upload`).
@@ -175,6 +175,6 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Конфигурация
 - Все запросы фронта направляются на `${NEXT_PUBLIC_API_ORIGIN}/api` (см. front/.env.example)
 - Токен хранится в localStorage под ключом `ecommerce_auth_token`; фронт автоматически добавляет Authorization
-- Проверка сессии выполняется запросом `GET /api/auth/me`
+- Проверка сессии выпол��яется запросом `GET /api/auth/me`
 
 Подробнее: docs/CONFIGURATION.md

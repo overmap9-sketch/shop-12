@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../core/hooks';
 import { register, selectAuthLoading, selectAuthError, clearError } from '../../features/auth/authSlice';
 import { Button } from '../../shared/ui/Button';
 import { NotificationService } from '../../shared/lib/notifications';

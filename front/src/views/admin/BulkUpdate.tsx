@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../shared/ui/Button';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../core/hooks';
 import { selectCategories, fetchCategories } from '../../features/catalog/catalogSlice';
 import { ProductsAPI } from '../../shared/api';
 import { Save, SlidersHorizontal } from 'lucide-react';

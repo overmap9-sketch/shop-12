@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../core/hooks';
 import { selectSelectedCurrency } from '../features/currency/currencySlice';
 import { CurrencyUtils } from '../shared/lib/currency';
 import { Currency, FormattedPrice } from '../features/currency/types';

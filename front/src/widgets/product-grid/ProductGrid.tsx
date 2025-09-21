@@ -2,7 +2,7 @@ import React from 'react';
 import { Product } from '../../entities';
 import { ProductCard, ProductCardSkeleton } from '../../shared/ui/ProductCard';
 import { ProductGridItem } from './ProductGridItem';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../core/hooks';
 import { addToCart } from '../../features/cart/cartSlice';
 import { addToFavourites, removeFromFavourites, selectIsFavourite } from '../../features/favourites/favouritesSlice';
 import { NotificationService } from '../../shared/lib/notifications';

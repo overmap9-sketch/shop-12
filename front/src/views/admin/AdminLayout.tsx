@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { selectUser, logout } from '../../features/auth/authSlice';
 import { Button } from '../../shared/ui/Button';
 import { Badge } from '../../components/ui/badge';
