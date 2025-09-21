@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from 'react';
-import { useAppDispatch } from '../app-core/hooks';
+import { useAppDispatch } from '../core/hooks';
 import { initializeTheme } from '../features/theme-switcher/themeSlice';
 import { fetchCart } from '../features/cart/cartSlice';
 import { fetchFavourites } from '../features/favourites/favouritesSlice';
