@@ -15,6 +15,9 @@ export class PaymentsController {
   @Post('create-checkout-session')
   async createCheckoutSession(@Body() body: any) {
     const { items = [], successUrl, cancelUrl, metadata } = body;
+    // Debug log for incoming create-checkout-session requests
+    // eslint-disable-next-line no-console
+    console.log('[payments] create-checkout-session body:', JSON.stringify({ items, successUrl, cancelUrl, metadata }).slice(0, 1000));
 
     // build line_items from products in data store
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
