@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { PlaceholderPage } from '../../../src/app-pages/PlaceholderPage';
+import { PlaceholderPage } from '../../../views/PlaceholderPage';
 
 export default function Page() {
   return <PlaceholderPage title="Order History" />;
