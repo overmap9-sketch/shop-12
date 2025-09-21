@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { selectUser, selectIsAuthenticated, logout } from '../../features/auth/authSlice';
 import { Button } from '../../shared/ui/Button';
 import { NotificationService } from '../../shared/lib/notifications';
