@@ -1,5 +1,5 @@
 import { diskStorage } from 'multer';
-import { ensureDir } from 'fs-extra';
+import fsx from 'fs-extra';
 import { extname, join } from 'path';
 import { randomUUID } from 'crypto';
 import { BadRequestException } from '@nestjs/common';
