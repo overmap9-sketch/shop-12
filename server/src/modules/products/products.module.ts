@@ -5,5 +5,5 @@ import { DataStoreModule } from '../../persistence/data-store.module.js';
 import { FilesModule } from '../files/files.module.js';
 import { JwtGuard, PermissionsGuard } from '../auth/guards.js';
 
-@Module({ imports: [DataStoreModule, FilesModule], controllers: [ProductsController], providers: [ProductsService, JwtGuard, PermissionsGuard] })
+@Module({ imports: [DataStoreModule, FilesModule], controllers: [ProductsController], providers: [ProductsService, JwtGuard, PermissionsGuard], exports: [ProductsService] })
 export class ProductsModule {}
