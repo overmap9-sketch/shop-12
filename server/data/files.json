@@ -13,5 +13,20 @@
     "dateCreated": "2025-09-21T08:54:52.276Z",
     "dateModified": "2025-09-21T08:54:52.276Z",
     "id": "2ac1c96a-9dfb-4d01-8650-80e110bfed22"
+  },
+  {
+    "originalName": "photo_2025-03-30_23-39-38.jpg",
+    "filename": "a9414d30-3463-480c-878d-dbf957822907.jpg",
+    "mimeType": "image/jpeg",
+    "size": 63498,
+    "ext": ".jpg",
+    "storagePath": "/app/code/server/uploads/images/2025/09/a9414d30-3463-480c-878d-dbf957822907.jpg",
+    "relativePath": "uploads/images/2025/09/a9414d30-3463-480c-878d-dbf957822907.jpg",
+    "publicPath": "/uploads/images/2025/09/a9414d30-3463-480c-878d-dbf957822907.jpg",
+    "downloadUrl": "/api/files/68b3c9ad-66ae-4ae0-b0c1-7ea0ff5f655a",
+    "category": "images",
+    "dateCreated": "2025-09-21T09:26:05.342Z",
+    "dateModified": "2025-09-21T09:26:05.342Z",
+    "id": "68b3c9ad-66ae-4ae0-b0c1-7ea0ff5f655a"
   }
 ]
