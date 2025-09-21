@@ -1,60 +1,41 @@
-Payment Module Security Checklist
+Чеклист безопасности — Stripe интеграция (конкретно для этого репозитория)
 
-Purpose
-This checklist captures essential security controls and configuration items required to safely operate the Stripe payment integration in production.
+Файлы/эндпоинты, которые нужно защитить
+- POST /api/payments/create-checkout-session — server/src/modules/payments/payments.controller.ts (метод createCheckoutSession)
+- POST /api/payments/webhook — server/src/modules/payments/payments.controller.ts (метод webhook)
 
-Core controls
-- Environment & secrets
-  - Store STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and any other secrets in a secrets manager or environment variables; never commit them to git.
-  - Ensure production and staging use separate keys.
-  - Implement key rotation policy and audit who can access keys.
+1) Secrets
+- STRIPE_SECRET_KEY: проверено — используется в server/src/modules/payments/payments.service.ts (constructor) и payments.controller.ts (lines ~10-12). Действие: хранить в production secrets manager.
+- STRIPE_WEBHOOK_SECRET: текущий код допускает fallback если не задан (unsafe). Действие: в production обязать переменную; отклонять вебхуки без подписей.
 
-- Transport & network
-  - Enforce HTTPS for all endpoints (redirect HTTP -> HTTPS) and enable HSTS.
-  - Use TLS 1.2+ and disable weak ciphers.
-  - Consider a WAF or API gateway in front of payment endpoints.
+2) Webhook signature verification
+- Acceptance: server/src/modules/payments/payments.controller.ts должен использовать this.stripe.webhooks.constructEvent(rawBody, signature, webhookSecret). main.ts уже использует express.raw для пути /api/payments/webhook — подтвердить.
 
-- Authentication & authorization
-  - Ensure admin endpoints that view payment/order data are protected with strong auth (MFA) and role-based access control.
-  - Limit which internal services can call sensitive endpoints.
+3) Idempotency
+- Acceptance: существует коллекция 'stripe_events' (json DB) с записью event.id после успешной обработки; повторный event.id игнорируется. Файл: server/src/modules/payments/payments.controller.ts — добавить проверку через this.db.all('stripe_events').
 
-- Webhook security
-  - Verify Stripe webhook signatures on every incoming webhook using STRIPE_WEBHOOK_SECRET and the Stripe SDK.
-  - Implement idempotency for webhook processing to avoid duplicate state transitions.
-  - Log raw webhook payloads to a secure, access-controlled store for audit (do not log secrets).
+4) Server-side pricing and validation
+- Acceptance: итоговая сумма и line_items формируются исключительно с использованием server/data/products.json (в коде уже реализовано: this.db.findById('products', id)). Добавить schema validation для тела запроса.
 
-- Input validation & data handling
-  - Validate and sanitize all incoming data (order IDs, metadata) before persisting or rendering.
-  - Use strict schema validation on payloads (e.g., Zod, Joi, or class-validator) and reject unexpected fields.
+5) Redirect origin allowlist
+- Acceptance: success_url / cancel_url либо строятся только из PUBLIC_ORIGIN (recommended) либо проверяются на соответствие allowlist.
 
-- PCI/Payment considerations
-  - Use Stripe Checkout or Elements to minimize PCI scope; never store raw card data.
-  - Review Stripe docs for PCI responsibilities and ensure compliance for your business model.
+6) Rate limiting / WAF
+- Acceptance: middleware или gateway возвращает 429 при превышении порога для create-checkout-session и webhook.
 
-- Operational security
-  - Implement rate limiting for endpoints that create sessions or accept webhooks.
-  - Add monitoring, tracing, and centralized logs (Sentry, Prometheus, Grafana).
-  - Create alerting for repeated webhook failures, high retry rates, or large volumes of failed payments.
+7) Logging & monitoring
+- Acceptance: ло��и содержат session.id (при создании) и event.id (при обработке вебхуков); ошибки отправляются в Sentry (или аналог).
 
-- Privacy & data retention
-  - Mask or avoid storing PII in logs.
-  - Implement a retention policy for payment records and related logs.
-  - Ensure compliance with local privacy regulations (GDPR, CCPA) as applicable.
+8) CI security
+- Acceptance: Semgrep и npm audit/Snyk запущены в CI; сборка блокируется при критических уязвимостях.
 
-- Dependency and code security
-  - Run dependency vulnerability scans (npm audit, Snyk) and SAST tools (Semgrep) in CI.
-  - Apply principle of least privilege to any service account or DB user used by payment services.
+9) Operational
+- Acceptance: Runbook для инцидентов платежей (webhook signature errors, duplicate events, reconciliation) доступен в репозитории или внутр. docs.
 
-Checks to perform before production release
-- STRIPE_WEBHOOK_SECRET set in production secrets manager and webhook signature verification implemented
-- HTTPS enforced on PUBLIC_ORIGIN and API_ORIGIN
-- Rate limiting and basic WAF or API gateway configured
-- Monitoring and alerting configured for payment flows
-- Idempotency implemented for webhook handler
-- SAST and dependency scans pass with no critical findings
-- Key rotation policy defined and access limited
-
-Acceptance criteria
-- Payment flows complete successfully in sandbox and live mode with webhooks verified
-- No sensitive keys or secrets are present in the repository history or code
-- Alerts and dashboards provide actionable insights for payment errors
+Порядок работ для соответствия:
+1. Настроить STRIPE_WEBHOOK_SECRET в production; запретить fallback в коде.
+2. Реализовать идемпотентность (stripe_events) и проверить с помощью Stripe CLI.
+3. Добавить schema validation для create-checkout-session.
+4. Ограничить redirect URL и включить HTTPS (PUBLIC_ORIGIN).
+5. Добавить rate limiting и WAF/слой API Gateway.
+6. Интегрировать Sentry и настроить CI сканы.

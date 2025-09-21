@@ -1,50 +1,38 @@
-Payment Module Security Alignment
+Соответствие безопасности — сопоставление чеклистов с текущей реализацией
 
-This document maps the security checklist items to the current codebase status and recommended remediation steps.
+1) STRIPE_WEBHOOK_SECRET
+- Текущее состояние: переменная поддерживается в коде, но при её отсутствии контроллер fallback'ится на небезопасный парсинг (server/src/modules/payments/payments.controller.ts lines ~73-80).
+- Рекомендация: явно требовать STRIPE_WEBHOOK_SECRET для production. Если не задан — вернуть 500/ошибку и не обрабатывать вебхуки.
+- Проверка: установить secret через окружение и выполнить `stripe listen --forward-to <prod-url>/api/payments/webhook` — webhook должен проходить проверку.
 
-1) Secrets and env
-- Current status: STRIPE_SECRET_KEY and NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY present in environment variables for dev. STRIPE_WEBHOOK_SECRET is not set in production env.
-- Remediation: Set STRIPE_WEBHOOK_SECRET in production secrets manager; remove any secrets from code and history; enforce access controls.
+2) Webhook handler
+- Текущее состояние: raw middleware есть в server/src/main.ts (строка app.use('/api/payments/webhook', express.raw({ type: 'application/json' })) ).
+- Рекомендация: убедиться, что (req as any).rawBody заполняется и использовать именно его при верификации.
 
-2) Webhook verification
-- Current status: Webhook endpoint exists (server/src/modules/payments/payments.controller.ts) with basic handling. Signature verification is noted as pending.
-- Remediation: Implement signature verification using Stripe SDK (construct event from raw body and signature header), return 2xx only after successful verification and idempotent processing.
+3) Idempotency
+- Текущее состояние: порядок действий при checkout.session.completed меняет order.status без проверки обработанных event.id.
+- Рекомендация: создать коллекцию/таблицу 'stripe_events' и записывать event.id при успешной обработке. Перед обработкой проверять наличие записи.
 
-3) HTTPS & CORS
-- Current status: Development PUBLIC_ORIGIN and NEXT_PUBLIC_API_ORIGIN are HTTP local addresses. Production must use HTTPS.
-- Remediation: Configure production deployment to serve over HTTPS, enable HSTS, update PUBLIC_ORIGIN and NEXT_PUBLIC_API_ORIGIN to HTTPS, and restrict CORS to allowed origins.
+4) Создание сессии (create-checkout-session)
+- Текущее состояние: сервер вычисляет line_items и totalAmount из базы (server/src/modules/payments/payments.controller.ts lines ~23-36). Это корректно.
+- Рекомендация: добавить валидацию входа и проверить, что сохранённый order содержит sessionId и status: 'pending' перед возвратом session.id клиенту.
 
-4) Idempotency & duplicate handling
-- Current status: Order update logic works but needs idempotency safeguards to avoid double-updating orders on multiple webhook deliveries.
-- Remediation: Use idempotency keys, store processed event IDs (stripe event id) and ignore duplicates.
+5) Frontend
+- Текущее состояние: front/src/components/CheckoutButton.tsx вызывает POST /api/payments/create-checkout-session и использует loadStripe + redirectToCheckout (lines ~7-24).
+- Рекомендация: после получения data.id приложение может показывать confirmation UI, но не полагаться на клиентскую редирекцию как единственный источник истины — сервер определяет оплату через webhook.
 
-5) Rate limiting and WAF
-- Current status: No rate limiting implemented at application level; no WAF configured.
-- Remediation: Add rate limiting middleware for payment endpoints and configure a WAF or API gateway in front of the server in production.
+6) Rate limiting & WAF
+- Текущее состояние: отсутствует.
+- Рекомендация: добавить rate limiting на уровне приложения или перед сервером (NGINX, Cloudflare, API Gateway).
 
-6) Logging & monitoring
-- Current status: Basic logging present; no centralized monitoring integrated (Sentry not configured).
-- Remediation: Integrate Sentry or similar for error monitoring, and send relevant metrics to Prometheus/Grafana.
+7) Monitoring
+- Текущее состояние: базовые console.logs. Необходимо интегрировать Sentry/Prometheus.
+- Рекомендация: добавлять context: sessionId/eventId в логи и отправлять ошибки в Sentry.
 
-7) Input validation
-- Current status: Some runtime checks exist, but strict schema validation is not enforced across payment endpoints.
-- Remediation: Add schema validators (class-validator/Zod/Joi) to validate incoming requests and webhook payloads.
+План работ (первоначальный приоритет)
+1. STRIPE_WEBHOOK_SECRET обязательный + signature verification (payments.controller.webhook)
+2. Idempotency (stripe_events) + tests через Stripe CLI
+3. Enforce PUBLIC_ORIGIN https и redirect allowlist
+4. Add rate limiting and basic monitoring
 
-8) PCI scope
-- Current status: Stripe Checkout is used which reduces PCI scope — GOOD.
-- Remediation: Document remaining responsibilities for PCI and verify with Stripe guidance.
-
-9) CI security checks
-- Current status: No automated Semgrep/SAST configured.
-- Remediation: Add Semgrep and dependency vulnerability scans to CI pipeline and block releases on critical failures.
-
-10) Operational runbooks
-- Current status: No runbook present.
-- Remediation: Create an incident runbook describing steps to triage failed payments, webhook signature errors, and reconciliation.
-
-Next recommended work order
-1. Set STRIPE_WEBHOOK_SECRET in production secrets manager and implement webhook signature verification + idempotency.
-2. Enforce HTTPS and restrict CORS.
-3. Add rate limiting and WAF protections.
-4. Integrate Sentry and configure alerting for payment flows.
-5. Add CI security scans (Semgrep, dependency audits) and fix any critical issues before production.
+Если подтверждаете, начну с пункта 1 (реализация обязательной проверки подписи и отказа от fallback).
