@@ -3,6 +3,7 @@ import fsx from 'fs-extra';
 import { extname, join } from 'path';
 import { randomUUID } from 'crypto';
 import { BadRequestException } from '@nestjs/common';
+import { diskStorage } from 'multer';
 
 export function createMulterOptions(opts?: { allowed?: string[]|"*"; maxFileSize?: number; category?: string; maxFiles?: number }) {
   const uploadDir = process.env.UPLOAD_DIR || './uploads';
