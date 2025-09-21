@@ -15,7 +15,7 @@ Tasks
    - Endpoint POST /api/payments/create-checkout-session — DONE
    - Webhook endpoint POST /api/payments/webhook to handle checkout.session.completed — DONE (basic implementation, requires STRIPE_WEBHOOK_SECRET to verify signatures)
 4. Frontend: implement Checkout flow
-   - Add Checkout button component that calls backend to create session and redirects using stripe.js — PENDING
+   - Add Checkout button component that calls backend to create session and redirects using stripe.js — DONE (component added at front/src/components/CheckoutButton.tsx)
    - Add admin order webhook testing utilities — PENDING
 5. Security & configuration
    - Use env vars for keys, do NOT commit secrets — PENDING
