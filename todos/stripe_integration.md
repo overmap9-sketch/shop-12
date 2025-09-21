@@ -2,37 +2,56 @@ Stripe integration TODO
 
 Status: in_progress
 
-Env variables set: STRIPE keys configured via DevServerControl
+Env variables set: STRIPE keys configured via environment (dev keys present in environment for testing)
 
 Overview
-- Integrate Stripe Checkout / PaymentIntents to accept payments from the Next.js frontend and NestJS backend.
+- Integrate Stripe Checkout / PaymentIntents to accept payments from the Next.js frontend and NestJS backend. Harden the integration for production use with a security-first approach.
 
 Tasks
-1. Create todos and documentation (this file + docs/STRIPE_INTEGRATION.md) — DONE
-2. Add server env variables (STRIPE_SECRET_KEY) and front env (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) — DONE (set via environment)
-3. Backend: implement payments module
+1. Documentation and tracking
+   - This file and docs/STRIPE_INTEGRATION.md, plus new docs/payment_module_security.md — UPDATED
+2. Environment & secrets management
+   - Ensure STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET are set in production environment variables and never committed to source control — DONE (dev keys present); STRIPE_WEBHOOK_SECRET: PENDING (must be set in production env)
+   - Configure automated key rotation and least-privilege access for any deployment systems — PENDING
+3. Backend implementation
    - payments.module.ts, payments.service.ts, payments.controller.ts — DONE
    - Endpoint POST /api/payments/create-checkout-session — DONE
-   - Webhook endpoint POST /api/payments/webhook to handle checkout.session.completed — DONE (basic implementation, requires STRIPE_WEBHOOK_SECRET to verify signatures)
-4. Frontend: implement Checkout flow
-   - Add Checkout button component that calls backend to create session and redirects using stripe.js — DONE (component added at front/src/components/CheckoutButton.tsx)
-   - Add admin order webhook testing utilities — PENDING
-5. Security & configuration
-   - Use env vars for keys, do NOT commit secrets — DONE (keys set in environment)
-   - Use webhook signing secret for webhook verification — PENDING (set STRIPE_WEBHOOK_SECRET to enable signature verification)
-6. Test in Stripe sandbox (publishable + secret keys) and verify successful payment flow — PENDING
-7. Production checklist
-   - Use live keys, HTTPS, webhook endpoint with correct signing secret, ensure idempotency and retry logic — PENDING
+   - Webhook endpoint POST /api/payments/webhook — DONE (basic implementation). Must enable full signature verification using STRIPE_WEBHOOK_SECRET and implement idempotency handling — PENDING
+   - Add strict input validation and whitelisting for all payment-related endpoints — PENDING
+4. Frontend implementation
+   - Checkout button and stripe.js redirect — DONE
+   - Ensure no secret keys are present client-side; use NEXT_PUBLIC_* only for publishable key — DONE
+   - Harden client-side flows to validate server responses before redirecting — PENDING
+5. Security & production hardening (new, high priority)
+   - Enforce HTTPS and HSTS in all environments that accept payments — PENDING
+   - Enforce CORS rules to only allow trusted origins (frontend origin) — PENDING
+   - Rate limiting for payment endpoints (create-checkout-session, webhook) — PENDING
+   - Verify webhook signatures using Stripe SDK and STRIPE_WEBHOOK_SECRET — PENDING
+   - Implement idempotency keys for server-side actions triggered by webhooks to avoid duplicate state changes — PENDING
+   - Use structured logging (correlation IDs) and send errors to monitoring (Sentry) — PENDING
+   - Monitor suspicious activity and configure alerts for failed payments, repeated webhook retries, and unexpected events — PENDING
+   - Restrict access to Stripe keys (separate production keys, minimal access) and rotate keys regularly — PENDING
+   - PCI guidance: use Stripe Checkout to minimize PCI scope; do not collect raw card data on your servers — DONE (Checkout used)
+   - Ensure webhook endpoint is not publicly discoverable beyond necessary path and protect with IP allowlisting or WAF where possible — PENDING
+   - Validate and sanitize any metadata or inputs persisted to order records to avoid injection/XSS in admin UIs — PENDING
+6. Testing & verification
+   - Test full payment flow in Stripe sandbox and verify webhook handling with the CLI and webhook forwarding — PENDING
+   - Perform end-to-end tests that simulate network failures and webhook retries — PENDING
+   - Run security scanning (SAST) and dependency vulnerability scans before production releases — PENDING
+7. Operational readiness
+   - Add observability: metrics, traces, and error dashboards for payment flows — PENDING
+   - Create incident runbook for payment failures, webhook signature errors, and reconciliation mismatches — PENDING
 
 Notes / Decisions
-- Prefer Stripe Checkout for quick integration (less PCI burden). Use PaymentIntents + Elements if you need in-site card forms.
-- Webhooks are recommended to reliably mark orders paid on the backend.
+- Prefer Stripe Checkout to reduce PCI burden. PaymentIntents + Elements only if in-site card collection is required.
+- Webhooks are required to reliably mark orders paid and should be verified and idempotent.
 
 What I did now
-- Created this todos file and docs/STRIPE_INTEGRATION.md (documentation). Status updated here.
+- Updated todos file to include a security-focused production checklist and tasks. Created cybersecurity/ and docs/payment_module_security.md files.
 
 Next actions I can take for you
-- (A) Set environment variables using the platform and add backend + frontend code to create checkout sessions and redirect users to Stripe Checkout. I will NOT store your secret keys in the repo; they will be set via environment variables.
-- (B) Implement webhook endpoint and test it in the Stripe dashboard using the CLI or webhook forwarding service.
+- (A) Enable STRIPE_WEBHOOK_SECRET in production environment and implement strict signature verification in payments webhook handler.
+- (B) Add idempotency handling and structured logging for webhook-initiated order updates.
+- (C) Configure monitoring (Sentry) and automated security scans (Semgrep) prior to production release.
 
-To proceed choose: "Implement now" or "Only document". If implement now, please confirm you want me to set STRIPE keys as environment variables in this environment (I will use DevServerControl to set them).
+To proceed, tell me which of the next actions (A/B/C) you want me to implement now; I will then start the work and update the todo statuses accordingly.
