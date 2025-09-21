@@ -17,13 +17,6 @@ const nextConfig = {
       { source: '/uploads/:path*', destination: `${target}/uploads/:path*` },
     ];
   },
-  experimental: {
-    allowedDevOrigins: (process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS || '')
-      .split(',')
-      .map(s => s.trim())
-      .filter(Boolean),
-    typedRoutes: false,
-  },
   webpack: (config) => {
     // Align with tsconfig paths: "@/*" -> repo root
     config.resolve.alias['@'] = path.resolve(__dirname, '..');
