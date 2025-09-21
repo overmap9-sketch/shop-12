@@ -17,7 +17,14 @@ export interface ImageUploadError {
 export class ImageUploadAPI {
   private static apiBase = '/api';
   private static getAuthHeader() {
-    const token = localStorage.getItem('ecommerce_auth_token') || localStorage.getItem('auth_token') || localStorage.getItem('admin-token');
+    let token = localStorage.getItem('ecommerce_auth_token') || localStorage.getItem('auth_token') || localStorage.getItem('admin-token');
+    if (!token) return {};
+    try {
+      // Stored via JSON.stringify in some flows
+      const parsed = JSON.parse(token);
+      if (typeof parsed === 'string') token = parsed;
+    } catch {}
+    token = token.replace(/^"+|"+$/g, '');
     return token ? { Authorization: `Bearer ${token}` } : {};
   }
 
