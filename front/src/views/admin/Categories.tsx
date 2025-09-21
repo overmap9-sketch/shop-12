@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { selectCategories, fetchCategories } from '../../features/catalog/catalogSlice';
 import { Category } from '../../entities';
 import { CategoriesAPI } from '../../shared/api';
