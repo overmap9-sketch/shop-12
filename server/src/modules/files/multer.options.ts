@@ -1,6 +1,6 @@
 import { diskStorage } from 'multer';
 import fsx from 'fs-extra';
-import { extname, join } from 'path';
+import { extname, join, resolve } from 'path';
 import { randomUUID } from 'crypto';
 import { BadRequestException } from '@nestjs/common';
 
@@ -13,10 +13,11 @@ export function createMulterOptions(opts?: { allowed?: string[]|"*"; maxFileSize
   const now = new Date();
   const year = String(now.getFullYear());
   const month = String(now.getMonth()+1).padStart(2,'0');
-  const destination = join(uploadDir, category, year, month);
+  const destinationRel = join(uploadDir, category, year, month);
+  const destinationAbs = resolve(process.cwd(), destinationRel);
   return {
     storage: diskStorage({
-      destination: async (_req, _file, cb) => { try { await fsx.ensureDir(destination); cb(null, destination); } catch (e) { cb(e as any, destination); } },
+      destination: async (_req, _file, cb) => { try { await fsx.ensureDir(destinationAbs); cb(null, destinationAbs); } catch (e) { cb(e as any, destinationAbs); } },
       filename: (_req, file, cb) => { const ext = extname(file.originalname).toLowerCase(); cb(null, `${randomUUID()}${ext}`); },
     }),
     fileFilter: (_req: any, file: Express.Multer.File, cb: Function) => {
