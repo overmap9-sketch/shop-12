@@ -1,5 +1,7 @@
 import { Injectable, UnauthorizedException, ConflictException, OnModuleInit, Logger } from '@nestjs/common';
-import { JsonDbService, BaseEntity } from '../../persistence/json-db.service.js';
+import { BaseEntity } from '../../persistence/json-db.service.js';
+import { Inject, Injectable, UnauthorizedException, ConflictException, OnModuleInit, Logger } from '@nestjs/common';
+import { DATA_STORE, DataStore } from '../../persistence/data-store.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
@@ -10,7 +12,7 @@ interface User extends BaseEntity { email: string; passwordHash: string; firstNa
 export class AuthService implements OnModuleInit {
   private readonly collection = 'users';
   private readonly logger = new Logger(AuthService.name);
-  constructor(private readonly db: JsonDbService, private readonly cfg: ConfigService) {}
+  constructor(@Inject(DATA_STORE) private readonly db: DataStore, private readonly cfg: ConfigService) {}
 
   async onModuleInit() {
     // Seed default admin if none exists
