@@ -4,7 +4,7 @@
 
 ## Содержание
 - [Требования](#требования)
-- [Быстрый старт (только фронт)](#быстрый-старт-тольк��-фронт)
+- [Быстрый старт (только фр��нт)](#быстрый-старт-тольк��-фронт)
 - [Быстрый старт (фронт + бэкенд вместе)](#быстрый-старт-фронт--бэкенд-вместе)
 - [Переменные окружения](#переменные-окружения)
 - [Скрипты npm](#скрипты-npm)
@@ -95,7 +95,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 Ключевые папки:
 - `front/app/` — маршруты Next.js (App Router)
 - `front/src/app/` — AppProvider, Redux store и хуки
-- `front/src/app-pages/` — страницеподобные компоненты (Admin, Auth, и т.д.)
+- `front/src/app-pages/` — страницеподобные комп��ненты (Admin, Auth, и т.д.)
 - `front/src/features/` — Redux-слайсы (auth, cart, catalog, currency, theme)
 - `front/src/shared/api/` — API-слой (axios-инстанс и доменные клиенты)
 - `front/src/shared/themes/` — темы и провайдеры
@@ -168,6 +168,13 @@ API-клиент: `front/src/shared/api/images.ts`
 
 ## Траблшутинг
 - 401 при загрузке/запросах: проверьте наличие токена и права `files:upload` (или роль admin)
-- CORS/предпросмотр: добавьте домен предпросмотра в `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS`
+- CORS/предпросмотр: добавь��е домен предпросмотра в `NEXT_PUBLIC_ALLOWED_DEV_ORИGINS`
 - Не видно загруженные файлы: убедитесь, что бэкенд раздаёт `/uploads`, а фронт проксирует этот путь
 - 404 от API: проверьте `NEXT_PUBLIC_API_ORIGIN` и доступность бэкенда `/api/*`
+
+## Конфигурация
+- Все запросы фронта направляются на `${NEXT_PUBLIC_API_ORIGIN}/api` (см. front/.env.example)
+- Токен хранится в localStorage под ключом `ecommerce_auth_token`; фронт автоматически добавляет Authorization
+- Проверка сессии выполняется запросом `GET /api/auth/me`
+
+Подробнее: docs/CONFIGURATION.md
