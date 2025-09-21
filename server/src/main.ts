@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module.js';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import express from 'express';
+import { resolve } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -13,6 +15,10 @@ async function bootstrap() {
 
   const origin = config.get<string>('CORS_ORIGIN') || '*';
   app.enableCors({ origin, credentials: true });
+
+  // Static serving for uploads
+  const uploadDir = config.get<string>('UPLOAD_DIR') || './uploads';
+  app.use('/uploads', express.static(resolve(process.cwd(), uploadDir)));
 
   const port = config.get<number>('PORT') || 4000;
   await app.listen(port);

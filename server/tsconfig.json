@@ -11,7 +11,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": "./src",
-    "types": ["node"]
+    "types": ["node", "express", "multer", "fs-extra"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../app/hooks';
 import { selectCategories } from '../../features/catalog/catalogSlice';
 import { Category } from '../../entities';
-import { CategoriesAPI } from '../../shared/api';
+import { CategoriesAPI, ImageUploadAPI } from '../../shared/api';
 import { Button } from '../../shared/ui/Button';
 import { LoadingSpinner } from '../../shared/ui/LoadingSpinner';
 import {
@@ -236,14 +236,34 @@ export function CategoryForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Image URL</label>
-                <input
-                  type="url"
-                  value={formData.image || ''}
-                  onChange={(e) => handleInputChange('image', e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
-                  placeholder="https://example.com/image.jpg"
-                />
+                <label className="block text-sm font-medium mb-2">Image</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="url"
+                    value={formData.image || ''}
+                    onChange={(e) => handleInputChange('image', e.target.value)}
+                    className="flex-1 px-3 py-2 border rounded-md"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      try {
+                        const url = await ImageUploadAPI.uploadImage(file);
+                        handleInputChange('image', url);
+                      } catch (err) {
+                        console.error('Image upload failed', err);
+                        alert('Image upload failed');
+                      } finally {
+                        e.currentTarget.value = '';
+                      }
+                    }}
+                    className="text-sm"
+                  />
+                </div>
                 {formData.image && (
                   <div className="mt-2">
                     <img

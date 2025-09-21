@@ -11,7 +11,16 @@ const nextConfig = {
     if (!target || target === 'internal' || target === 'self') {
       return [];
     }
-    return [{ source: '/api/:path*', destination: `${target}/api/:path*` }];
+    return [
+      { source: '/api/:path*', destination: `${target}/api/:path*` },
+      { source: '/uploads/:path*', destination: `${target}/uploads/:path*` },
+    ];
+  },
+  experimental: {
+    allowedDevOrigins: (process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS || '')
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean),
   },
   webpack: (config) => {
     // Align with tsconfig paths: "@/*" -> repo root

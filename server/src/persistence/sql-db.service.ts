@@ -29,7 +29,7 @@ export class SqlDbService implements DataStore, OnModuleInit {
     this.sequelize = new Sequelize(url, { logging: false, dialect: 'postgres' });
     this.Document = this.sequelize.define<DocumentModel>('Document', {
       id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-      collection: { type: DataTypes.STRING, allowNull: false, index: true },
+      collection: { type: DataTypes.STRING, allowNull: false },
       data: { type: DataTypes.JSONB, allowNull: false },
       dateCreated: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
       dateModified: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
@@ -43,7 +43,7 @@ export class SqlDbService implements DataStore, OnModuleInit {
     this.logger.log('Sequelize connected and documents table is ready');
   }
 
-  private toEntity<T extends BaseEntity>(doc: DocumentModel): T {
+  private toEntity<T = any>(doc: DocumentModel): T {
     const data = doc.get('data') as any;
     const id = doc.get('id') as string;
     const dateCreated = (doc.get('dateCreated') as Date)?.toISOString();

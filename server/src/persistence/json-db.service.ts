@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ensureDir, pathExists, readJSON, writeJSON } from 'fs-extra';
+import fsx from 'fs-extra';
 import { join, resolve } from 'path';
 import { randomUUID } from 'crypto';
 
@@ -17,23 +17,23 @@ export class JsonDbService {
   }
 
   private async filePath(collection: string) {
-    await ensureDir(this.dataDir);
+    await fsx.ensureDir(this.dataDir);
     return join(this.dataDir, `${collection}.json`);
   }
 
   async all<T = any>(collection: string): Promise<T[]> {
     const file = await this.filePath(collection);
-    if (!(await pathExists(file))) {
-      await writeJSON(file, [], { spaces: 2 });
+    if (!(await fsx.pathExists(file))) {
+      await fsx.writeJSON(file, [], { spaces: 2 });
       return [];
     }
-    const arr = await readJSON(file);
+    const arr = await fsx.readJSON(file);
     return Array.isArray(arr) ? (arr as T[]) : [];
   }
 
   async saveAll<T = any>(collection: string, rows: T[]): Promise<void> {
     const file = await this.filePath(collection);
-    await writeJSON(file, rows, { spaces: 2 });
+    await fsx.writeJSON(file, rows, { spaces: 2 });
   }
 
   async findById<T extends BaseEntity>(collection: string, id: string): Promise<T | undefined> {
