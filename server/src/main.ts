@@ -20,6 +20,9 @@ async function bootstrap() {
   const uploadDir = config.get<string>('UPLOAD_DIR') || './uploads';
   app.use('/uploads', express.static(resolve(process.cwd(), uploadDir)));
 
+  // Stripe webhook endpoint requires raw body
+  app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
+
   const port = config.get<number>('PORT') || 4000;
   await app.listen(port);
   // eslint-disable-next-line no-console
