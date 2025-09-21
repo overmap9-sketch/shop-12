@@ -52,8 +52,17 @@ export function useParams<T extends Record<string, string>>() {
     return {} as T;
   }
   const parts = window.location.pathname.split('/').filter(Boolean);
-  // No real mapping to route params is possible here; return empty
-  return {} as T;
+  // Attempt to map common param patterns, e.g. /product/:id or /products/:id
+  const params: Record<string,string> = {};
+  const idx = parts.findIndex(p => p === 'product' || p === 'products' || p === 'product-detail');
+  if (idx !== -1 && parts.length > idx + 1) {
+    params['id'] = parts[idx + 1];
+  } else if (parts.length > 0) {
+    // fallback: last segment as id if looks like an id (contains '-' or alphanumeric)
+    const last = parts[parts.length - 1];
+    if (last && last.length > 0) params['id'] = last;
+  }
+  return params as T;
 }
 
 // useSearchParams shim with setter compatible with react-router-dom (server-safe)
