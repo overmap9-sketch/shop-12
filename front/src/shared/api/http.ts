@@ -1,14 +1,17 @@
-export const API_BASE = '/api';
+const ORIGIN = (process.env.NEXT_PUBLIC_API_ORIGIN || '').replace(/\/$/, '');
+export const API_BASE = ORIGIN && ORIGIN !== 'internal' && ORIGIN !== 'self' ? `${ORIGIN}/api` : '/api';
 
 async function request(path: string, options: RequestInit = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
-    cache: 'no-store',
-  });
+  const headers: any = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (typeof window !== 'undefined') {
+    let token = localStorage.getItem('ecommerce_auth_token') || localStorage.getItem('auth_token') || localStorage.getItem('admin-token');
+    if (token) {
+      try { const parsed = JSON.parse(token); if (typeof parsed === 'string') token = parsed; } catch {}
+      token = token.replace(/^"+|"+$/g, '');
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers, cache: 'no-store', credentials: 'include' });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     throw new Error(text || `HTTP ${res.status}`);

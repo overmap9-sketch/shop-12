@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
 import { ThemeProvider } from '../shared/themes/ThemeProvider';
-import { initializeMockData } from '../shared/lib/mockData';
 import '../shared/config/i18n';
+import { Storage, STORAGE_KEYS } from '../shared/lib/storage';
+import { http } from '../shared/api/http';
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -12,8 +14,16 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   useEffect(() => {
-    // Initialize mock data on app startup
-    initializeMockData();
+    // Verify auth token with backend on app start
+    (async () => {
+      try {
+        const res = await http.get('/auth/me');
+        if (res?.user) Storage.set(STORAGE_KEYS.USER, res.user);
+      } catch {
+        Storage.remove(STORAGE_KEYS.USER);
+        Storage.remove(STORAGE_KEYS.AUTH_TOKEN);
+      }
+    })();
   }, []);
 
   return (

@@ -38,9 +38,10 @@ export class FilesService {
   async registerSavedFile(file: Express.Multer.File, opts: { category?: string; uploaderId?: string } = {}): Promise<StoredFile> {
     const ext = extname(file.originalname || file.filename || '').toLowerCase();
     const id = (file as any).id || randomUUID();
-    const storagePath = resolve(file.path);
-    const relativePath = relative(process.cwd(), storagePath);
-    const publicPath = '/' + relative(this.rootDir, storagePath).split('\\').join('/');
+    const storagePathAbs = resolve(file.path);
+    const relativePath = relative(process.cwd(), storagePathAbs);
+    // Compute public path relative to uploads root
+    const relFromUploads = relative(this.rootDir, storagePathAbs).split('\\').join('/');
     const downloadUrl = `/api/files/${id}`;
     const rec: Omit<StoredFile,'id'> = {
       originalName: file.originalname,
@@ -48,9 +49,9 @@ export class FilesService {
       mimeType: file.mimetype,
       size: file.size,
       ext,
-      storagePath,
+      storagePath: storagePathAbs,
       relativePath,
-      publicPath: '/uploads/' + publicPath.replace(/^\/+/, ''),
+      publicPath: '/uploads/' + relFromUploads.replace(/^\/+/, ''),
       downloadUrl,
       category: opts.category,
       uploaderId: opts.uploaderId,
@@ -65,9 +66,28 @@ export class FilesService {
   async remove(id: string) {
     const f = await this.get(id);
     if (!f) return false;
-    if (await fsx.pathExists(f.storagePath)) await fsx.remove(f.storagePath);
+    const path = this.resolvePath(f);
+    if (await fsx.pathExists(path)) await fsx.remove(path);
     return this.db.remove(this.collection, id);
   }
 
-  createReadStream(file: StoredFile) { return createReadStream(file.storagePath); }
+  // Resolve actual absolute storage path in a portable way, avoiding stale absolute paths from other environments
+  resolvePath(file: StoredFile): string {
+    const tryPaths = [] as string[];
+    if (file.storagePath) tryPaths.push(resolve(file.storagePath));
+    if (file.relativePath) tryPaths.push(resolve(process.cwd(), file.relativePath));
+    if (file.publicPath) {
+      const clean = file.publicPath.replace(/^\/?uploads\/?/, '');
+      tryPaths.push(resolve(this.rootDir, clean));
+    }
+    for (const p of tryPaths) {
+      try { if (fsx.existsSync(p)) return p; } catch {}
+    }
+    // Fallback to relativePath under uploads root if present
+    return file.relativePath?.includes('uploads')
+      ? resolve(process.cwd(), file.relativePath)
+      : resolve(this.rootDir, file.filename);
+  }
+
+  createReadStream(file: StoredFile) { return createReadStream(this.resolvePath(file)); }
 }

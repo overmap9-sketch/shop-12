@@ -50,9 +50,10 @@ export class FilesController {
   async download(@Param('id') id: string, @Res() res: Response) {
     const f = await this.files.get(id);
     if (!f) throw new BadRequestException('File not found');
+    const path = this.files.resolvePath(f);
     res.setHeader('Content-Type', f.mimeType);
     res.setHeader('Content-Length', f.size.toString());
     res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(f.originalName)}"`);
-    return res.sendFile(f.storagePath);
+    return res.sendFile(path);
   }
 }

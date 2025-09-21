@@ -119,3 +119,19 @@ Notes:
 - Using JSON storage accidentally: set STORAGE_DRIVER=sequelize and restart.
 - Permissions / data folder: set DATA_DIR to a writable location when using json driver.
 - Typescript build: run `npm run build` before `npm start`.
+
+## Configuration & Auth
+
+See docs/CONFIGURATION.md for full env reference and storage switching.
+
+Key envs (server/.env):
+- PORT, CORS_ORIGIN
+- STORAGE_DRIVER=json|sequelize, DATA_DIR, UPLOAD_DIR
+- JWT_SECRET, JWT_EXPIRES_IN, ALLOW_MOCK_TOKENS
+- ADMIN_EMAIL, ADMIN_PASSWORD (admin is seeded on first run)
+- DATABASE_URL (when using sequelize)
+
+Auth endpoints:
+- POST /api/auth/login
+- POST /api/auth/register
+- GET /api/auth/me (JWT required)
