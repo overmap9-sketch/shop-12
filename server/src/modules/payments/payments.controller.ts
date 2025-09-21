@@ -88,7 +88,7 @@ export class PaymentsController {
         const orders = await this.db.all<any>('orders');
         const order = orders.find(o => o.sessionId === sessionId);
         if (order) {
-          await this.db.update('orders', order.id, { status: 'paid', dateModified: new Date().toISOString() });
+          await this.db.update('orders', order.id, { status: 'paid', dateModified: new Date().toISOString() } as any);
         }
       } catch (e) {
         // ignore
