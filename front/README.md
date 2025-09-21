@@ -1,121 +1,173 @@
-# PaintHub Frontend (Next.js)
+# PaintHub — Frontend (Next.js)
 
-This document covers how to run the frontend, how to run frontend and backend together (proxy), the main modules, project architecture, and the data flow/state management.
+Полноценный фронтенд e‑commerce (Next.js + TypeScript + Tailwind + Redux Toolkit) с административной панелью, загрузкой изображений и проксированием API к бэкенду.
 
-## Quick Start (Frontend Only)
+## Содержание
+- [Требования](#требования)
+- [Быстрый старт (только фронт)](#быстрый-старт-тольк��-фронт)
+- [Быстрый старт (фронт + бэкенд вместе)](#быстрый-старт-фронт--бэкенд-вместе)
+- [Переменные окружения](#переменные-окружения)
+- [Скрипты npm](#скрипты-npm)
+- [Архитектура проекта](#архитектура-проекта)
+- [Потоки данных и стейт-менеджмент](#потоки-данных-и-стейт-менеджмент)
+- [Работа с API и прокси](#работа-с-api-и-прокси)
+- [Загрузка файлов/изображений](#загрузка-файловизображений)
+- [Модули фронтенда](#модули-фронтенда)
+- [Локализация и темы](#локализация-и-темы)
+- [Траблшутинг](#траблшутинг)
 
-1. cd front
-2. npm install
-3. cp .env.example .env.local
-4. Set NEXT_PUBLIC_API_ORIGIN to your backend origin (e.g., http://localhost:4000)
-5. npm run dev (defaults to PORT=3000)
-6. Open http://localhost:3000
+---
 
-Common checks:
-- If API calls fail, verify NEXT_PUBLIC_API_ORIGIN and that the backend is running
-- For external previews (e.g., Builder.io), add the preview origin to NEXT_PUBLIC_ALLOWED_DEV_ORIGINS
-- /uploads proxy relies on NEXT_PUBLIC_API_ORIGIN (backend must serve /uploads statically)
+## Требования
+- Node.js 18+ (рекомендовано 18/20/22)
+- npm 9+
 
-## Quick Start (Frontend + Backend Together)
+---
 
-Single command (from repo root):
+## Быстрый старт (только фронт)
+1. Перейдите в каталог фронта:
+   ```sh
+   cd front
+   ```
+2. Установите зависимости:
+   ```sh
+   npm install
+   ```
+3. Скопируйте переменные окружения и при необходимости отредактируй��е:
+   ```sh
+   cp .env.example .env.local
+   # Убедитесь, что NEXT_PUBLIC_API_ORIGIN указывает на работающий бэкенд
+   ```
+4. Запустите dev-сервер:
+   ```sh
+   npm run dev
+   ```
+5. Откройте http://localhost:3000
 
-sh
+---
+
+## Быстрый старт (фронт + бэкенд вместе)
+В одном процессе (из корня репозитория):
+```sh
 sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev"
+```
+Либо в двух терминалах:
+- Терминал А (бэкенд):
+  ```sh
+  cd server
+  npm install
+  npm run build
+  npm start   # http://localhost:4000
+  ```
+- Терминал Б (фронт):
+  ```sh
+  cd front
+  npm install
+  npm run dev # http://localhost:3000
+  ```
+Прокси: фронт проксирует запросы к бэкенду через Next.js rewrites (/api и /uploads) на адрес из `NEXT_PUBLIC_API_ORIGIN`.
 
-Two terminals:
-- Terminal A (backend)
-  - cd server && npm install && npm run build && npm start  # http://localhost:4000
-- Terminal B (frontend)
-  - cd front && npm install && npm run dev                  # http://localhost:3000
+---
 
-### Proxy model (Next.js rewrites)
-- Defined in front/next.config.mjs
-- Rewrites forward:
-  - /api/:path*    -> ${NEXT_PUBLIC_API_ORIGIN}/api/:path*
-  - /uploads/:path*-> ${NEXT_PUBLIC_API_ORIGIN}/uploads/:path*
-- Keep NEXT_PUBLIC_API_ORIGIN aligned with your backend host/port
-- allowedDevOrigins can be configured via NEXT_PUBLIC_ALLOWED_DEV_ORIGINS
+## Переменные окружения
+Файл-шаблон: `front/.env.example` (скопируйте в `.env.local`).
 
-## Environment Variables (Frontend)
-Create front/.env.local from .env.example.
+Доступные ключи:
+- `NEXT_PUBLIC_API_ORIGIN` — адрес бэкенда (например, `http://localhost:4000`). Используется для проксирования `/api/*` и `/uploads/*`.
+- `PORT` — порт dev-сервера Next.js (по умолчанию 3000).
+- `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через запятую), которым разрешён dev-доступ (например, домен предпросмотра).
+- `NEXT_TELEMETRY_DISABLED` — опционально выключает телеметрию Next.js (`1` чтобы выключить).
 
-- NEXT_PUBLIC_API_ORIGIN=http://localhost:4000
-  - Backend origin used by rewrites for /api and /uploads
-- PORT=3000
-  - Frontend dev server port for next dev
-- NEXT_PUBLIC_ALLOWED_DEV_ORIGINS=http://localhost:3000
-  - Comma-separated origins allowed for dev previews
-- NEXT_TELEMETRY_DISABLED=1
-  - Optional: disable Next.js telemetry locally
+> Примечание: порт бэкенда задаётся на стороне сервера (по умолчанию 4000). В фронте он не управляется, но должен совпадать с `NEXT_PUBLIC_API_ORIGIN`.
 
-Notes:
-- Backend port is configured on the server side (server/.env or environment), default 4000 in this repo.
+---
 
-## Architecture Overview
+## Скрипты npm
+В каталоге `front/` доступны:
+- `npm run dev` — запуск Next.js dev-сервера
+- `npm run build` — сборка
+- `npm run start` — запуск собранного приложения
+- `npm run lint` — линтинг исходников
 
-- Next.js (App Router), TypeScript, Tailwind CSS
-- Redux Toolkit for state management
-- i18next for localization
-- Domain-oriented folders in front/src:
-  - app/           -> AppProvider, store, hooks
-  - app-pages/     -> Page-level React components (Admin, Auth, etc.)
-  - features/      -> Redux slices (auth, cart, catalog, currency, theme)
-  - shared/api/    -> API layer (axios instance + domain clients)
-  - shared/themes/ -> Theme providers and CSS variables
-  - components/    -> Reusable UI components
-  - widgets/       -> Composite UI blocks (header, footer, product grid, etc.)
+---
 
-Routing
-- Next.js routes live in front/app/* and render components from front/src/app-pages
-- react-router-dom references are shimmed to Next navigation (see next.config.mjs) during migration
+## Архитектура проекта
+Ключевые папки:
+- `front/app/` — маршруты Next.js (App Router)
+- `front/src/app/` — AppProvider, Redux store и хуки
+- `front/src/app-pages/` — страницеподобные компоненты (Admin, Auth, и т.д.)
+- `front/src/features/` — Redux-слайсы (auth, cart, catalog, currency, theme)
+- `front/src/shared/api/` — API-слой (axios-инстанс и доменные клиенты)
+- `front/src/shared/themes/` — темы и провайдеры
+- `front/src/components/` — переиспользуемые UI-компоненты
+- `front/src/widgets/` — составные UI-блоки (Header, Footer, Grids)
 
-## Data Flow (Redux Toolkit)
+Маршрутизация:
+- Страницы в `front/app/*` реэкспортируют/встраивают компоненты из `front/src/app-pages/*`.
+- `react-router-dom` замаплен на shim (см. `front/next.config.mjs`) для плавной миграции.
 
-1. UI dispatches an action/async thunk (e.g., login, fetch products)
-2. Thunks call API clients from front/src/shared/api via axios instance (shared/config/api.ts)
-   - Request interceptor attaches Authorization from localStorage (ecommerce_auth_token, auth_token, or admin-token)
-   - Base path is /api; Next.js rewrites proxy it to NEXT_PUBLIC_API_ORIGIN
-3. Reducers update slices upon success/failure
-4. Components subscribe via selectors (useAppSelector)
+---
 
-Slices
-- features/auth/authSlice.ts
-- features/catalog/catalogSlice.ts
-- features/cart/cartSlice.ts
-- features/currency/currencySlice.ts
-- features/theme-switcher/themeSlice.ts
+## Потоки данных и стейт-менеджмент
+Стек: Redux Toolkit + TypeScript
+- Store: `front/src/app/store.ts`
+- Слайсы: `features/*` (auth, cart, catalog, currency, theme)
+- Паттерн:
+  1. UI диспатчит action/async thunk
+  2. Thunk вызывает доменный API-клиент из `shared/api` (см. `shared/config/api.ts`)
+     - Интерцептор добавляет `Authorization` из localStorage
+     - Базовый URL — `/api`, проксируется в бэкенд через rewrites
+  3. Reducer обновляет срез состояния
+  4. Компоненты читают данные через selectors (`useAppSelector`)
 
-API Layer
-- shared/config/api.ts -> axios instance
-- shared/api/products.ts, categories.ts -> domain calls
-- shared/api/images.ts -> multipart uploads to /api/files/images and /api/files/images/many
+Хранилище токена:
+- localStorage: `ecommerce_auth_token` / `auth_token` / `admin-token`
 
-## Modules (Frontend)
+---
 
-Auth
-- Pages: src/app-pages/auth
-- Token persisted to localStorage; axios reads it automatically
-- In dev, backend can accept mock_* tokens when ALLOW_MOCK_TOKENS=true
+## Работа с API и прокси
+- Конфигурация прокси в `front/next.config.mjs`:
+  - `/api/:path*`    → `${NEXT_PUBLIC_API_ORIGIN}/api/:path*`
+  - `/uploads/:path*`→ `${NEXT_PUBLIC_API_ORIGIN}/uploads/:path*`
+- `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список источников, разрешённых в dev-режиме.
 
-Products (Admin)
-- Form: src/app-pages/admin/ProductForm.tsx
-- ImageUploader supports drag & drop and URL add
-- Upload uses /api/files/images; saved publicPath populates product.images
+HTTP-клиент:
+- `front/src/shared/config/api.ts` — axios-инстанс с интерцептором токена.
 
-Categories (Admin)
-- Form: src/app-pages/admin/CategoryForm.tsx
-- Single image upload; saved to category.image
+---
 
-Internationalization
-- src/shared/config/i18n.ts and src/shared/locales/{en,es}/translation.json
+## Загрузка файлов/изображений
+UI-компонент: `front/src/components/ui/ImageUploader.tsx`
+API-клиент: `front/src/shared/api/images.ts`
+- Одиночная загрузка: POST `/api/files/images` (multipart/form-data, поле `file`)
+- Пакетная загрузка: POST `/api/files/images/many` (поле `files`)
+- В ответе бэкенд возвращает метаданные файла, фронт сохраняет `publicPath` как URL
 
-Theming
-- src/shared/themes/ThemeProvider.tsx and theme CSS files
+Интеграции:
+- Продукты (Admin): `front/src/app-pages/admin/ProductForm.tsx` — массив изображений товара
+- Категории (Admin): `front/src/app-pages/admin/CategoryForm.tsx` — одиночное изображение
 
-## Troubleshooting
+Требования к доступу:
+- Для загрузки необходим валидный токен (роль `admin` или разрешение `files:upload`).
 
-- 401 on uploads: ensure a token exists with files:upload permission (or admin role)
-- CORS/preview warnings: add preview origin to NEXT_PUBLIC_ALLOWED_DEV_ORIGINS
-- Uploads not visible: verify backend serves /uploads and rewrites include it
-- API 404: check NEXT_PUBLIC_API_ORIGIN and backend /api routes
+---
+
+## Модули фронтенда
+- Auth: вход/регистрация, токен в localStorage, интерцептор подхватывает заголовок
+- Products (Admin): формы добавления/редактирования, загрузка изображений, категории, атрибуты
+- Categories (Admin): иерархия, изображение, сортировка
+- Cart/Favourites: базовые операции корзины и избранного
+
+---
+
+## Локализация и темы
+- i18n: `front/src/shared/config/i18n.ts`, ресурсы в `front/src/shared/locales/{en,es}`
+- Темы: `front/src/shared/themes/*`, провайдер `ThemeProvider`
+
+---
+
+## Траблшутинг
+- 401 при загрузке/запросах: проверьте наличие токена и права `files:upload` (или роль admin)
+- CORS/предпросмотр: добавьте домен предпросмотра в `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS`
+- Не видно загруженные файлы: убедитесь, что бэкенд раздаёт `/uploads`, а фронт проксирует этот путь
+- 404 от API: проверьте `NEXT_PUBLIC_API_ORIGIN` и доступность бэкенда `/api/*`
