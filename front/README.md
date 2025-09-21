@@ -113,7 +113,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 - Store: `front/src/core/store.ts`
 - Слайсы: `features/*` (auth, cart, catalog, currency, theme)
 - Паттерн:
-  1. UI диспатчит action/async thunk
+  1. UI ��испатчит action/async thunk
   2. Thunk вызывает доменный API-клиент из `shared/api` (см. `shared/config/api.ts`)
      - Интерцептор добавляет `Authorization` из localStorage
      - Базовый URL — `/api`, проксируется в бэкенд через rewrites
@@ -178,3 +178,21 @@ API-клиент: `front/src/shared/api/images.ts`
 - Проверка сессии выпол��яется запросом `GET /api/auth/me`
 
 Подробнее: docs/CONFIGURATION.md
+
+## Быстрое исправление "Failed to fetch" (CORS / прокси)
+
+Если вы увидели в каталоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под ваш фронтенд:
+
+1) Скопируйте `server/.env.example` → `server/.env` и убедитесь, что там указано:
+
+   CORS_ORIGIN=http://localhost:3000
+
+2) Перезапустите бэкенд:
+
+   cd server && npm run start:dev
+
+Почему это работает: фронт отправляет запросы с credentials, поэтому бэкенду нужно отвечать конкретным Origin вместо `*` — браузер примет такой ответ и запросы перестанут блокироваться.
+
+Альтернатива: в продакшне используйте единый origin (reverse proxy) или корректно перечисляйте разрешённые origin в конфигурации сервера.
+
+См. также: docs/CORS_AND_PROXY.md
