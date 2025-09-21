@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { themeSlice } from '../features/theme-switcher/themeSlice';
 
-// Simple test store - adding slices one by one
 export const simpleStore = configureStore({
   reducer: {
     theme: themeSlice.reducer,

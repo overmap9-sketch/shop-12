@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store';
@@ -14,7 +13,6 @@ interface AppProviderProps {
 
 export function AppProvider({ children }: AppProviderProps) {
   useEffect(() => {
-    // Verify auth token with backend on app start
     (async () => {
       try {
         const res = await http.get('/auth/me');
