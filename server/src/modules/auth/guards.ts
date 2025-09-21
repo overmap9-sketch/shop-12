@@ -15,7 +15,8 @@ export class JwtGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<any>();
     const auth = req.headers['authorization'] || req.headers['Authorization'];
     if (!auth || typeof auth !== 'string' || !auth.startsWith('Bearer ')) throw new UnauthorizedException('Missing token');
-    const token = auth.slice('Bearer '.length).trim();
+    let token = auth.slice('Bearer '.length).trim();
+    token = token.replace(/^"+|"+$/g, '');
 
     // Optional dev-mode: accept mock tokens
     const allowMock = (this.cfg.get<string>('ALLOW_MOCK_TOKENS') || '').toLowerCase() === 'true';
