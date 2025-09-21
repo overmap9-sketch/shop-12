@@ -18,8 +18,8 @@ Tasks
    - Add Checkout button component that calls backend to create session and redirects using stripe.js — DONE (component added at front/src/components/CheckoutButton.tsx)
    - Add admin order webhook testing utilities — PENDING
 5. Security & configuration
-   - Use env vars for keys, do NOT commit secrets — PENDING
-   - Use webhook signing secret for webhook verification — PENDING
+   - Use env vars for keys, do NOT commit secrets — DONE (keys set in environment)
+   - Use webhook signing secret for webhook verification — PENDING (set STRIPE_WEBHOOK_SECRET to enable signature verification)
 6. Test in Stripe sandbox (publishable + secret keys) and verify successful payment flow — PENDING
 7. Production checklist
    - Use live keys, HTTPS, webhook endpoint with correct signing secret, ensure idempotency and retry logic — PENDING
