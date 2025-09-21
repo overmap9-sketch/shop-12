@@ -34,12 +34,14 @@ export class PaymentsController {
       });
     }
 
+    const origin = (this.config.get('PUBLIC_ORIGIN') || 'http://localhost:3000').replace(/\/$/, '');
+
     const session = await this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items,
-      success_url: successUrl || `${this.config.get('PUBLIC_ORIGIN') || ''}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${this.config.get('PUBLIC_ORIGIN') || ''}/checkout/cancel`,
+      success_url: successUrl || `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${origin}/checkout/cancel`,
       metadata: metadata || {},
     } as any);
 
