@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
+import { JwtGuard } from './guards.js';
 
 @Controller('auth')
 export class AuthController {
@@ -10,6 +11,10 @@ export class AuthController {
 
   @Post('register')
   register(@Body() body: any) { return this.svc.register(body); }
+
+  @UseGuards(JwtGuard)
+  @Get('me')
+  me(@Req() req: any) { return this.svc.me(req.user); }
 
   @Get('health')
   health() { return { ok: true }; }

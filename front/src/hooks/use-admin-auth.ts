@@ -26,6 +26,9 @@ export function useAdminAuth() {
   return context;
 }
 
+import { http } from '../shared/api/http';
+import { Storage, STORAGE_KEYS } from '../shared/lib/storage';
+
 export function useAdminAuthState() {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,17 +37,16 @@ export function useAdminAuthState() {
     checkAuthStatus();
   }, []);
 
-  const checkAuthStatus = () => {
+  const checkAuthStatus = async () => {
     try {
-      const token = localStorage.getItem('admin-token');
-      const userData = localStorage.getItem('admin-user');
-      
-      if (token && userData) {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
+      const res = await http.get('/auth/me');
+      if (res?.user) {
+        setUser({ id: res.user.id, email: res.user.email, name: res.user.firstName + ' ' + res.user.lastName, role: res.user.role || 'moderator' });
+        Storage.set(STORAGE_KEYS.USER, res.user);
+      } else {
+        setUser(null);
       }
     } catch (error) {
-      console.error('Error checking auth status:', error);
       logout();
     } finally {
       setIsLoading(false);
@@ -53,44 +55,28 @@ export function useAdminAuthState() {
 
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
-    
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Simple validation (in real app, this would be server-side)
-      if (email === 'admin@example.com' && password === 'admin123') {
-        const mockUser: AdminUser = {
-          id: '1',
-          email: 'admin@example.com',
-          name: 'Admin User',
-          role: 'admin'
-        };
-        
-        // Store token and user data
-        localStorage.setItem('admin-token', 'mock-admin-token-' + Date.now());
-        localStorage.setItem('admin-user', JSON.stringify(mockUser));
-        
-        setUser(mockUser);
+      const res = await http.post('/auth/login', { email, password });
+      if (res?.token && res?.user) {
+        Storage.set(STORAGE_KEYS.AUTH_TOKEN, res.token);
+        Storage.set(STORAGE_KEYS.USER, res.user);
+        setUser({ id: res.user.id, email: res.user.email, name: res.user.firstName + ' ' + res.user.lastName, role: res.user.role || 'moderator' });
       } else {
-        throw new Error('Invalid credentials');
+        throw new Error('Invalid response');
       }
-    } catch (error) {
-      throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('admin-token');
-    localStorage.removeItem('admin-user');
+    Storage.remove(STORAGE_KEYS.AUTH_TOKEN);
+    Storage.remove(STORAGE_KEYS.USER);
     setUser(null);
   };
 
   const checkAuth = (): boolean => {
-    const token = localStorage.getItem('admin-token');
-    return !!token && !!user;
+    return !!user;
   };
 
   return {

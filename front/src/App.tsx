@@ -5,7 +5,6 @@ import { initializeTheme } from '@/front/src/features/theme-switcher/themeSlice'
 import { fetchCart } from '@/front/src/features/cart/cartSlice';
 import { fetchFavourites } from '@/front/src/features/favourites/favouritesSlice';
 import { initializeCurrency } from '@/front/src/features/currency/currencySlice';
-import { initializeMockData } from '@/front/src/shared/lib/mockData';
 
 // Layout components
 import { Header } from '@/front/src/widgets/header/Header';
