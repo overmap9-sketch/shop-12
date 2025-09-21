@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { AdminDashboard } from '../../app-pages/admin/Dashboard';
+import { AdminDashboard } from '../../views/admin/Dashboard';
 
 export default function Page() {
   return <AdminDashboard />;
