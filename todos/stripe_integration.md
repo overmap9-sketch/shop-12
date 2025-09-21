@@ -9,7 +9,7 @@ Overview
 
 Tasks
 1. Create todos and documentation (this file + docs/STRIPE_INTEGRATION.md) — DONE
-2. Add server env variables (STRIPE_SECRET_KEY) and front env (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) — PENDING
+2. Add server env variables (STRIPE_SECRET_KEY) and front env (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) — DONE (set via environment)
 3. Backend: implement payments module
    - payments.module.ts, payments.service.ts, payments.controller.ts
    - Endpoint POST /api/payments/create-checkout-session
