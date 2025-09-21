@@ -2,12 +2,12 @@
 "use client";
 import React, { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../src/app-core/hooks';
-import { useAdminAuthState } from '../../src/hooks/use-admin-auth';
-import { selectUser, selectIsAuthenticated, logout } from '../../src/features/auth/authSlice';
-import { isAdminRole, usePermissions } from '../../src/shared/lib/permissions';
-import { Badge } from '../../src/components/ui/badge';
-import { Link, useLocation, useNavigate } from '../../src/shared/lib/router-shim';
+import { useAppSelector, useAppDispatch } from '../../core/hooks';
+import { useAdminAuthState } from '../../hooks/use-admin-auth';
+import { selectUser, selectIsAuthenticated, logout } from '../../features/auth/authSlice';
+import { isAdminRole, usePermissions } from '../../shared/lib/permissions';
+import { Badge } from '../../components/ui/badge';
+import { Link, useLocation, useNavigate } from '../../shared/lib/router-shim';
 import {
   LayoutDashboard,
   Package,
