@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {ProductsAPI} from "../../shared/api";
-import { useAppSelector, useAppDispatch } from '../../app/hooks.ts';
+import { useAppSelector, useAppDispatch } from '../../core/hooks.ts';
 import { addToCart } from '../../features/cart/cartSlice.ts';
 import { addToFavourites, removeFromFavourites, selectIsFavourite } from '../../features/favourites/favouritesSlice.ts';
 import { fetchCategories, selectCategories } from '../../features/catalog/catalogSlice.ts';
