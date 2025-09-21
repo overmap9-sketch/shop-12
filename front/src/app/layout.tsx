@@ -1,6 +1,6 @@
 import React from 'react';
-import '../src/global.css';
-import { DEFAULT_THEME } from '../src/shared/themes/types';
+import '../global.css';
+import { DEFAULT_THEME } from '../shared/themes/types';
 import type { Metadata } from 'next';
 import { ClientProviders } from './providers';
 
