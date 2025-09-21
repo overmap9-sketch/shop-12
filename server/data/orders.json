@@ -1,0 +1,16 @@
+[
+  {
+    "sessionId": "cs_test_a1L7YkbjRMxJ1T89QWuO3cGWAHOUDGAUBfwlrGXiJH2WiZB3spb87Kc9Sg",
+    "status": "pending",
+    "items": [
+      {
+        "productId": "paint-p1",
+        "quantity": 1
+      }
+    ],
+    "total": 3999,
+    "dateCreated": "2025-09-21T23:07:22.235Z",
+    "id": "5811f688-931c-4531-9e84-6a4a598049a2",
+    "dateModified": "2025-09-21T23:07:22.235Z"
+  }
+]
