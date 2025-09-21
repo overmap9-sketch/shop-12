@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../app/hooks';
+import { useAppSelector } from '../core/hooks';
 import { selectCategories } from '../features/catalog/catalogSlice';
 import { Product, Category } from '../entities';
 import { 

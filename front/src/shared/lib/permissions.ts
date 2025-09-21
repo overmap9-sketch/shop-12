@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../core/hooks';
 import { selectUser } from '../../features/auth/authSlice';
 import type { User } from '../../entities';
 

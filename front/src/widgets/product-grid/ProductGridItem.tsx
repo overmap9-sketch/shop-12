@@ -4,7 +4,7 @@ import { Product } from '../../entities';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
 import { Star, Heart, ShoppingCart } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../core/hooks';
 import { addToCart } from '../../features/cart/cartSlice';
 import { addToFavourites, removeFromFavourites, selectIsFavourite } from '../../features/favourites/favouritesSlice';
 import { NotificationService } from '../../shared/lib/notifications';
