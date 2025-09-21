@@ -22,7 +22,7 @@ import { PaymentsModule } from './payments/payments.module.js';
     OrdersModule,
     FilesModule,
     // Payments module for Stripe integration
-    (await import('./payments/payments.module.js')).PaymentsModule,
+    PaymentsModule,
   ],
 })
 export class AppModule {}
