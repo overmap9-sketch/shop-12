@@ -21,6 +21,7 @@ const nextConfig = {
       .split(',')
       .map(s => s.trim())
       .filter(Boolean),
+    typedRoutes: false,
   },
   webpack: (config) => {
     // Align with tsconfig paths: "@/*" -> repo root
