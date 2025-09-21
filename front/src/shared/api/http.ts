@@ -1,5 +1,5 @@
 const ORIGIN = (process.env.NEXT_PUBLIC_API_ORIGIN || '').replace(/\/$/, '');
-export const API_BASE = ORIGIN && ORIGIN !== 'internal' && ORIGIN !== 'self' ? `${ORIGIN}/api` : '/api';
+export const API_BASE = (typeof window !== 'undefined') ? '/api' : (ORIGIN && ORIGIN !== 'internal' && ORIGIN !== 'self' ? `${ORIGIN}/api` : '/api');
 
 async function request(path: string, options: RequestInit = {}) {
   const headers: any = { 'Content-Type': 'application/json', ...(options.headers || {}) };
