@@ -347,9 +347,10 @@ export function Cart() {
               </div>
 
               {/* Checkout Button */}
-              <Button size="lg" className="w-full mb-4" asChild>
-                <Link to="/checkout">{t('cart.checkout')}</Link>
-              </Button>
+              <div className="w-full mb-4">
+                {/* Use CheckoutButton component to create Stripe session and redirect */}
+                <CheckoutButton items={cartItems.map(ci => ({ productId: ci.product?.id || ci.product?.slug || '', quantity: ci.quantity }))} />
+              </div>
 
               {/* Free Shipping Notice */}
               {subtotal.amount < 100 && subtotal.amount > 0 && (
