@@ -11,9 +11,9 @@ Tasks
 1. Create todos and documentation (this file + docs/STRIPE_INTEGRATION.md) — DONE
 2. Add server env variables (STRIPE_SECRET_KEY) and front env (NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) — DONE (set via environment)
 3. Backend: implement payments module
-   - payments.module.ts, payments.service.ts, payments.controller.ts
-   - Endpoint POST /api/payments/create-checkout-session
-   - (Optional) Webhook endpoint POST /api/payments/webhook to handle checkout.session.completed — PENDING
+   - payments.module.ts, payments.service.ts, payments.controller.ts — DONE
+   - Endpoint POST /api/payments/create-checkout-session — DONE
+   - Webhook endpoint POST /api/payments/webhook to handle checkout.session.completed — DONE (basic implementation, requires STRIPE_WEBHOOK_SECRET to verify signatures)
 4. Frontend: implement Checkout flow
    - Add Checkout button component that calls backend to create session and redirects using stripe.js — PENDING
    - Add admin order webhook testing utilities — PENDING
