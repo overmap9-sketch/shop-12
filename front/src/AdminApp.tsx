@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from '@/front/src/app/store';
+import { store } from '@/front/src/app-core/store';
 import { SimpleThemeProvider } from '@/front/src/shared/themes/SimpleThemeProvider';
 import { ErrorBoundary } from '@/front/src/components/ErrorBoundary';
 
