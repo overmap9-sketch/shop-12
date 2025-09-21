@@ -6,6 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  typedRoutes: false,
   async rewrites() {
     const target = process.env.NEXT_PUBLIC_API_ORIGIN;
     if (!target || target === 'internal' || target === 'self') {
