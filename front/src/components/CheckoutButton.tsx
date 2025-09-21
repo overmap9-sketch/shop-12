@@ -9,7 +9,11 @@ export default function CheckoutButton({ items }: { items: { productId: string; 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items }),
       });
-      if (!res.ok) throw new Error('Failed to create checkout session');
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        console.error('Create checkout session failed', res.status, text);
+        throw new Error(text || 'Failed to create checkout session');
+      }
       const data = await res.json();
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
       // Prefer redirect via session id
