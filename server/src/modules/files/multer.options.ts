@@ -16,7 +16,7 @@ export function createMulterOptions(opts?: { allowed?: string[]|"*"; maxFileSize
   const destination = join(uploadDir, category, year, month);
   return {
     storage: diskStorage({
-      destination: async (_req, _file, cb) => { try { await ensureDir(destination); cb(null, destination); } catch (e) { cb(e as any, destination); } },
+      destination: async (_req, _file, cb) => { try { await fsx.ensureDir(destination); cb(null, destination); } catch (e) { cb(e as any, destination); } },
       filename: (_req, file, cb) => { const ext = extname(file.originalname).toLowerCase(); cb(null, `${randomUUID()}${ext}`); },
     }),
     fileFilter: (_req: any, file: Express.Multer.File, cb: Function) => {
