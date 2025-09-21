@@ -12,10 +12,26 @@ export default function CheckoutButton({ items }: { items: { productId: string; 
       if (!res.ok) throw new Error('Failed to create checkout session');
       const data = await res.json();
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
-      if (!stripe) throw new Error('Stripe failed to load');
       // Prefer redirect via session id
       if (data.id) {
-        await stripe.redirectToCheckout({ sessionId: data.id as string });
+        try {
+          if (stripe) {
+            const res = await stripe.redirectToCheckout({ sessionId: data.id as string });
+            if ((res as any)?.error) {
+              console.error('Stripe redirectToCheckout error', res);
+              // fallback to direct url
+              if (data.url) window.location.href = data.url;
+            }
+          } else if (data.url) {
+            window.location.href = data.url;
+          } else {
+            throw new Error('Stripe not available and no redirect URL');
+          }
+        } catch (err) {
+          console.error('Error during stripe redirect:', err);
+          if (data.url) window.location.href = data.url;
+          else throw err;
+        }
       } else if (data.url) {
         window.location.href = data.url;
       } else {
