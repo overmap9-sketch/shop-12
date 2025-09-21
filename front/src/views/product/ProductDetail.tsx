@@ -62,7 +62,14 @@ export function ProductDetail() {
       setLoading(true);
       setError(null);
 
-      const productData = await ProductsAPI.getProduct(id);
+      let productData = await ProductsAPI.getProduct(id);
+
+      // If not found by id, try by slug
+      if (!productData) {
+        try {
+          productData = await ProductsAPI.getProductBySlug(id);
+        } catch {}
+      }
 
       if (!productData) {
         setError('Product not found');
