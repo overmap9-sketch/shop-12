@@ -20,6 +20,8 @@ import { FilesModule } from './files/files.module.js';
     FavouritesModule,
     OrdersModule,
     FilesModule,
+    // Payments module for Stripe integration
+    (await import('./payments/payments.module.js')).PaymentsModule,
   ],
 })
 export class AppModule {}
