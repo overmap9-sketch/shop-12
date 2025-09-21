@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { AdminCategories } from '../../../src/app-pages/admin/Categories';
+import { AdminCategories } from '../../../views/admin/Categories';
 
 export default function Page() {
   return <AdminCategories />;
