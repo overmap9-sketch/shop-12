@@ -55,10 +55,15 @@ Remaining tasks (next steps)
    - Action: scan for any imports/usages that reference Next <Html> or next/document materials indirectly (e.g., using next/script or components that access HtmlContext). Replace or move to client-only where appropriate.
 2) Replace remaining react-router-dom Link imports in server-rendered components with router-shim Link when necessary to avoid server-only issues.
    - Files to audit (examples): front/src/views/*, front/src/widgets/*, front/src/components/*
-3) Improve product page SSR metadata and move JSON-LD server-side where possible.
-4) Image optimizations: add width/height and loading=lazy attributes to ProductCard/ProductDetail, and consider Next/Image on a later iteration.
-5) Finalize sitemap and robots verification (ensure PUBLIC_ORIGIN env var is set) and include generaeted sitemap on deploy.
+3) Improve product page SSR metadata and move JSON-LD server-side where possible. — COMPLETED (moved to server)
+4) Image optimizations: add width/height and loading=lazy attributes to ProductCard/ProductDetail, and consider Next/Image on a later iteration. — PARTIAL (lazy/decoding/fetchpriority added)
+5) Finalize sitemap and robots verification (ensure PUBLIC_ORIGIN env var is set) and include generated sitemap on deploy. — PARTIAL
 6) Add CI step in project pipeline to run next build and run Lighthouse checks (see docs/SEO_GUIDE.md for CI example).
+
+Update — 2025-09-22
+- Catalog SSR: Implemented server-rendered initial catalog with ProductGridServer and client hydration shell; preserves SEO HTML and enables client interactivity post-hydration.
+  - Files: front/src/app/(shop)/catalog/page.tsx, front/src/app/(shop)/catalog/shell.tsx, front/src/widgets/product-grid/ProductGridServer.tsx.
+- Next: wire initial params into client store for seamless hydration; audit any SSR/client mismatches.
 
 How progress will be tracked
 - I will update this file after each change describing: file modified, reason, and status (completed/in_progress/blocked).
