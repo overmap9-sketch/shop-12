@@ -29,4 +29,14 @@ async function bootstrap() {
   console.log(`Backend listening on http://localhost:${port}`);
 }
 
+// Global handlers to avoid process exit on unhandled errors in dev
+process.on('unhandledRejection', (reason: any) => {
+  // eslint-disable-next-line no-console
+  console.error('[unhandledRejection]', reason?.stack || reason);
+});
+process.on('uncaughtException', (err: any) => {
+  // eslint-disable-next-line no-console
+  console.error('[uncaughtException]', err?.stack || err);
+});
+
 bootstrap();
