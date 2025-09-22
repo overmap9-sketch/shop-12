@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const nextConfig = {
   reactStrictMode: true,
   typedRoutes: false,
-  outputFileTracingRoot: path.resolve(__dirname, '..'),
+  // outputFileTracingRoot intentionally omitted to avoid interfering with app/src special routes
   typescript: {
     ignoreBuildErrors: true,
   },
