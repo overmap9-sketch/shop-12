@@ -1,5 +1,5 @@
 "use client";
-import ClientCancel from '../cancel/ClientCancel';
+import ClientCancel from '../ClientCancel';
 
 export default function Page() {
   return <ClientCancel />;
