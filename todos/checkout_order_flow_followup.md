@@ -16,9 +16,12 @@ Checklist (repo-linked)
   - Files: server/src/main.ts (unhandledRejection/uncaughtException logging)
 - [x] Frontend UX: Improve /checkout/success and /checkout/cancel layout (card, centered, a11y)
   - Files: front/src/app/(shop)/checkout/ClientSuccess.tsx, ClientCancel.tsx
-- [ ] Webhook end-to-end verification (manual, no e2e tests):
-  - Use Stripe CLI or Dashboard to send events to /api/payments/webhook
-  - Confirm order.status updates to 'paid' and idempotency works
+- [x] Environment configured with Stripe keys (user provided)
+  - server/.env: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PUBLIC_ORIGIN
+  - front/.env.local: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, PUBLIC_ORIGIN
+- [in_progress] Webhook end-to-end verification (manual, no e2e tests):
+  - Create Stripe webhook to https://YOUR_DOMAIN/api/payments/webhook (events: checkout.session.completed, checkout.session.expired, payment_intent.payment_failed)
+  - Initiate test payment, verify order.status becomes 'paid' and idempotency works
 - [ ] Admin UI: Ensure Orders view surfaces payment info/events clearly (pending refinement)
 
 Notes
