@@ -73,161 +73,33 @@ export function AdminOrders() {
     const loadOrders = async () => {
       try {
         setLoading(true);
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Mock order data
-        const mockOrders: Order[] = [
-          {
-            id: '1',
-            orderNumber: 'ORD-001',
-            customerId: '1',
-            customerName: 'John Doe',
-            customerEmail: 'john.doe@example.com',
-            status: 'processing',
-            paymentStatus: 'paid',
-            items: [
-              {
-                id: '1',
-                productId: '1',
-                productName: 'Wireless Headphones Pro',
-                productImage: 'https://picsum.photos/100/100?random=1',
-                quantity: 1,
-                price: 299.99,
-                total: 299.99
-              },
-              {
-                id: '2',
-                productId: '2',
-                productName: 'Phone Case',
-                productImage: 'https://picsum.photos/100/100?random=2',
-                quantity: 2,
-                price: 19.99,
-                total: 39.98
-              }
-            ],
-            subtotal: 339.97,
-            tax: 27.20,
-            shipping: 9.99,
-            total: 377.16,
-            shippingAddress: {
-              street: '123 Main St',
-              city: 'New York',
-              state: 'NY',
-              zipCode: '10001',
-              country: 'USA'
-            },
-            createdAt: '2024-01-15T10:30:00Z',
-            updatedAt: '2024-01-15T14:20:00Z',
-            estimatedDelivery: '2024-01-20T00:00:00Z'
-          },
-          {
-            id: '2',
-            orderNumber: 'ORD-002',
-            customerId: '2',
-            customerName: 'Jane Smith',
-            customerEmail: 'jane.smith@example.com',
-            status: 'shipped',
-            paymentStatus: 'paid',
-            items: [
-              {
-                id: '3',
-                productId: '3',
-                productName: 'Gaming Laptop RTX',
-                productImage: 'https://picsum.photos/100/100?random=3',
-                quantity: 1,
-                price: 1599.99,
-                total: 1599.99
-              }
-            ],
-            subtotal: 1599.99,
-            tax: 127.99,
-            shipping: 0,
-            total: 1727.98,
-            shippingAddress: {
-              street: '456 Oak Ave',
-              city: 'Los Angeles',
-              state: 'CA',
-              zipCode: '90210',
-              country: 'USA'
-            },
-            createdAt: '2024-01-14T15:45:00Z',
-            updatedAt: '2024-01-16T09:30:00Z',
-            estimatedDelivery: '2024-01-19T00:00:00Z',
-            trackingNumber: 'TRK123456789'
-          },
-          {
-            id: '3',
-            orderNumber: 'ORD-003',
-            customerId: '3',
-            customerName: 'Mike Wilson',
-            customerEmail: 'mike.wilson@example.com',
-            status: 'pending',
-            paymentStatus: 'pending',
-            items: [
-              {
-                id: '4',
-                productId: '4',
-                productName: 'Cotton T-Shirt Pack',
-                productImage: 'https://picsum.photos/100/100?random=4',
-                quantity: 3,
-                price: 49.99,
-                total: 149.97
-              }
-            ],
-            subtotal: 149.97,
-            tax: 11.99,
-            shipping: 7.99,
-            total: 169.95,
-            shippingAddress: {
-              street: '789 Pine St',
-              city: 'Chicago',
-              state: 'IL',
-              zipCode: '60601',
-              country: 'USA'
-            },
-            createdAt: '2024-01-16T08:15:00Z',
-            updatedAt: '2024-01-16T08:15:00Z'
-          },
-          {
-            id: '4',
-            orderNumber: 'ORD-004',
-            customerId: '4',
-            customerName: 'Sarah Johnson',
-            customerEmail: 'sarah.johnson@example.com',
-            status: 'delivered',
-            paymentStatus: 'paid',
-            items: [
-              {
-                id: '5',
-                productId: '5',
-                productName: 'Eco-Friendly Yoga Mat',
-                productImage: 'https://picsum.photos/100/100?random=5',
-                quantity: 1,
-                price: 59.99,
-                total: 59.99
-              }
-            ],
-            subtotal: 59.99,
-            tax: 4.80,
-            shipping: 5.99,
-            total: 70.78,
-            shippingAddress: {
-              street: '321 Elm St',
-              city: 'Seattle',
-              state: 'WA',
-              zipCode: '98101',
-              country: 'USA'
-            },
-            createdAt: '2024-01-10T12:00:00Z',
-            updatedAt: '2024-01-18T16:45:00Z',
-            estimatedDelivery: '2024-01-15T00:00:00Z',
-            trackingNumber: 'TRK987654321'
-          }
-        ];
-        
-        setOrders(mockOrders);
+
+        const res = await fetch('/api/orders');
+        if (!res.ok) throw new Error('Failed to fetch orders');
+        const data = await res.json();
+
+        // Map server orders to the admin UI shape
+        const mapped: Order[] = (data || []).map((o: any) => ({
+          id: o.id,
+          orderNumber: o.orderNumber || o.id,
+          customerId: o.userId || o.customerId || 'guest',
+          customerName: o.customerName || (o.user && o.user.name) || 'Guest',
+          customerEmail: o.customerEmail || (o.user && o.user.email) || '',
+          status: (o.status as any) || 'pending',
+          paymentStatus: (o.payment && o.payment.payment_status) ? (o.payment.payment_status as any) : ((o.status === 'paid') ? 'paid' : 'pending'),
+          items: o.items || [],
+          subtotal: o.subtotal || o.total || 0,
+          tax: o.tax || 0,
+          shipping: o.shipping || 0,
+          total: o.total || o.totalAmount || 0,
+          shippingAddress: o.shippingAddress || {},
+          createdAt: o.dateCreated || o.createdAt || new Date().toISOString(),
+          updatedAt: o.dateModified || o.updatedAt || new Date().toISOString(),
+          estimatedDelivery: o.estimatedDelivery,
+          trackingNumber: o.trackingNumber,
+        }));
+
+        setOrders(mapped);
       } catch (error) {
         console.error('Failed to load orders:', error);
       } finally {
