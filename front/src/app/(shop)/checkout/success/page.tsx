@@ -1,12 +1,6 @@
-import React, { Suspense } from 'react';
-import dynamic from 'next/dynamic';
-
-const ClientSuccess = dynamic(() => import('./ClientSuccess'), { ssr: false });
+"use client";
+import ClientSuccess from './ClientSuccess';
 
 export default function Page() {
-  return (
-    <Suspense fallback={<div className="p-6">Loading...</div>}>
-      <ClientSuccess />
-    </Suspense>
-  );
+  return <ClientSuccess />;
 }
