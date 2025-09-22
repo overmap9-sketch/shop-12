@@ -74,7 +74,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 
 Доступные ключи:
 - `NEXT_PUBLIC_API_ORIGIN` — адрес бэкенда (например, `http://localhost:4000`). Используется для п��оксирования `/api/*` и `/uploads/*`.
-- `PORT` — порт dev-сервера Next.js (по умолчанию 3000).
+- `PORT` — порт dev-серв��ра Next.js (по умолчанию 3000).
 - `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через запятую), которым разрешён dev-доступ (например, домен предпросмотра).
 - `NEXT_TELEMETRY_DISABLED` — опционально выключает телеметрию Next.js (`1` чтобы выключить).
 
@@ -145,7 +145,7 @@ API-клиент: `front/src/shared/api/images.ts`
 
 Интеграции:
 - Продукты (Admin): `front/src/views/admin/ProductForm.tsx` — массив изображений товара
-- Категории (Admin): `front/src/views/admin/CategoryForm.tsx` — одиночное изображение
+- Категории (Admin): `front/src/views/admin/CategoryForm.tsx` — одино��ное изображение
 
 Требования к доступу:
 - Для загрузки необходим валидный токен (роль `admin` или разрешение `files:upload`).
@@ -169,7 +169,7 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Траблшутинг
 - 401 при загрузке/запросах: проверьте наличие токена и права `files:upload` (или роль admin)
 - CORS/предпросмотр: добавьте домен предпросмотра в `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS`
-- Не видно загруженные файлы: убедитесь, что бэкенд раздаёт `/uploads`, а фронт проксирует этот путь
+- Не видно загруженные файлы: убедитесь, что ��экенд раздаёт `/uploads`, а фронт проксирует этот путь
 - 404 от API: проверьте `NEXT_PUBLIC_API_ORIGIN` и доступность бэкенда `/api/*`
 
 ## Конфигурация
@@ -196,3 +196,17 @@ API-клиент: `front/src/shared/api/images.ts`
 Альтернатива: в продакшне используйте единый origin (reverse proxy) или корректно перечисляйте разрешённые origin в конфигурации сервера.
 
 См. также: docs/CORS_AND_PROXY.md
+
+---
+
+## Полный справочник переменных окружения (front/.env.local)
+Скопируйте шаблон: `front/.env.example` → `front/.env.local` и укажите значения.
+
+- PUBLIC_ORIGIN — базовый origin сайта (каноникал, sitemap, Open Graph). Пример: http://localhost:3000 или https://shop.example.com
+- PORT — порт dev-сервера Next.js (по умолчанию 3000)
+- NEXT_PUBLIC_API_ORIGIN — origin бэкенда для прокси `/api` и `/uploads`. Пример: http://localhost:4000
+- NEXT_PUBLIC_ALLOWED_DEV_ORIGINS — дополнительные origin через запятую, которым разрешён доступ в dev/preview
+- NEXT_TELEMETRY_DISABLED — отключение телеметрии Next.js (1 — отключить)
+- NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY — publishable ключ Stripe (pk_test_... в dev) для фронтенда
+
+> Примечание: PUBLIC_ORIGIN также используется для генерации sitemap и канонических ссылок; убедитесь, что это корректный публичный URL в продакшене.

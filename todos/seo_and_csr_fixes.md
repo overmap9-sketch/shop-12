@@ -82,3 +82,8 @@ Planned actions (next steps):
 Next immediate action (queued)
 - Run a full next build, capture any prerender/CSR bailout warnings, and scan for server usage of client-only APIs; then implement item (1) above.
 
+Update — 2025-09-22
+- front/.env.example updated with PUBLIC_ORIGIN, PORT, and detailed comments; documented in front/README.md.
+- server/.env.example enhanced with comments and keys; documented in server/README.md.
+- front metadataBase and robots sitemap now derive from PUBLIC_ORIGIN to ensure correct canonical/sitemap in all environments.
+

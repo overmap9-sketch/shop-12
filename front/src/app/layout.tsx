@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import { ClientProviders } from './providers';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://example.com'),
+  metadataBase: new URL(process.env.PUBLIC_ORIGIN || 'http://localhost:3000'),
   title: {
     default: 'PaintHub – E‑commerce',
     template: '%s · PaintHub'

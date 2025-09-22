@@ -135,3 +135,34 @@ Auth endpoints:
 - POST /api/auth/login
 - POST /api/auth/register
 - GET /api/auth/me (JWT required)
+
+## Environment variables (server/.env)
+Copy `server/.env.example` → `server/.env` and set values:
+
+Core
+- PORT — порт сервера (по умолчанию 4000)
+- CORS_ORIGIN — разрешённый origin фронтенда (например, http://localhost:3000)
+
+Storage & uploads
+- STORAGE_DRIVER — json | sequelize | postgres
+- DATA_DIR — каталог данных для json-драйвера
+- UPLOAD_DIR — директория для загрузок, раздаётся как /uploads
+- UPLOAD_MAX_FILE_SIZE — макс. размер файла (байты)
+- UPLOAD_ALLOWED_MIME — допустимые mime-типы, через запятую (например, image/*)
+
+Auth
+- JWT_SECRET — секрет подписи JWT (укажите надёжное значение в продакшене)
+- JWT_EXPIRES_IN — срок жизни токена (секунды или строка формата 1h/7d)
+- ALLOW_MOCK_TOKENS — разрешить mock-токены в dev (true/false)
+- ADMIN_EMAIL / ADMIN_PASSWORD — учётка администратора при первом запуске
+
+PostgreSQL (если STORAGE_DRIVER=sequelize|postgres)
+- DATABASE_URL — строка подключения (postgres://user:password@host:5432/db)
+- SEQUELIZE_LOGGING — логирование SQL (true/false)
+
+Public origin
+- PUBLIC_ORIGIN — публичный origin (используется в редиректах/ссылках, платежах)
+
+Stripe
+- STRIPE_SECRET_KEY — секретный ключ (sk_test_... в dev)
+- STRIPE_WEBHOOK_SECRET — секрет подписи webhook (whsec_...)
