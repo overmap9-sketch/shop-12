@@ -97,3 +97,8 @@ Update — 2025-09-22
 - Improved CLS/LCP: ProductCard images use decoding="async"; ProductDetail main image uses fetchpriority="high" and eager loading; thumbnails lazy-load.
 - Sitemap: more robust product loading (tries ../server/data and server/data).
 
+Update — 2025-09-22
+- Fixed duplicate import in front/src/app/(shop)/catalog/page.tsx.
+- Updated openGraph.url to use PUBLIC_ORIGIN in front/src/app/layout.tsx.
+- Normalized PUBLIC_ORIGIN usage in front/src/app/sitemap.ts (no trailing slash).
+- Next: run production build and address any remaining SSR/CSR warnings.
