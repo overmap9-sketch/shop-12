@@ -7,7 +7,7 @@ export class OrdersController {
   constructor(private readonly svc: OrdersService, private readonly payments: PaymentsService) {}
 
   @Get()
-  list(@Query('userId') userId?: string) { return this.svc.list(userId || 'guest'); }
+  list(@Query('userId') userId?: string) { return this.svc.list(userId); }
 
   @Post()
   create(@Body() body: any) { return this.svc.create(body.userId || 'guest', body); }
