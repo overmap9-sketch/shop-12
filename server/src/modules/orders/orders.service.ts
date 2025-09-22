@@ -13,8 +13,9 @@ export class OrdersService {
     return this.db.insert<Order>(this.collection, order as any);
   }
 
-  async list(userId: string) {
+  async list(userId?: string) {
     const all = await this.db.all<Order>(this.collection);
+    if (!userId) return all;
     return all.filter(o => o.userId === userId);
   }
 
