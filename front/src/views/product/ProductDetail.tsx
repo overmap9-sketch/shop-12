@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -32,8 +33,9 @@ import {
   Info
 } from 'lucide-react';
 
-export function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
+export function ProductDetail({ serverId }: { serverId?: string }) {
+  const params = useParams<{ id: string }>();
+  const id = serverId || params?.id;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -195,6 +197,44 @@ export function ProductDetail() {
     );
   }
 
+  React.useEffect(() => {
+    if (!product) return;
+    // set canonical link for SEO
+    try {
+      const canonicalHref = `${typeof window !== 'undefined' ? window.location.origin : ''}/product/${product.id}`;
+      let link = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        document.head.appendChild(link);
+      }
+      link.href = canonicalHref;
+    } catch (e) {
+      // ignore in non-browser environments
+    }
+  }, [product]);
+
+  const renderJsonLd = () => {
+    if (!product) return null;
+    const jsonLd = {
+      '@context': 'https://schema.org/',
+      '@type': 'Product',
+      name: product.title,
+      image: product.images || [],
+      description: product.description,
+      sku: product.sku || product.id,
+      brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+      offers: {
+        '@type': 'Offer',
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        priceCurrency: product.currency || 'USD',
+        price: product.price?.toString?.() || (product.price || 0).toString(),
+        availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+      }
+    };
+    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Breadcrumbs */}
@@ -284,6 +324,7 @@ export function ProductDetail() {
 
           {/* Product Information */}
           <div className="space-y-6">
+            {renderJsonLd()}
             {/* Header */}
             <div>
               <div className="flex items-start justify-between mb-2">
@@ -399,7 +440,7 @@ export function ProductDetail() {
             {/* Features */}
             {product.features.length > 0 && (
               <div>
-                <h3 className="font-semibold text-foreground mb-3">Key Features</h3>
+                <h3 className="font-semibold text-foreground mb-3">Features</h3>
                 <ul className="space-y-2">
                   {product.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2 text-muted-foreground">
@@ -455,24 +496,24 @@ export function ProductDetail() {
                   <Heart className={`h-5 w-5 ${isFavourite ? 'fill-current' : ''}`} />
                 </Button>
               </div>
-            </div>
 
-            {/* Trust Signals */}
-            <div className="border-t pt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Truck className="h-4 w-4 text-primary" />
-                  <span>{t('product.trustSignals.freeShipping', {
-                    amount: convertAndFormat(50).formatted
-                  })}</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <RotateCcw className="h-4 w-4 text-primary" />
-                  <span>30-day return policy</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Shield className="h-4 w-4 text-primary" />
-                  <span>2-year warranty</span>
+              {/* Trust Signals */}
+              <div className="border-t pt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    <span>{t('product.trustSignals.warranty', '2-year warranty')}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" />
+                    <span>{t('product.trustSignals.freeShipping', {
+                      amount: convertAndFormat(50).formatted
+                    })}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RotateCcw className="h-4 w-4" />
+                    <span>{t('product.trustSignals.easyReturns', 'Easy returns')}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -485,10 +526,6 @@ export function ProductDetail() {
             {/* Specifications */}
             {Object.keys(product.specifications).length > 0 && (
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Info className="h-5 w-5" />
-                  Specifications
-                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {Object.entries(product.specifications).map(([key, value]) => (
                     <div key={key} className="flex justify-between py-2 border-b border-border last:border-b-0">
@@ -515,3 +552,5 @@ export function ProductDetail() {
     </div>
   );
 }
+
+export default ProductDetail;

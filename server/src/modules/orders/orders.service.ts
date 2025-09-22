@@ -13,8 +13,22 @@ export class OrdersService {
     return this.db.insert<Order>(this.collection, order as any);
   }
 
-  async list(userId: string) {
+  async list(userId?: string) {
     const all = await this.db.all<Order>(this.collection);
+    if (!userId) return all;
     return all.filter(o => o.userId === userId);
+  }
+
+  async findBySession(sessionId: string) {
+    const all = await this.db.all<any>(this.collection);
+    return all.find((o) => o.sessionId === sessionId);
+  }
+
+  async findById(id: string) {
+    return this.db.findById<any>(this.collection, id);
+  }
+
+  async update(id: string, patch: Partial<any>) {
+    return this.db.update<any>(this.collection, id, patch as any);
   }
 }

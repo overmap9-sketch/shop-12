@@ -3,6 +3,7 @@ import { OrdersController } from './orders.controller.js';
 import { OrdersService } from './orders.service.js';
 import { DataStoreModule } from '../../persistence/data-store.module.js';
 import { CartModule } from '../cart/cart.module.js';
+import { PaymentsModule } from '../payments/payments.module.js';
 
-@Module({ imports: [DataStoreModule, CartModule], controllers: [OrdersController], providers: [OrdersService] })
+@Module({ imports: [DataStoreModule, CartModule, PaymentsModule], controllers: [OrdersController], providers: [OrdersService] })
 export class OrdersModule {}

@@ -1,17 +1,9 @@
-import React, { useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import React from "react";
+import { Link } from '../shared/lib/router-shim';
 import { buttonVariants } from "../shared/ui/Button";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname,
-    );
-  }, [location.pathname]);
-
+  // Avoid client-only hooks to keep this component server-safe for Next.js
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center max-w-md mx-auto px-4">

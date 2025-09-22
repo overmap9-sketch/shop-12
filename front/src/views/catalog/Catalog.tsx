@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
+"use client";
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { 

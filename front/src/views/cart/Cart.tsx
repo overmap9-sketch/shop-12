@@ -36,6 +36,9 @@ export function Cart() {
   // Get currency conversion function
   const { convertAndFormat } = useCurrency();
 
+  const [couponCode, setCouponCode] = React.useState('');
+  const [couponApplied, setCouponApplied] = React.useState<{ code?: string; discount?: number } | null>(null);
+
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
@@ -151,8 +154,6 @@ export function Cart() {
 
   // Use currency-formatted totals from the hook
   const { subtotal, shipping, tax, total } = orderTotal;
-  const [couponCode, setCouponCode] = React.useState('');
-  const [couponApplied, setCouponApplied] = React.useState<{ code?: string; discount?: number } | null>(null);
 
   const applyCoupon = async () => {
     const { CartAPI } = await import('../../shared/api/cart');

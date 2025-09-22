@@ -44,5 +44,37 @@
     "dateCreated": "2025-09-21T23:07:40.091Z",
     "id": "7a673874-f922-4a80-8343-bfe83e3eddb0",
     "dateModified": "2025-09-21T23:07:40.091Z"
+  },
+  {
+    "sessionId": "cs_test_b1mxcfkGf62QzJG7HnDFLBhFBS7WmcjMkST9mA90qUdJqgj61xJK8U3MCD",
+    "status": "pending",
+    "items": [
+      {
+        "productId": "paint-p2",
+        "quantity": 1
+      },
+      {
+        "productId": "paint-p3",
+        "quantity": 1
+      }
+    ],
+    "total": 9498,
+    "dateCreated": "2025-09-22T13:10:10.127Z",
+    "id": "aef56f6f-9c5d-49ec-beaf-24c4e502290d",
+    "dateModified": "2025-09-22T13:10:10.127Z"
+  },
+  {
+    "sessionId": "cs_test_a1Whg1IUJ9zbErCsCksZMlUSBSSxPmutpFYGw9rIelWJEwLBsOy0tgT79d",
+    "status": "pending",
+    "items": [
+      {
+        "productId": "paint-p2",
+        "quantity": 1
+      }
+    ],
+    "total": 4499,
+    "dateCreated": "2025-09-22T13:22:05.722Z",
+    "id": "b6213f72-1652-4fe0-a7e8-4cb958a52312",
+    "dateModified": "2025-09-22T13:22:05.722Z"
   }
 ]

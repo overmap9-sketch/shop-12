@@ -49,62 +49,15 @@
         "quantity": 1,
         "price": 44.99,
         "dateAdded": "2025-09-21T23:03:35.575Z"
-      },
-      {
-        "id": "f412a81f-dff3-47b3-bca5-5177c3bebad9",
-        "productId": "paint-p3",
-        "product": {
-          "id": "paint-p3",
-          "slug": "interior-semi-gloss-bright-white-trim-1gal",
-          "title": "Interior Trim & Door Paint – Semi-Gloss, Bright White (1 Gal)",
-          "description": "Hard-wearing semi-gloss finish designed for trim, doors, and cabinets. Fast-drying and block resistant.",
-          "price": 49.99,
-          "currency": "USD",
-          "images": [
-            "https://images.pexels.com/photos/2293822/pexels-photo-2293822.jpeg",
-            "https://images.pexels.com/photos/7217966/pexels-photo-7217966.jpeg",
-            "https://images.pexels.com/photos/2768398/pexels-photo-2768398.jpeg"
-          ],
-          "category": "interior-paint",
-          "subcategory": "semi-gloss",
-          "tags": [
-            "interior",
-            "semi-gloss",
-            "trim",
-            "doors"
-          ],
-          "rating": 4.8,
-          "reviewCount": 163,
-          "stock": 18,
-          "sku": "INT-SG-TRIM-1G",
-          "brand": "ProFinish",
-          "features": [
-            "Block Resistant",
-            "Fast Drying",
-            "Durable"
-          ],
-          "specifications": {
-            "Color": "Bright White",
-            "Finish": "Semi-Gloss",
-            "Volume": "1 gal"
-          },
-          "status": "published",
-          "isNew": false,
-          "isFeatured": true,
-          "isOnSale": false
-        },
-        "quantity": 1,
-        "price": 49.99,
-        "dateAdded": "2025-09-21T23:07:35.562Z"
       }
     ],
-    "subtotal": 94.98,
-    "tax": 7.598400000000001,
+    "subtotal": 44.99,
+    "tax": 3.5992,
     "shipping": 10,
     "discount": 0,
-    "total": 112.5784,
+    "total": 58.589200000000005,
     "currency": "USD",
     "dateCreated": "2025-09-21T21:30:36.846Z",
-    "dateModified": "2025-09-21T23:07:35.562Z"
+    "dateModified": "2025-09-22T13:22:02.737Z"
   }
 ]
