@@ -122,7 +122,7 @@ Notes:
 
 ## Configuration & Auth
 
-See docs/CONFIGURATION.md for full env reference and storage switching.
+See docs/CONFIGURATION.md for full env reference and storage switching. Frontend env templates are provided at front/.env.example (copy to front/.env.local) and front/env.local.example.
 
 Key envs (server/.env):
 - PORT, CORS_ORIGIN

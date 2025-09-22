@@ -1,6 +1,11 @@
 import React from 'react';
 import { Product } from '../../entities';
 
+/**
+ * Server-rendered product grid for SEO and fast TTFB. Images include fixed dimensions
+ * and responsive sizes to minimize CLS. Client interactivity is provided by the
+ * client-side Catalog components.
+ */
 export function ProductGridServer({ products, columns = 4 }: { products: Product[]; columns?: 2|3|4|5 }) {
   const gridCols: Record<number, string> = {
     2: 'grid-cols-1 sm:grid-cols-2',
@@ -8,6 +13,7 @@ export function ProductGridServer({ products, columns = 4 }: { products: Product
     4: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
     5: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
   };
+  const sizes = '(min-width: 1536px) 20vw, (min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
   return (
     <div className={`grid ${gridCols[columns]} gap-6`}>
       {products.map((p) => (
@@ -20,6 +26,9 @@ export function ProductGridServer({ products, columns = 4 }: { products: Product
                 className="object-cover w-full h-full"
                 loading="lazy"
                 decoding="async"
+                width={800}
+                height={800}
+                sizes={sizes}
               />
             </div>
           </a>
