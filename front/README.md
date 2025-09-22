@@ -6,7 +6,7 @@
 - [Требования](#требования)
 - [Быстрый старт (толь��о фр��нт)](#быстрый-ста��т-тольк��-фронт)
 - [Быстрый старт (фронт + бэкенд вместе)](#быстрый-старт-фронт--бэкенд-вместе)
-- [Переменные окружения](#переменны��-окружения)
+- [Переменные окружения](#переменные-окружения)
 - [Скрипты npm](#скрипты-npm)
 - [Архитектура проекта](#архитектура-проекта)
 - [Потоки данных и стейт-менеджмент](#потоки-данных-и-стейт-менеджмент)
@@ -161,15 +161,21 @@ API-клиент: `front/src/shared/api/images.ts`
 ---
 
 ## Локализация и темы
-- i18n: `front/src/shared/config/i18n.ts`, ресурсы в `front/src/shared/locales/{en,es}`
+- i18n: `front/src/shared/config/i18n.ts`, ��есурсы в `front/src/shared/locales/{en,es}`
 - Темы: `front/src/shared/themes/*`, провайдер `ThemeProvider`
 
 ---
 
+## Stripe (кратко)
+- Настройте ключи в front/.env.local: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...`, `PUBLIC_ORIGIN`.
+- Бэкенд: `STRIPE_SECRET_KEY=sk_test_...`, `STRIPE_WEBHOOK_SECRET=whsec_...`, `PUBLIC_ORIGIN` в server/.env.
+- В Stripe Dashboard создайте webhook на `/api/payments/webhook` и скопируйте Signing secret.
+- Подробнее: docs/stripe_integration_and_webhooks.md
+
 ## Checkout: SEO и Suspense (Next.js)
 - Страницы `/checkout/success` и `/checkout/cancel` — серверные и рендерят клиентские компоненты внутри `<Suspense>` с доступным `fallback` (aria-busy).
 - Использование `useSearchParams()` в клиентских компонентах требует обёртки в `Suspense`, иначе при сборке возможен CSR bailout.
-- Эти страницы помечены `robots: noindex, nofollow` и имеют канонические ссылки, чтобы ��е попадать в индекс.
+- Эти страницы помечены `robots: noindex, nofollow` и имеют канонические ссылки, чтобы не попадать в индекс.
 - Важные env: `PUBLIC_ORIGIN`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
 
 ## Траблшутинг
@@ -187,7 +193,7 @@ API-клиент: `front/src/shared/api/images.ts`
 
 ## Быстрое исправление "Failed to fetch" (CORS / прокси)
 
-Если вы увидели в каталоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под ваш фронтенд:
+Если вы увидели в каталоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под в��ш фронтенд:
 
 1) Скопируйте `server/.env.example` → `server/.env` и убедитесь, что там указано:
 
