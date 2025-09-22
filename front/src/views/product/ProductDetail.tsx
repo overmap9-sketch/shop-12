@@ -287,6 +287,8 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
                       className="w-full h-full object-cover"
                       loading="lazy"
                       decoding="async"
+                      width={64}
+                      height={64}
                     />
                   </button>
                 ))}
