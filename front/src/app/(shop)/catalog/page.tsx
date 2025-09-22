@@ -3,10 +3,8 @@ import fs from 'fs';
 import React from 'react';
 import { Product } from '../../../entities';
 import { ProductGridServer } from '../../../widgets/product-grid/ProductGridServer';
-import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
-
-const ClientCatalogShell = dynamic(() => import('./shell').then(m => m.ClientCatalogShell), { ssr: false });
+import { ClientCatalogShell } from './shell';
 
 function readJson<T = any>(candidates: string[]): T | null {
   for (const p of candidates) {
