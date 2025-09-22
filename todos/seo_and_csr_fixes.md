@@ -63,7 +63,9 @@ Remaining tasks (next steps)
 Update — 2025-09-22
 - Catalog SSR: Implemented server-rendered initial catalog with ProductGridServer and client hydration shell; preserves SEO HTML and enables client interactivity post-hydration.
   - Files: front/src/app/(shop)/catalog/page.tsx, front/src/app/(shop)/catalog/shell.tsx, front/src/widgets/product-grid/ProductGridServer.tsx.
-- Next: wire initial params into client store for seamless hydration; audit any SSR/client mismatches.
+- Hydration: wired initial URL params into client Redux store on mount to keep state in sync and avoid refetch mismatch.
+  - Updated: front/src/app/(shop)/catalog/page.tsx (pass initial), front/src/app/(shop)/catalog/shell.tsx (dispatch setSearchQuery/updateFilters/setSort/setCurrentPage).
+- Next: audit any SSR/client mismatches and run production build.
 
 How progress will be tracked
 - I will update this file after each change describing: file modified, reason, and status (completed/in_progress/blocked).
