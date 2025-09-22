@@ -1,5 +1,4 @@
 import path from 'path';
-import path from 'path';
 import fs from 'fs';
 import React from 'react';
 import { Product } from '../../../entities';
