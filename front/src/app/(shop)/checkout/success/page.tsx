@@ -1,4 +1,3 @@
-"use client";
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import ClientSuccess from '../ClientSuccess';
