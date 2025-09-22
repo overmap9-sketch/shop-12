@@ -34,7 +34,6 @@ import { ProductFilter, ProductSort } from '../../entities';
 import { useDebounce } from '../../hooks/use-debounce';
 import { useSearchParams } from 'react-router-dom';
 
-"use client";
 import React, { useState, useEffect, useCallback } from 'react';
 export function Catalog() {
   const { t } = useTranslation();
