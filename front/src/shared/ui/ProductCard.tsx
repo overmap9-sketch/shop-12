@@ -81,6 +81,8 @@ export function ProductCard({
             onMouseEnter={handleImageHover}
             loading="lazy"
             decoding="async"
+            width={800}
+            height={800}
           />
           
           {/* Badges */}
