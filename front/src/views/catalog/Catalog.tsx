@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
 "use client";
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../core/hooks';
 import { 
@@ -34,7 +34,6 @@ import { ProductFilter, ProductSort } from '../../entities';
 import { useDebounce } from '../../hooks/use-debounce';
 import { useSearchParams } from 'react-router-dom';
 
-import React, { useState, useEffect, useCallback } from 'react';
 export function Catalog() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
