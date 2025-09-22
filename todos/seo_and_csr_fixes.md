@@ -15,7 +15,7 @@ Changes applied (completed)
   - Status: completed  — verified locally in dev run.
 
 - Implemented Stripe webhook idempotency & event handling (server):
-  - server/src/modules/payments/payments.controller.ts — verify signature, check/persist stripe_events, update orders status on events
+  - server/src/modules/payments/payments.controller.ts �� verify signature, check/persist stripe_events, update orders status on events
   - Status: completed
 
 - Added orders endpoints & retry flow server-side:
@@ -96,3 +96,6 @@ Update — 2025-09-22
 - Improved CLS/LCP: added width/height and responsive sizes to images in front/src/widgets/product-grid/ProductGridServer.tsx.
 - Reviewed SEO docs and READMEs; current PUBLIC_ORIGIN usage in layout, robots, sitemap is correct; product JSON-LD is server-side.
 - Next: run production build and address any remaining prerender/CSR warnings; then proceed with image skeletons and bundle audit.
+
+Update — 2025-09-22
+- Dev server recovery: configured setup command to install server and front; set env vars CORS_ORIGIN=http://localhost:3000, PUBLIC_ORIGIN=http://localhost:3000, NEXT_PUBLIC_API_ORIGIN=http://localhost:4000; set dev command to run backend and frontend concurrently; set proxy port to 3000. Status: running.
