@@ -20,8 +20,10 @@ Checklist (repo-linked)
   - server/.env: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PUBLIC_ORIGIN
   - front/.env.local: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, PUBLIC_ORIGIN
 - [in_progress] Webhook end-to-end verification (manual, no e2e tests):
-  - Create Stripe webhook to https://YOUR_DOMAIN/api/payments/webhook (events: checkout.session.completed, checkout.session.expired, payment_intent.payment_failed)
-  - Initiate test payment, verify order.status becomes 'paid' and idempotency works
+  - ISSUE FOUND: Stripe CLI is forwarding to /stripe/webhook (404). Our endpoint is /api/payments/webhook. Fix: `stripe listen --forward-to http://localhost:4000/api/payments/webhook`.
+  - If CLI runs on another machine, forward to the server's reachable address: `--forward-to http://<SERVER_IP>:4000/api/payments/webhook`.
+  - Events required: checkout.session.completed (required), checkout.session.expired, payment_intent.payment_failed.
+  - After fix, initiate test payment; verify order.status becomes 'paid' and idempotency works
 - [ ] Admin UI: Ensure Orders view surfaces payment info/events clearly (pending refinement)
 
 Notes
