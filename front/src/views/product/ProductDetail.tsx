@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -32,8 +33,9 @@ import {
   Info
 } from 'lucide-react';
 
-export function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
+export function ProductDetail({ serverId }: { serverId?: string }) {
+  const params = useParams<{ id: string }>();
+  const id = serverId || params?.id;
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
