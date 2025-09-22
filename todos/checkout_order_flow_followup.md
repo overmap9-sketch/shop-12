@@ -11,6 +11,8 @@ Checklist (repo-linked)
   - File: docs/stripe_integration_and_webhooks.md
 - [x] README (short): Add Stripe setup notes (front + server)
   - Files: front/README.md, server/README.md
+- [x] Server README: add Stripe installation & usage (Dashboard + CLI) section
+  - File: server/README.md
 - [x] Backend resilience: Do not crash on Stripe key errors; add global handlers
   - Files: server/src/modules/payments/payments.controller.ts (validate key; handled errors)
   - Files: server/src/main.ts (unhandledRejection/uncaughtException logging)
