@@ -39,7 +39,8 @@ Option A — Dashboard (hosted/dev server):
 Option B — Stripe CLI (local development):
 1) Install: https://stripe.com/docs/stripe-cli
 2) Login: `stripe login`
-3) Forward events: `stripe listen --forward-to localhost:4000/api/payments/webhook`
+3) Forward events: `stripe listen --forward-to http://localhost:4000/api/payments/webhook`
+   - If CLI runs on another machine, use the server machine address: `stripe listen --forward-to http://<SERVER_IP>:4000/api/payments/webhook` (localhost will point to the CLI machine, not your server).
 4) CLI prints a Webhook signing secret (whsec_...) → set STRIPE_WEBHOOK_SECRET to match the CLI session
 
 ## Backend endpoints
