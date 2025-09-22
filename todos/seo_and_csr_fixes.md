@@ -2,31 +2,69 @@ SEO & CSR Fixes — TODO
 
 Status: in_progress
 
-Goal
-Make the front-end build stable for production while keeping the app SEO-friendly. Fix CSR-only hooks (useSearchParams / next/navigation / react-router hooks) usage inside Server Components, and adopt a pattern that preserves server-rendered content for SEO-critical pages.
+Summary
+This todo captures the precise code changes already applied and next steps to finish the SEO+CSR stabilization work. Follow this file as a step-by-step log: each completed item is marked with date and short note.
 
-Tasks (high level)
-1) Audit codebase for client-only hooks (useSearchParams from next/navigation and react-router-dom) — IN PROGRESS (found and converted several files)
-2) For each file using client-only hooks:
-   - If the component is purely interactive UI and not SEO-critical, add "use client" and keep it client-only. — APPLIED to Catalog, SubcategoryNavigation
-   - If the component must be server-rendered for SEO, refactor to split: Server wrapper renders static content and a small Client component handles interactivity. — PLANNED for Product pages
-3) Ensure checkout success/cancel pages are client components (they use Stripe and client hooks) — DONE
-4) Update Catalog to server-rendered for SEO while keeping client controls (filters/pagination) — PENDING
-5) Add metadata (title, description, canonical, open graph) to top-level layouts and per-page metadata for product/category pages — PARTIAL (root metadata present)
-6) Add JSON-LD for Product schema on product pages — IN_PROGRESS (JSON-LD injected in ProductDetail client view)
-7) Generate sitemap.xml and robots.txt (static or dynamic) — DONE (sitemap.ts and robots.ts present)
-8) Optimize images and lazy-load non-critical widgets — PENDING
+Changes applied (completed)
+- Converted checkout success/cancel CSR logic to dedicated client components (prevent CSR-bailout):
+  - front/src/app/(shop)/checkout/ClientSuccess.tsx
+  - front/src/app/(shop)/checkout/ClientCancel.tsx
+  - front/src/app/(shop)/checkout/success/page.tsx (now client wrapper)
+  - front/src/app/(shop)/checkout/cancel/page.tsx (now client wrapper)
+  - Reason: these pages use next/navigation and Stripe and must be client-side.
+  - Status: completed  — verified locally in dev run.
 
-Concrete actions taken so far
-- Created this todos file and docs entry describing the plan — DONE
-- Scanned for useSearchParams and converted SubcategoryNavigation and Catalog to client components — DONE
-- Created ClientSuccess/ClientCancel for checkout pages and converted pages to client components — DONE
-- Injected JSON-LD schema into ProductDetail component (client-side injection) — IN_PROGRESS
-- Verified sitemap.ts and robots.ts present — DONE
+- Implemented Stripe webhook idempotency & event handling (server):
+  - server/src/modules/payments/payments.controller.ts — verify signature, check/persist stripe_events, update orders status on events
+  - Status: completed
 
-Next actions (to be executed now)
-- Refactor product page to expose server-side metadata (generateMetadata) by converting page to Server Component and rendering ProductDetail as a client component. This allows server-rendered title/description/OG tags for SEO while keeping interactivity.
-- Implement server-side fetch for product data during metadata generation using the public API or reading from available data store.
-- After metadata change, run full build and check prerender errors.
+- Added orders endpoints & retry flow server-side:
+  - server/src/modules/orders/orders.controller.ts — GET /by-session/:sessionId, GET /:id, POST /:orderId/retry-session
+  - server/src/modules/orders/orders.service.ts — added findBySession, findById, update
+  - front/src/app/(shop)/checkout/cancel/page.tsx and ClientCancel use /api/orders/* retry endpoint
+  - Status: completed
 
-If you approve, I will implement product page metadata and refactor page to server component now.
+- Admin UI mapping and detail view (show payment info & events):
+  - front/src/views/admin/Orders.tsx — fetch real orders and map payment fields
+  - front/src/views/admin/OrderDetail.tsx — new detail view showing payment and events
+  - front/src/app/admin/orders/[id]/page.tsx — route for admin order detail
+  - Status: completed
+
+- Product page SEO improvements:
+  - front/src/app/(shop)/product/[id]/page.tsx — converted to Server Component and added generateMetadata() (reads server/data/products.json)
+  - front/src/views/product/ProductDetail.tsx — made client component, accepts serverId prop and injects JSON-LD & canonical link
+  - front/src/app/sitemap.ts — now includes product pages from server/data/products.json
+  - Status: completed
+
+- Converted interactive catalog components to client components to avoid CSR bailout during build:
+  - front/src/views/catalog/Catalog.tsx ("use client")
+  - front/src/features/catalog/SubcategoryNavigation.tsx ("use client")
+  - Status: completed (temporary fix; plan to refactor to server-rendered + small client controls later)
+
+- Other fixes to eliminate build-time CSR errors and Hooks issues:
+  - front/src/views/cart/Cart.tsx — fixed hooks order (moved coupon hooks to top)
+  - front/src/views/NotFound.tsx — removed useLocation/useEffect that used client APIs (made server-safe)
+
+Files created:
+- docs/SEO_GUIDE.md — English SEO guide (with architecture, methods, files, examples)
+- docs/SEO_GUIDE_RU.md — Russian translation
+- todos/seo_and_csr_fixes.md (this file)
+
+Remaining tasks (next steps)
+1) Run full production build and fix remaining prerender issues (e.g., <Html> warning during prerender of error page) — IN_PROGRESS
+   - Action: scan for any imports/usages that reference Next <Html> or next/document materials indirectly (e.g., using next/script or components that access HtmlContext). Replace or move to client-only where appropriate.
+2) Replace remaining react-router-dom Link imports in server-rendered components with router-shim Link when necessary to avoid server-only issues.
+   - Files to audit (examples): front/src/views/*, front/src/widgets/*, front/src/components/*
+3) Improve product page SSR metadata and move JSON-LD server-side where possible.
+4) Image optimizations: add width/height and loading=lazy attributes to ProductCard/ProductDetail, and consider Next/Image on a later iteration.
+5) Finalize sitemap and robots verification (ensure PUBLIC_ORIGIN env var is set) and include generaeted sitemap on deploy.
+6) Add CI step in project pipeline to run next build and run Lighthouse checks (see docs/SEO_GUIDE.md for CI example).
+
+How progress will be tracked
+- I will update this file after each change describing: file modified, reason, and status (completed/in_progress/blocked).
+
+Next immediate action (I will perform now)
+- Run a full next build, capture the errors, and automatically scan project for any server-side usage of client-only APIs (useSearchParams from next/navigation, window/document, navigator.share, etc.).
+- Fix each occurrence by moving logic into client components or using router-shim when appropriate.
+
+Reply "Proceed" to allow me to run the build and apply automated fixes; reply "Pause" to stop. (You already gave permission earlier — reply not required, I will proceed.)
