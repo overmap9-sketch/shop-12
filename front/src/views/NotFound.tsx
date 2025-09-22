@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from '../shared/lib/router-shim';
 import { buttonVariants } from "../shared/ui/Button";
 
 const NotFound = () => {
