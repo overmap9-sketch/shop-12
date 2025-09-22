@@ -113,6 +113,12 @@ Notes:
 - DATA_DIR: path for json driver (default ./data)
 - DATABASE_URL: postgres connection string for sequelize driver
 
+## Payments/Stripe конфигурация (кратко)
+- Укажите `STRIPE_SECRET_KEY` (sk_test_...), `STRIPE_WEBHOOK_SECRET` (whsec_...), `PUBLIC_ORIGIN` в server/.env.
+- Создайте webhook в Stripe на `/api/payments/webhook` и скопируйте Signing secret.
+- Front: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
+- Подробнее: docs/stripe_integration_and_webhooks.md
+
 ## Payments/Stripe конфигурация
 - Укажите `PUBLIC_ORIGIN` (публичный URL фронтенда) — используется при генерации `success_url` и `cancel_url`.
 - Ключи: `STRIPE_SECRET_KEY` (server), `STRIPE_WEBHOOK_SECRET` (server), `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (front).
