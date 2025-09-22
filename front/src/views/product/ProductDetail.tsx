@@ -322,6 +322,7 @@ export function ProductDetail() {
 
           {/* Product Information */}
           <div className="space-y-6">
+            {renderJsonLd()}
             {/* Header */}
             <div>
               <div className="flex items-start justify-between mb-2">
