@@ -113,6 +113,11 @@ Notes:
 - DATA_DIR: path for json driver (default ./data)
 - DATABASE_URL: postgres connection string for sequelize driver
 
+## Payments/Stripe конфигурация
+- Укажите `PUBLIC_ORIGIN` (публичный URL фронтенда) — используется при генерации `success_url` и `cancel_url`.
+- Ключи: `STRIPE_SECRET_KEY` (server), `STRIPE_WEBHOOK_SECRET` (server), `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (front).
+- URL возврата: `${PUBLIC_ORIGIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}` и `${PUBLIC_ORIGIN}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`.
+
 ## Troubleshooting
 
 - Cannot connect to Postgres: ensure DATABASE_URL is correct and database is reachable.
