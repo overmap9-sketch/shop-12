@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.PUBLIC_ORIGIN || 'https://example.com';
+  const base = (process.env.PUBLIC_ORIGIN || 'http://localhost:3000').replace(/\/$/, '');
   const items: MetadataRoute.Sitemap = [
     { url: `${base}/`, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/catalog`, changeFrequency: 'weekly', priority: 0.8 },

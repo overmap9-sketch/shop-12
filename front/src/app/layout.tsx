@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'PaintHub – E‑commerce',
     description: 'Shop paints and accessories',
-    url: 'https://example.com',
+    url: (process.env.PUBLIC_ORIGIN || 'http://localhost:3000'),
     siteName: 'PaintHub',
     locale: 'en_US',
     type: 'website'

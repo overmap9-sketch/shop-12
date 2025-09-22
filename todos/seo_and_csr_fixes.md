@@ -31,7 +31,7 @@ Changes applied (completed)
   - Status: completed
 
 - Product page SEO improvements:
-  - front/src/app/(shop)/product/[id]/page.tsx — converted to Server Component and added generateMetadata() (reads server/data/products.json)
+  - front/src/app/(shop)/product/[id]/page.tsx ��� converted to Server Component and added generateMetadata() (reads server/data/products.json)
   - front/src/views/product/ProductDetail.tsx — made client component, accepts serverId prop and injects JSON-LD & canonical link
   - front/src/app/sitemap.ts — now includes product pages from server/data/products.json
   - Status: completed
@@ -97,3 +97,9 @@ Update — 2025-09-22
 - Improved CLS/LCP: ProductCard images use decoding="async"; ProductDetail main image uses fetchpriority="high" and eager loading; thumbnails lazy-load.
 - Sitemap: more robust product loading (tries ../server/data and server/data).
 
+Update — 2025-09-22
+- Fixed duplicate import in front/src/app/(shop)/catalog/page.tsx.
+- Updated openGraph.url to use PUBLIC_ORIGIN in front/src/app/layout.tsx.
+- Normalized PUBLIC_ORIGIN usage in front/src/app/sitemap.ts (no trailing slash).
+- Dev setup stabilized: installed deps, built backend, set envs, started dev servers (front:3000, backend:4000), proxy pointed to 3000.
+- Next: run production build, trace and fix “<Html> should not be imported outside of pages/_document” during /404 prerender, then re-run build.
