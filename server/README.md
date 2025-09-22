@@ -74,6 +74,11 @@ The backend will connect to Postgres, create the table "documents" if not presen
 
 ## API Endpoints (prefix /api)
 
+Payments
+- POST /payments/create-checkout-session — body: { items: [{ productId, quantity }], successUrl?, cancelUrl?, metadata? }
+- POST /payments/webhook — Stripe webhooks endpoint (raw body). Ensure Stripe forwards to this exact path.
+
+Products
 - GET /products — query: q, category, subcategory, isFeatured, isNew, isOnSale, sortField, sortOrder, page, limit
 - GET /products/:id
 - POST /products
@@ -98,8 +103,11 @@ The backend will connect to Postgres, create the table "documents" if not presen
 - DELETE /favourites/:productId?userId=...
 - POST /favourites/clear?userId=...
 
+Orders
 - GET /orders?userId=...
 - POST /orders — body: { userId?, items, total, ... }
+- GET /orders/by-session/:sessionId — get order by Stripe session
+- POST /orders/:orderId/retry-session — create a new Stripe session for existing order
 
 Notes:
 - userId defaults to "guest" if omitted.
@@ -162,7 +170,7 @@ Storage & uploads
 - UPLOAD_ALLOWED_MIME — допустимые mime-типы, через запятую (например, image/*)
 
 Auth
-- JWT_SECRET — секрет подписи JWT (укажите надёжное значение в продакшене)
+- JWT_SECRET — секрет подписи JWT (укажите надёжно�� значение в продакшене)
 - JWT_EXPIRES_IN — срок жизни токена (секунды или строка формата 1h/7d)
 - ALLOW_MOCK_TOKENS — разрешить mock-токены в dev (true/false)
 - ADMIN_EMAIL / ADMIN_PASSWORD — учётка администратора при первом запуске
