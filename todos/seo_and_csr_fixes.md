@@ -90,16 +90,7 @@ Next immediate action (queued)
 - Run a full next build, capture any prerender/CSR bailout warnings, and scan for server usage of client-only APIs; then implement item (1) above.
 
 Update — 2025-09-22
-- front/.env.example updated with PUBLIC_ORIGIN, PORT, and detailed comments; documented in front/README.md.
-- server/.env.example enhanced with comments and keys; documented in server/README.md.
-- front metadataBase and robots sitemap now derive from PUBLIC_ORIGIN to ensure correct canonical/sitemap in all environments.
-- Product page: moved canonical and JSON-LD to server-side. Implemented server-rendered Product JSON-LD via page component; removed client canonical mutation.
-- Improved CLS/LCP: ProductCard images use decoding="async"; ProductDetail main image uses fetchpriority="high" and eager loading; thumbnails lazy-load.
-- Sitemap: more robust product loading (tries ../server/data and server/data).
-
-Update — 2025-09-22
-- Fixed duplicate import in front/src/app/(shop)/catalog/page.tsx.
-- Updated openGraph.url to use PUBLIC_ORIGIN in front/src/app/layout.tsx.
-- Normalized PUBLIC_ORIGIN usage in front/src/app/sitemap.ts (no trailing slash).
-- Dev setup stabilized: installed deps, built backend, set envs, started dev servers (front:3000, backend:4000), proxy pointed to 3000.
-- Next: run production build, trace and fix “<Html> should not be imported outside of pages/_document” during /404 prerender, then re-run build.
+- front/.env.example created and documented: PUBLIC_ORIGIN, PORT, NEXT_PUBLIC_API_ORIGIN, NEXT_PUBLIC_ALLOWED_DEV_ORIGINS, NEXT_TELEMETRY_DISABLED, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.
+- Fixed missing import in front/src/app/(shop)/catalog/page.tsx (added `import path from 'path'`) to prevent runtime ReferenceError.
+- Reviewed SEO docs and READMEs; current PUBLIC_ORIGIN usage in layout, robots, sitemap is correct; product JSON-LD is server-side.
+- Next: run production build and address any remaining prerender warnings; then proceed with image skeletons and bundle audit.
