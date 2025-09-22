@@ -91,6 +91,8 @@ Next immediate action (queued)
 
 Update — 2025-09-22
 - front/.env.example created and documented: PUBLIC_ORIGIN, PORT, NEXT_PUBLIC_API_ORIGIN, NEXT_PUBLIC_ALLOWED_DEV_ORIGINS, NEXT_TELEMETRY_DISABLED, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.
+- Added duplicate env template front/env.local.example to align with request; referenced both in README.
 - Fixed missing import in front/src/app/(shop)/catalog/page.tsx (added `import path from 'path'`) to prevent runtime ReferenceError.
+- Improved CLS/LCP: added width/height and responsive sizes to images in front/src/widgets/product-grid/ProductGridServer.tsx.
 - Reviewed SEO docs and READMEs; current PUBLIC_ORIGIN usage in layout, robots, sitemap is correct; product JSON-LD is server-side.
-- Next: run production build and address any remaining prerender warnings; then proceed with image skeletons and bundle audit.
+- Next: run production build and address any remaining prerender/CSR warnings; then proceed with image skeletons and bundle audit.
