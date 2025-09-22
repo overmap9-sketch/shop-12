@@ -46,7 +46,7 @@ export class PaymentsController {
       mode: 'payment',
       line_items,
       success_url: successUrl || `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${origin}/checkout/cancel`,
+      cancel_url: cancelUrl || `${origin}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
       metadata: metadata || {},
     } as any);
 
