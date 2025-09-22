@@ -63,8 +63,22 @@ Remaining tasks (next steps)
 How progress will be tracked
 - I will update this file after each change describing: file modified, reason, and status (completed/in_progress/blocked).
 
-Next immediate action (I will perform now)
-- Run a full next build, capture the errors, and automatically scan project for any server-side usage of client-only APIs (useSearchParams from next/navigation, window/document, navigator.share, etc.).
-- Fix each occurrence by moving logic into client components or using router-shim when appropriate.
+Update — 2025-09-22
+Reviewed: front/README.md, server/README.md, docs/seo_and_csr_implementation.md, front/src/app/layout.tsx, robots.ts, sitemap.ts.
+Findings:
+- metadataBase and robots sitemap currently use https://example.com; should derive from PUBLIC_ORIGIN for correct canonical/sitemap in all envs.
+- ProductDetail injects canonical on the client. Prefer server-side canonical and JSON-LD via generateMetadata on product page.
+- Sitemap already reads server/data/products.json; keep silent failure but prefer env-based base URL.
+- A11y: broad usage of aria- attributes across UI is good; continue audit as components evolve.
+- Performance: ensure images have width/height and loading="lazy"; consider next/image later; add skeletons for product grids; prioritize LCP hero image on home.
 
-Reply "Proceed" to allow me to run the build and apply automated fixes; reply "Pause" to stop. (You already gave permission earlier — reply not required, I will proceed.)
+Planned actions (next steps):
+1) Use PUBLIC_ORIGIN in app layout metadataBase and robots sitemap; keep alternates canonical relative to metadataBase.
+2) Move product JSON-LD + canonical fully into product/[id]/page.tsx generateMetadata (server-side) and remove client-side canonical injection.
+3) Refactor Catalog to server-render initial list and move controls (filters/sort/pagination) to a small client component; support query params for shareable URLs.
+4) Add image lazy-loading and skeletons to ProductCard/ProductGrid; audit CLS with fixed dimensions.
+5) Add preconnect/preload for critical assets (e.g., fonts, hero image) to improve LCP on landing.
+
+Next immediate action (queued)
+- Run a full next build, capture any prerender/CSR bailout warnings, and scan for server usage of client-only APIs; then implement item (1) above.
+
