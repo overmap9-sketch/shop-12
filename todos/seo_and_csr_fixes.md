@@ -86,4 +86,7 @@ Update — 2025-09-22
 - front/.env.example updated with PUBLIC_ORIGIN, PORT, and detailed comments; documented in front/README.md.
 - server/.env.example enhanced with comments and keys; documented in server/README.md.
 - front metadataBase and robots sitemap now derive from PUBLIC_ORIGIN to ensure correct canonical/sitemap in all environments.
+- Product page: moved canonical and JSON-LD to server-side. Implemented server-rendered Product JSON-LD via page component; removed client canonical mutation.
+- Improved CLS/LCP: ProductCard images use decoding="async"; ProductDetail main image uses fetchpriority="high" and eager loading; thumbnails lazy-load.
+- Sitemap: more robust product loading (tries ../server/data and server/data).
 
