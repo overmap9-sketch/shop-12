@@ -36,6 +36,9 @@ export function Cart() {
   // Get currency conversion function
   const { convertAndFormat } = useCurrency();
 
+  const [couponCode, setCouponCode] = React.useState('');
+  const [couponApplied, setCouponApplied] = React.useState<{ code?: string; discount?: number } | null>(null);
+
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
