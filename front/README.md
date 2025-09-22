@@ -8,7 +8,7 @@
 - [Быстрый старт (фронт + бэкенд вместе)](#быстрый-старт-фронт--бэкенд-вместе)
 - [Переменные окружения](#переменные-окружения)
 - [Скрипты npm](#скрипты-npm)
-- [Архитектура проекта](#архитектура-проекта)
+- [Архитектура проекта](#арх��тектура-проекта)
 - [Потоки данных и стейт-менеджмент](#потоки-данных-и-стейт-менеджмент)
 - [Работа с API и прокси](#работа-с-api-и-прокси)
 - [Загрузка файлов/изо��ражений](#загрузка-файловизображений)
@@ -46,7 +46,7 @@
 
 ---
 
-## Быстрый старт (фронт + бэкенд вместе)
+## Быстрый старт (��ронт + бэкенд вместе)
 В одном процессе (из корня репозитория):
 ```sh
 sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev"
@@ -75,7 +75,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 Доступные ключи:
 - `NEXT_PUBLIC_API_ORIGIN` — адрес бэкенда (например, `http://localhost:4000`). Используется для п��оксирования `/api/*` и `/uploads/*`.
 - `PORT` — порт dev-серв��ра Next.js (по умолчанию 3000).
-- `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через запятую), которым разрешён dev-доступ (например, домен предпросмотра).
+- `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через за��ятую), которым разрешён dev-доступ (например, домен предпросмотра).
 - `NEXT_TELEMETRY_DISABLED` — опционально выключает телеметрию Next.js (`1` чтобы выключить).
 
 > Примечание: порт бэкенда задаётся на стороне сервера (по умолчанию 4000). В фронте ��н не управляется, но должен совпадать с `NEXT_PUBLIC_API_ORIGIN`.
@@ -98,7 +98,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 - `front/src/views/` — страницы/виды (Admin, Auth и т.д.)
 - `front/src/features/` — Redux-слайсы (auth, cart, catalog, currency, theme)
 - `front/src/shared/api/` — API-слой (axios-инстанс и доменные клиенты)
-- `front/src/shared/themes/` — темы и провайдеры
+- `front/src/shared/themes/` — темы и ��ровайдеры
 - `front/src/components/` — переиспользуемые UI-компоненты
 - `front/src/widgets/` — составные UI-блоки (Header, Footer, Grids)
 
@@ -161,7 +161,7 @@ API-клиент: `front/src/shared/api/images.ts`
 ---
 
 ## Локализация и темы
-- i18n: `front/src/shared/config/i18n.ts`, ��есурсы в `front/src/shared/locales/{en,es}`
+- i18n: `front/src/shared/config/i18n.ts`, ресурсы в `front/src/shared/locales/{en,es}`
 - Темы: `front/src/shared/themes/*`, провайдер `ThemeProvider`
 
 ---
@@ -169,7 +169,10 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Stripe (кратко)
 - Настройте ключи в front/.env.local: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...`, `PUBLIC_ORIGIN`.
 - Бэкенд: `STRIPE_SECRET_KEY=sk_test_...`, `STRIPE_WEBHOOK_SECRET=whsec_...`, `PUBLIC_ORIGIN` в server/.env.
-- В Stripe Dashboard создайте webhook на `/api/payments/webhook` и скопируйте Signing secret.
+- Webhook: используйте точный путь `/api/payments/webhook`.
+  - Stripe CLI (локально): `stripe listen --forward-to http://localhost:4000/api/payments/webhook`
+  - С другой машины: `--forward-to http://<SERVER_IP>:4000/api/payments/webhook`
+- Страница success показывает `pending`, пока вебхук не дойдёт до сервера.
 - Подробнее: docs/stripe_integration_and_webhooks.md
 
 ## Checkout: SEO и Suspense (Next.js)
@@ -193,7 +196,7 @@ API-клиент: `front/src/shared/api/images.ts`
 
 ## Быстрое исправление "Failed to fetch" (CORS / прокси)
 
-Если вы увидели в каталоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под в��ш фронтенд:
+Если вы увидели в каталоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под ваш фронтенд:
 
 1) Скопируйте `server/.env.example` → `server/.env` и убедитесь, что там указано:
 
