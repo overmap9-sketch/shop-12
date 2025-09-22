@@ -1,6 +1,6 @@
 # Backend (NestJS) — Storage-switchable API
 
-This backend provides a simple e‑commerce API (products, categories, cart, favourites, orders) and supports two storage drivers:
+This backend provides a simple e���commerce API (products, categories, cart, favourites, orders) and supports two storage drivers:
 - JSON files on disk (default)
 - PostgreSQL via Sequelize (JSONB documents table)
 
@@ -132,6 +132,45 @@ Notes:
 - Ключи: `STRIPE_SECRET_KEY` (server), `STRIPE_WEBHOOK_SECRET` (server), `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (front).
 - URL возврата: `${PUBLIC_ORIGIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}` и `${PUBLIC_ORIGIN}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`.
 
+### Stripe: установка и эксплуатация (Dashboard и CLI)
+
+Установка/настройка
+1) Аккаунт Stripe и режим Test: https://dashboard.stripe.com
+2) Ключи:
+   - STRIPE_SECRET_KEY=sk_test_...
+   - STRIPE_WEBHOOK_SECRET=whsec_...
+   - PUBLIC_ORIGIN=https://your-site.example (или http://localhost:3000 в dev)
+   - CORS_ORIGIN=http://localhost:3000 (в dev)
+
+Через Stripe Dashboard (прод/стейдж/дев с публичным URL)
+1) Developers → API keys: скопируйте Secret key (sk_test_...) → server/.env
+2) Developers → Webhooks → Add endpoint:
+   - Endpoint URL: https://YOUR_DOMAIN/api/payments/webhook
+   - Events: как минимум checkout.session.completed; дополнительно checkout.session.expired, payment_intent.payment_failed
+   - Reveal → скопируйте Signing secret (whsec_...) → server/.env
+3) Перезапустите сервер.
+
+Через Stripe CLI (локальная разработка)
+1) Установка: https://stripe.com/docs/stripe-cli
+2) Вход: `stripe login`
+3) Прокидка событий на бэкенд:
+   - Если сервер локально: `stripe listen --forward-to http://localhost:4000/api/payments/webhook`
+   - Если CLI на другой машине: `stripe listen --forward-to http://<SERVER_IP>:4000/api/payments/webhook`
+4) Тестирование:
+   - Проведите оплату на фронте (тестовая карта 4242 4242 4242 4242)
+   - Страница /checkout/success обновит статус после прихода вебхука (до этого может быть pending)
+   - Логи CLI должны показывать 200 на POST /api/payments/webhook
+
+Полезные команды
+- Запуск сервера (dev): `npm run start:dev` (порт 4000)
+- Проверка ключей в среде: убедитесь, что STRIPE_SECRET_KEY/STRIPE_WEBHOOK_SECRET доступны процессу
+- Перезапуск: после изменения .env перезапустите проц��сс
+
+FAQ
+- 404 при вебхуке: проверьте URL. Должно быть ровно `/api/payments/webhook`, а не `/stripe/webhook`.
+- Status остаётся pending: вебхук не дошёл. Проверьте CLI/Dashboard, секрет (whsec_), и сетевой доступ к серверу.
+- 400 "Stripe is not configured": не задан STRIPE_SECRET_KEY.
+
 ## Troubleshooting
 
 - Cannot connect to Postgres: ensure DATABASE_URL is correct and database is reachable.
@@ -170,7 +209,7 @@ Storage & uploads
 - UPLOAD_ALLOWED_MIME — допустимые mime-типы, через запятую (например, image/*)
 
 Auth
-- JWT_SECRET — секрет подписи JWT (укажите надёжно�� значение в продакшене)
+- JWT_SECRET — секрет подписи JWT (укажите надёжное значение в продакшене)
 - JWT_EXPIRES_IN — срок жизни токена (секунды или строка формата 1h/7d)
 - ALLOW_MOCK_TOKENS — разрешить mock-токены в dev (true/false)
 - ADMIN_EMAIL / ADMIN_PASSWORD — учётка администратора при первом запуске
