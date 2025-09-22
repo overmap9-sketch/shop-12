@@ -226,6 +226,8 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
                 loading="eager"
                 fetchpriority="high"
                 decoding="async"
+                width={1200}
+                height={1200}
               />
 
               {/* Image Navigation */}
