@@ -1,9 +1,11 @@
 import path from 'path';
+import path from 'path';
 import fs from 'fs';
 import React from 'react';
 import { Product } from '../../../entities';
 import { ProductGridServer } from '../../../widgets/product-grid/ProductGridServer';
 import dynamic from 'next/dynamic';
+import { Metadata } from 'next';
 
 const ClientCatalogShell = dynamic(() => import('./shell').then(m => m.ClientCatalogShell), { ssr: false });
 
@@ -18,6 +20,13 @@ function readJson<T = any>(candidates: string[]): T | null {
   }
   return null;
 }
+
+export const metadata: Metadata = {
+  title: 'Product Catalog · PaintHub',
+  description: 'Discover our amazing collection of products',
+  alternates: { canonical: '/catalog' },
+  robots: { index: true, follow: true }
+};
 
 export default function Page({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
   const baseCandidates = [
@@ -54,6 +63,17 @@ export default function Page({ searchParams }: { searchParams?: Record<string, s
   const title = currentCategory?.name || 'Product Catalog';
   const description = currentCategory?.description || 'Discover our amazing collection of products';
 
+  const origin = (process.env.PUBLIC_ORIGIN || 'http://localhost:3000').replace(/\/$/, '');
+  const listJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: pageItems.map((p, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      url: `${origin}/product/${(p as any).slug || (p as any).id}`,
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-background py-8">
       <div className="container mx-auto px-4">
@@ -61,6 +81,7 @@ export default function Page({ searchParams }: { searchParams?: Record<string, s
           <h1 className="text-3xl font-bold text-foreground mb-2">{title}</h1>
           <p className="text-muted-foreground">{description}</p>
         </header>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listJsonLd) }} />
         <section id="ssr-catalog" aria-label="Product results">
           <ProductGridServer products={pageItems as any} columns={3} />
         </section>
