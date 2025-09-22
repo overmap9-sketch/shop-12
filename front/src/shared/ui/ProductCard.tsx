@@ -80,6 +80,7 @@ export function ProductCard({
             className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
             onMouseEnter={handleImageHover}
             loading="lazy"
+            decoding="async"
           />
           
           {/* Badges */}
