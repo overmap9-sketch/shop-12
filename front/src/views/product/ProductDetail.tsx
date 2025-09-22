@@ -195,6 +195,44 @@ export function ProductDetail() {
     );
   }
 
+  React.useEffect(() => {
+    if (!product) return;
+    // set canonical link for SEO
+    try {
+      const canonicalHref = `${typeof window !== 'undefined' ? window.location.origin : ''}/product/${product.id}`;
+      let link = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        document.head.appendChild(link);
+      }
+      link.href = canonicalHref;
+    } catch (e) {
+      // ignore in non-browser environments
+    }
+  }, [product]);
+
+  const renderJsonLd = () => {
+    if (!product) return null;
+    const jsonLd = {
+      '@context': 'https://schema.org/',
+      '@type': 'Product',
+      name: product.title,
+      image: product.images || [],
+      description: product.description,
+      sku: product.sku || product.id,
+      brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
+      offers: {
+        '@type': 'Offer',
+        url: typeof window !== 'undefined' ? window.location.href : '',
+        priceCurrency: product.currency || 'USD',
+        price: product.price?.toString?.() || (product.price || 0).toString(),
+        availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+      }
+    };
+    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Breadcrumbs */}
