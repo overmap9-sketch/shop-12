@@ -440,7 +440,7 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
             {/* Features */}
             {product.features.length > 0 && (
               <div>
-                <h3 className="font-semibold text-foreground mb-3">Key Features</h3>
+                <h3 className="font-semibold text-foreground mb-3">Features</h3>
                 <ul className="space-y-2">
                   {product.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2 text-muted-foreground">
@@ -496,24 +496,24 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
                   <Heart className={`h-5 w-5 ${isFavourite ? 'fill-current' : ''}`} />
                 </Button>
               </div>
-            </div>
 
-            {/* Trust Signals */}
-            <div className="border-t pt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Truck className="h-4 w-4 text-primary" />
-                  <span>{t('product.trustSignals.freeShipping', {
-                    amount: convertAndFormat(50).formatted
-                  })}</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <RotateCcw className="h-4 w-4 text-primary" />
-                  <span>30-day return policy</span>
-                </div>
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Shield className="h-4 w-4 text-primary" />
-                  <span>2-year warranty</span>
+              {/* Trust Signals */}
+              <div className="border-t pt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    <span>{t('product.trustSignals.warranty', '2-year warranty')}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4" />
+                    <span>{t('product.trustSignals.freeShipping', {
+                      amount: convertAndFormat(50).formatted
+                    })}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RotateCcw className="h-4 w-4" />
+                    <span>{t('product.trustSignals.easyReturns', 'Easy returns')}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -526,10 +526,6 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
             {/* Specifications */}
             {Object.keys(product.specifications).length > 0 && (
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Info className="h-5 w-5" />
-                  Specifications
-                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {Object.entries(product.specifications).map(([key, value]) => (
                     <div key={key} className="flex justify-between py-2 border-b border-border last:border-b-0">
@@ -556,3 +552,5 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
     </div>
   );
 }
+
+export default ProductDetail;
