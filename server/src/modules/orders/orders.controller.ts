@@ -19,6 +19,13 @@ export class OrdersController {
     return order;
   }
 
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    const order = await this.svc.findById(id);
+    if (!order) throw new NotFoundException('Order not found');
+    return order;
+  }
+
   @Post(':orderId/retry-session')
   async retrySession(@Param('orderId') orderId: string, @Body() body: any) {
     const order = await this.svc.findById(orderId);
