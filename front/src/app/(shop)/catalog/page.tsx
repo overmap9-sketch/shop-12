@@ -64,7 +64,14 @@ export default function Page({ searchParams }: { searchParams?: Record<string, s
         <section id="ssr-catalog" aria-label="Product results">
           <ProductGridServer products={pageItems as any} columns={3} />
         </section>
-        <ClientCatalogShell />
+        <ClientCatalogShell initial={{
+          q,
+          category,
+          subcategory,
+          page,
+          limit,
+          sort
+        }} />
       </div>
     </div>
   );
