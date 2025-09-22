@@ -1,9 +1,5 @@
 # Task: SEO hardening and build fix for checkout pages
 
-Owner: holdman04@inbox.ru
-Principals: admin
-Created: 2025-09-22
-
 ## Goals
 - Ensure Next.js build passes without CSR-bailout errors.
 - Improve SEO/a11y for checkout pages (success/cancel) and mark as noindex.
