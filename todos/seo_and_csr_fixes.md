@@ -55,16 +55,45 @@ Remaining tasks (next steps)
    - Action: scan for any imports/usages that reference Next <Html> or next/document materials indirectly (e.g., using next/script or components that access HtmlContext). Replace or move to client-only where appropriate.
 2) Replace remaining react-router-dom Link imports in server-rendered components with router-shim Link when necessary to avoid server-only issues.
    - Files to audit (examples): front/src/views/*, front/src/widgets/*, front/src/components/*
-3) Improve product page SSR metadata and move JSON-LD server-side where possible.
-4) Image optimizations: add width/height and loading=lazy attributes to ProductCard/ProductDetail, and consider Next/Image on a later iteration.
-5) Finalize sitemap and robots verification (ensure PUBLIC_ORIGIN env var is set) and include generaeted sitemap on deploy.
+3) Improve product page SSR metadata and move JSON-LD server-side where possible. — COMPLETED (moved to server)
+4) Image optimizations: add width/height and loading=lazy attributes to ProductCard/ProductDetail, and consider Next/Image on a later iteration. — PARTIAL (lazy/decoding/fetchpriority added)
+5) Finalize sitemap and robots verification (ensure PUBLIC_ORIGIN env var is set) and include generated sitemap on deploy. — PARTIAL
 6) Add CI step in project pipeline to run next build and run Lighthouse checks (see docs/SEO_GUIDE.md for CI example).
+
+Update — 2025-09-22
+- Catalog SSR: Implemented server-rendered initial catalog with ProductGridServer and client hydration shell; preserves SEO HTML and enables client interactivity post-hydration.
+  - Files: front/src/app/(shop)/catalog/page.tsx, front/src/app/(shop)/catalog/shell.tsx, front/src/widgets/product-grid/ProductGridServer.tsx.
+- Hydration: wired initial URL params into client Redux store on mount to keep state in sync and avoid refetch mismatch.
+  - Updated: front/src/app/(shop)/catalog/page.tsx (pass initial), front/src/app/(shop)/catalog/shell.tsx (dispatch setSearchQuery/updateFilters/setSort/setCurrentPage).
+- Next: audit any SSR/client mismatches and run production build.
 
 How progress will be tracked
 - I will update this file after each change describing: file modified, reason, and status (completed/in_progress/blocked).
 
-Next immediate action (I will perform now)
-- Run a full next build, capture the errors, and automatically scan project for any server-side usage of client-only APIs (useSearchParams from next/navigation, window/document, navigator.share, etc.).
-- Fix each occurrence by moving logic into client components or using router-shim when appropriate.
+Update — 2025-09-22
+Reviewed: front/README.md, server/README.md, docs/seo_and_csr_implementation.md, front/src/app/layout.tsx, robots.ts, sitemap.ts.
+Findings:
+- metadataBase and robots sitemap currently use https://example.com; should derive from PUBLIC_ORIGIN for correct canonical/sitemap in all envs.
+- ProductDetail injects canonical on the client. Prefer server-side canonical and JSON-LD via generateMetadata on product page.
+- Sitemap already reads server/data/products.json; keep silent failure but prefer env-based base URL.
+- A11y: broad usage of aria- attributes across UI is good; continue audit as components evolve.
+- Performance: ensure images have width/height and loading="lazy"; consider next/image later; add skeletons for product grids; prioritize LCP hero image on home.
 
-Reply "Proceed" to allow me to run the build and apply automated fixes; reply "Pause" to stop. (You already gave permission earlier — reply not required, I will proceed.)
+Planned actions (next steps):
+1) Use PUBLIC_ORIGIN in app layout metadataBase and robots sitemap; keep alternates canonical relative to metadataBase.
+2) Move product JSON-LD + canonical fully into product/[id]/page.tsx generateMetadata (server-side) and remove client-side canonical injection.
+3) Refactor Catalog to server-render initial list and move controls (filters/sort/pagination) to a small client component; support query params for shareable URLs.
+4) Add image lazy-loading and skeletons to ProductCard/ProductGrid; audit CLS with fixed dimensions.
+5) Add preconnect/preload for critical assets (e.g., fonts, hero image) to improve LCP on landing.
+
+Next immediate action (queued)
+- Run a full next build, capture any prerender/CSR bailout warnings, and scan for server usage of client-only APIs; then implement item (1) above.
+
+Update — 2025-09-22
+- front/.env.example updated with PUBLIC_ORIGIN, PORT, and detailed comments; documented in front/README.md.
+- server/.env.example enhanced with comments and keys; documented in server/README.md.
+- front metadataBase and robots sitemap now derive from PUBLIC_ORIGIN to ensure correct canonical/sitemap in all environments.
+- Product page: moved canonical and JSON-LD to server-side. Implemented server-rendered Product JSON-LD via page component; removed client canonical mutation.
+- Improved CLS/LCP: ProductCard images use decoding="async"; ProductDetail main image uses fetchpriority="high" and eager loading; thumbnails lazy-load.
+- Sitemap: more robust product loading (tries ../server/data and server/data).
+

@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {ProductsAPI} from "../../shared/api";
@@ -12,7 +13,7 @@ import { Button } from '../../shared/ui/Button';
 import { Badge } from '../../components/ui/badge';
 import { LoadingSpinner } from '../../shared/ui/LoadingSpinner';
 import { ProductBreadcrumb } from '../../components/ProductBreadcrumb';
-import { ProductGrid } from '../../widgets/product-grid/ProductGrid';
+const ProductGrid = dynamic(() => import('../../widgets/product-grid/ProductGrid').then(m => m.ProductGrid), { ssr: false, loading: () => <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">{Array.from({length:4}).map((_,i)=>(<div key={i} className="bg-card border border-border rounded-lg overflow-hidden"><div className="aspect-square skeleton" /><div className="p-4 space-y-3"><div className="skeleton-text h-3 w-1/3" /><div className="skeleton-title" /><div className="skeleton-text h-5 w-1/2" /></div></div>))}</div> });
 import { NotificationService } from '../../shared/lib/notifications.ts';
 import { useProductPrice, useCurrency } from '../../hooks/use-currency.ts';
 import {
@@ -197,43 +198,7 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
     );
   }
 
-  React.useEffect(() => {
-    if (!product) return;
-    // set canonical link for SEO
-    try {
-      const canonicalHref = `${typeof window !== 'undefined' ? window.location.origin : ''}/product/${product.id}`;
-      let link = document.querySelector("link[rel='canonical']") as HTMLLinkElement | null;
-      if (!link) {
-        link = document.createElement('link');
-        link.setAttribute('rel', 'canonical');
-        document.head.appendChild(link);
-      }
-      link.href = canonicalHref;
-    } catch (e) {
-      // ignore in non-browser environments
-    }
-  }, [product]);
 
-  const renderJsonLd = () => {
-    if (!product) return null;
-    const jsonLd = {
-      '@context': 'https://schema.org/',
-      '@type': 'Product',
-      name: product.title,
-      image: product.images || [],
-      description: product.description,
-      sku: product.sku || product.id,
-      brand: product.brand ? { '@type': 'Brand', name: product.brand } : undefined,
-      offers: {
-        '@type': 'Offer',
-        url: typeof window !== 'undefined' ? window.location.href : '',
-        priceCurrency: product.currency || 'USD',
-        price: product.price?.toString?.() || (product.price || 0).toString(),
-        availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
-      }
-    };
-    return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />;
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -258,6 +223,11 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
                   isImageZoomed ? 'scale-150 cursor-zoom-out' : 'cursor-zoom-in'
                 }`}
                 onClick={() => setIsImageZoomed(!isImageZoomed)}
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+                width={1200}
+                height={1200}
               />
 
               {/* Image Navigation */}
@@ -315,6 +285,10 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
                       src={image}
                       alt={`${product.title} ${index + 1}`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      width={64}
+                      height={64}
                     />
                   </button>
                 ))}
@@ -324,7 +298,6 @@ export function ProductDetail({ serverId }: { serverId?: string }) {
 
           {/* Product Information */}
           <div className="space-y-6">
-            {renderJsonLd()}
             {/* Header */}
             <div>
               <div className="flex items-start justify-between mb-2">

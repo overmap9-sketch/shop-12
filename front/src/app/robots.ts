@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin']
     },
-    sitemap: 'https://example.com/sitemap.xml'
+    sitemap: `${(process.env.PUBLIC_ORIGIN || 'http://localhost:3000').replace(/\/$/, '')}/sitemap.xml`
   };
 }

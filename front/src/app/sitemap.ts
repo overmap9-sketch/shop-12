@@ -11,15 +11,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   try {
-    const dataPath = path.resolve(process.cwd(), 'server', 'data', 'products.json');
-    if (fs.existsSync(dataPath)) {
-      const raw = fs.readFileSync(dataPath, 'utf-8');
-      const products = JSON.parse(raw) as any[];
-      for (const p of products) {
-        if (p && (p.status === 'published' || !p.status)) {
-          const slug = p.slug || p.id;
-          items.push({ url: `${base}/product/${slug}`, changeFrequency: 'monthly', priority: 0.7 });
-        }
+    const candidates = [
+      path.resolve(process.cwd(), '../server/data/products.json'),
+      path.resolve(process.cwd(), 'server/data/products.json'),
+    ];
+    let products: any[] = [];
+    for (const p of candidates) {
+      if (fs.existsSync(p)) {
+        const raw = fs.readFileSync(p, 'utf-8');
+        products = JSON.parse(raw) as any[];
+        break;
+      }
+    }
+    for (const p of products) {
+      if (p && (p.status === 'published' || !p.status)) {
+        const slug = p.slug || p.id;
+        items.push({ url: `${base}/product/${slug}`, changeFrequency: 'monthly', priority: 0.7 });
       }
     }
   } catch (e) {
