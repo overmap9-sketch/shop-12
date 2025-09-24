@@ -17,15 +17,18 @@ export function BottomNav() {
   const favCount = useAppSelector(selectFavouritesCount);
   const isAuth = useAppSelector(selectIsAuthenticated);
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const items = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/catalog', label: 'Catalog', icon: Grid3X3 },
-    { href: '/favourites', label: 'Favourites', icon: Heart, badge: favCount },
-    { href: '/cart', label: 'Cart', icon: ShoppingCart, badge: cartCount },
-    { href: isAuth ? '/profile' : '/login', label: 'Account', icon: User },
+    { href: '/favourites', label: 'Favourites', icon: Heart, badge: mounted ? favCount : 0 },
+    { href: '/cart', label: 'Cart', icon: ShoppingCart, badge: mounted ? cartCount : 0 },
+    { href: mounted && isAuth ? '/profile' : '/login', label: 'Account', icon: User },
   ] as const;
 
-  const isActive = (href: string) => (location.pathname || '').startsWith(href);
+  const isActive = (href: string) => (mounted ? (location.pathname || '').startsWith(href) : false);
 
   return (
     <nav
@@ -33,6 +36,7 @@ export function BottomNav() {
       role="navigation"
       aria-label="Bottom Navigation"
       style={{ ['--bn-h' as any]: '64px' }}
+      suppressHydrationWarning
     >
       <ul className="grid grid-cols-5">
         {items.map(({ href, label, icon: Icon, badge }) => (
