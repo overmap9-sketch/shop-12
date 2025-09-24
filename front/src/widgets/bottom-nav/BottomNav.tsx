@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from '../../shared/lib/router-shim';
 import { useAppSelector } from '../../core/hooks';
 import { selectCartItemCount } from '../../features/cart/cartSlice';
