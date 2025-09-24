@@ -29,9 +29,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-50 bg-card border-t border-border md:hidden"
+      className="fixed bottom-0 inset-x-0 z-50 bg-card border-t border-border md:hidden h-16 bottom-nav-safe-area"
       role="navigation"
       aria-label="Bottom Navigation"
+      style={{ ['--bn-h' as any]: '64px' }}
     >
       <ul className="grid grid-cols-5">
         {items.map(({ href, label, icon: Icon, badge }) => (
