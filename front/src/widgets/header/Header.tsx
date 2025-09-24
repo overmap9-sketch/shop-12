@@ -27,7 +27,8 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // mobile menu
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
@@ -38,8 +39,8 @@ export function Header() {
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        {/* Top bar */}
-        <div className="flex items-center justify-between py-2 text-sm border-b border-border">
+        {/* Top bar (hidden on mobile; moved to burger menu) */}
+        <div className="hidden md:flex items-center justify-between py-2 text-sm border-b border-border">
           <div className="flex items-center gap-4">
             <span className="text-foreground-muted">Free color matching • Pro discounts available</span>
           </div>
@@ -65,8 +66,8 @@ export function Header() {
             />
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-4">
+          {/* Actions (hidden on mobile; use BottomNav) */}
+          <div className="hidden md:flex items-center gap-4">
 
             {/* Favourites */}
             <Link
@@ -104,7 +105,7 @@ export function Header() {
             {mounted && isAuthenticated && user ? (
               <div className="relative">
                 <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-2 p-2 hover:bg-surface-alt rounded-md transition-theme"
                 >
                   <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">
@@ -113,7 +114,7 @@ export function Header() {
                   <span className="hidden md:block text-sm">{user.firstName}</span>
                 </button>
 
-                {isMenuOpen && (
+                {isUserMenuOpen && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setIsMenuOpen(false)} />
                     <div className="absolute right-0 top-full mt-2 w-48 bg-surface border border-border rounded-md shadow-theme-lg z-20">
@@ -148,6 +149,7 @@ export function Header() {
                             setIsMenuOpen(false);
                             dispatch(logout());
                             NotificationService.logoutSuccess();
+                            navigate('/');
                           }}
                         >
                           {t('navigation.logout')}
@@ -158,20 +160,15 @@ export function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link
-                  to="/login"
-                  className={buttonVariants({ variant: 'ghost', size: 'sm' })}
-                >
-                  {t('navigation.login')}
-                </Link>
-                <Link
-                  to="/register"
-                  className={buttonVariants({ size: 'sm' })}
-                >
-                  {t('navigation.register')}
-                </Link>
-              </div>
+              <button
+                aria-label={t('navigation.login')}
+                onClick={() => navigate('/login')}
+                className="p-2 hover:bg-surface-alt rounded-md transition-theme"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
             )}
           </div>
         </div>

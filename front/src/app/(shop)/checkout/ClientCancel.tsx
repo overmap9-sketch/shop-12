@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 
+/**
+ * Client-side cancel page with retry flow. Wrapped by Suspense in the server page.
+ */
 export default function ClientCancel() {
   const searchParams = useSearchParams();
   const sessionId = searchParams?.get('session_id') || '';
@@ -57,23 +60,34 @@ export default function ClientCancel() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Payment cancelled</h1>
-      {!sessionId && <div>No session specified. If you were redirected here from Stripe, session info may be missing.</div>}
-      {loading && <div>Loading order...</div>}
-      {error && <div className="text-red-600">{error}</div>}
-      {order && (
-        <div>
-          <div className="mb-2">Order ID: {order.id}</div>
-          <div className="mb-2">Status: <strong>{order.status}</strong></div>
-          <div className="mt-4">
-            <button disabled={retrying} onClick={handleRetry} className="px-4 py-2 bg-primary text-primary-foreground rounded-md">
-              {retrying ? 'Redirecting...' : 'Retry Payment'}
-            </button>
+    <div className="mx-auto max-w-2xl p-6">
+      <div className="bg-card border border-border rounded-lg p-6">
+        <h1 className="text-2xl font-semibold mb-2">Payment cancelled</h1>
+        {!sessionId && (
+          <p>No session specified. If you were redirected here from Stripe, session info may be missing.</p>
+        )}
+        {loading && <p aria-busy="true">Loading order...</p>}
+        {error && <p className="text-red-600">{error}</p>}
+        {order && (
+          <div className="space-y-2">
+            <div><span className="text-muted-foreground">Order ID:</span> <span className="font-medium">{order.id}</span></div>
+            <div><span className="text-muted-foreground">Status:</span> <strong className="uppercase">{order.status}</strong></div>
+            <div className="pt-2">
+              <button
+                disabled={retrying}
+                onClick={handleRetry}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-md"
+                aria-busy={retrying}
+              >
+                {retrying ? 'Redirecting…' : 'Retry Payment'}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-      {!order && <div className="mt-4">If you'd like to retry payment, contact support or try again from your cart.</div>}
+        )}
+        {!order && (
+          <p className="mt-4">If you'd like to retry payment, contact support or try again from your cart.</p>
+        )}
+      </div>
     </div>
   );
 }

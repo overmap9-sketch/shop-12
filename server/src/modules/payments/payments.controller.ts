@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Res, Inject, Logger } from '@nestjs/common';
+import { BadRequestException, Controller, Post, Body, Req, Res, Inject, Logger } from '@nestjs/common';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response } from 'express';
@@ -11,7 +11,11 @@ export class PaymentsController {
 
   constructor(private readonly config: ConfigService, @Inject(DATA_STORE) private readonly db: DataStore) {
     const key = this.config.get<string>('STRIPE_SECRET_KEY') || '';
-    this.stripe = new Stripe(key, { apiVersion: '2022-11-15' } as any);
+    // Initialize Stripe even if key is empty; calls will be guarded to avoid crashing the server
+    this.stripe = new Stripe(key || 'sk_test_placeholder', { apiVersion: '2022-11-15' } as any);
+    if (!key) {
+      this.logger.warn('STRIPE_SECRET_KEY is not set. Payment endpoints will return 400 until configured.');
+    }
   }
 
   @Post('create-checkout-session')
@@ -20,6 +24,12 @@ export class PaymentsController {
     // Debug log for incoming create-checkout-session requests
     // eslint-disable-next-line no-console
     console.log('[payments] create-checkout-session body:', JSON.stringify({ items, successUrl, cancelUrl, metadata }).slice(0, 1000));
+
+    const secret = this.config.get<string>('STRIPE_SECRET_KEY');
+    if (!secret) {
+      // Fail fast with clear message but do not crash the server
+      throw new BadRequestException('Stripe is not configured. Set STRIPE_SECRET_KEY on the server.');
+    }
 
     // build line_items from products in data store
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
@@ -41,14 +51,20 @@ export class PaymentsController {
 
     const origin = (this.config.get('PUBLIC_ORIGIN') || 'http://localhost:3000').replace(/\/$/, '');
 
-    const session = await this.stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      line_items,
-      success_url: successUrl || `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${origin}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
-      metadata: metadata || {},
-    } as any);
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await this.stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        mode: 'payment',
+        line_items,
+        success_url: successUrl || `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: cancelUrl || `${origin}/checkout/cancel?session_id={CHECKOUT_SESSION_ID}`,
+        metadata: metadata || {},
+      } as any);
+    } catch (err: any) {
+      this.logger.error('Stripe create session failed', err?.message || err);
+      throw new BadRequestException('Unable to create checkout session. Please contact support.');
+    }
 
     // Save a pending order
     try {

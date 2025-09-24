@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../core/hooks';
 import { login, selectAuthLoading, selectAuthError, clearError } from '../../features/auth/authSlice';
@@ -12,6 +12,7 @@ export function Login() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
   const loading = useAppSelector(selectAuthLoading);
   const error = useAppSelector(selectAuthError);
@@ -65,8 +66,11 @@ export function Login() {
       })).unwrap();
 
       NotificationService.loginSuccess(result.user.firstName);
-      // Redirect to home page on successful login
-      navigate('/');
+      // Redirect to intended destination if provided
+      const qsReturn = searchParams.get('returnTo');
+      let target = qsReturn || localStorage.getItem('postLoginRedirect') || '/';
+      try { localStorage.removeItem('postLoginRedirect'); } catch {}
+      navigate(target);
     } catch (error) {
       NotificationService.loginError(error instanceof Error ? error.message : 'Login failed');
     }

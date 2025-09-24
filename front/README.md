@@ -13,7 +13,7 @@
 - [Работа с API и прокси](#работа-с-api-и-прокси)
 - [Загрузка файлов/изо��ражений](#загрузка-файловизображений)
 - [Модули фронтенда](#модули-фронтенда)
-- [Локализация и темы](#локализация-и-темы)
+- [Локализация и темы](#локализация-��-темы)
 - [Траблшутинг](#траблшутинг)
 
 ---
@@ -136,7 +136,7 @@ HTTP-клиент:
 
 ---
 
-## Загрузка файлов/изображений
+## Загрузка фа��лов/изображений
 UI-компонент: `front/src/components/ui/ImageUploader.tsx`
 API-клиент: `front/src/shared/api/images.ts`
 - Одиночная загрузка: POST `/api/files/images` (multipart/form-data, поле `file`)
@@ -155,7 +155,7 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Модули фронтенда
 - Auth: вход/регистрация, токен в localStorage, интерцептор подхватывает заголовок
 - Products (Admin): формы добавления/редактирования, загрузка изображений, категории, атрибуты
-- Categories (Admin): иерархия, изображение, сортировка
+- Categories (Admin): иерархия, изображение, с��ртировка
 - Cart/Favourites: базовые операции корзины и избранного
 
 ---
@@ -166,9 +166,30 @@ API-клиент: `front/src/shared/api/images.ts`
 
 ---
 
+## Stripe (кратко)
+- Настройте ключи в front/.env.local: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...`, `PUBLIC_ORIGIN`.
+- Бэкенд: `STRIPE_SECRET_KEY=sk_test_...`, `STRIPE_WEBHOOK_SECRET=whsec_...`, `PUBLIC_ORIGIN` в server/.env.
+- Webhook: используйте точный путь `/api/payments/webhook`.
+  - Stripe CLI (локально): `stripe listen --forward-to http://localhost:4000/api/payments/webhook`
+  - С другой машины: `--forward-to http://<SERVER_IP>:4000/api/payments/webhook`
+- Страница success показывает `pending`, пока вебхук не дойдёт до сервера.
+- Подробнее: docs/stripe_integration_and_webhooks.md
+
+## Auth & Checkout Guards (кратко)
+- Админ-маршруты доступны только авторизованным администраторам; иначе показывается NotFound (без редирект-лупов).
+- Страница /admin/login рендерится без админ‑лейаута, чтобы избежать циклов.
+- Checkout требует авторизации: при отсутствии токена — редирект на /login?returnTo={текущий URL}, после входа выполняется возврат.
+- Подробнее: todos/auth_and_checkout_guards.md
+
+## Checkout: SEO и Suspense (Next.js)
+- Страницы `/checkout/success` и `/checkout/cancel` — серверные и рендерят клиентские компоненты внутри `<Suspense>` с доступным `fallback` (aria-busy).
+- Использование `useSearchParams()` в клиентских компонентах требует обёртки в `Suspense`, иначе при сборке возможен CSR bailout.
+- Эти страницы помечены `robots: noindex, nofollow` и имеют канонические ссылки, чтобы не попадать в индекс.
+- Важные env: `PUBLIC_ORIGIN`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
+
 ## Траблшутинг
 - 401 при загрузке/запросах: проверьте наличие токена и права `files:upload` (или роль admin)
-- CORS/предпросмотр: добавьте домен предпросмотра в `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS`
+- CORS/предпросмотр: добавьте домен пред��росмотра в `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS`
 - Не видно загруженные файлы: убедитесь, что ��экенд раздаёт `/uploads`, а фронт проксирует этот путь
 - 404 от API: проверьте `NEXT_PUBLIC_API_ORIGIN` и доступность бэкенда `/api/*`
 

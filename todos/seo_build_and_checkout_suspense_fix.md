@@ -11,7 +11,7 @@
 - [x] Add SEO metadata (title, description, robots noindex, canonical) to /checkout/success and /checkout/cancel
 - [x] Grep repository for useSearchParams usage and confirm no SSR build issues elsewhere
 - [ ] Build locally to confirm no warnings/errors related to Suspense (CI step)
-- [ ] Optional: document Next.js hook + Suspense requirement in docs/ or README if needed
+- [x] Optional: document Next.js hook + Suspense requirement in docs/ or README if needed
 
 ## Notes
 - ClientSuccess and ClientCancel now render under Suspense; fallback includes aria-busy for a11y.
