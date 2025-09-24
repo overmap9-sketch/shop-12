@@ -38,8 +38,8 @@ export function Header() {
   return (
     <header className="bg-background border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4">
-        {/* Top bar */}
-        <div className="flex items-center justify-between py-2 text-sm border-b border-border">
+        {/* Top bar (hidden on mobile; moved to burger menu) */}
+        <div className="hidden md:flex items-center justify-between py-2 text-sm border-b border-border">
           <div className="flex items-center gap-4">
             <span className="text-foreground-muted">Free color matching • Pro discounts available</span>
           </div>
