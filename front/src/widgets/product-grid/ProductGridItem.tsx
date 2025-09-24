@@ -55,7 +55,7 @@ export function ProductGridItem({ product, viewMode, loading = false }: ProductG
   // List view
   return (
     <div className="bg-card border rounded-lg p-4 hover:shadow-md transition-shadow">
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         {/* Product Image */}
         <div className="flex-shrink-0">
           <div className="w-24 h-24 bg-muted rounded-md overflow-hidden">
@@ -69,7 +69,7 @@ export function ProductGridItem({ product, viewMode, loading = false }: ProductG
         </div>
 
         {/* Product Info */}
-        <div className="flex-grow space-y-2">
+        <div className="flex-grow min-w-0 space-y-2">
           <div className="flex items-start justify-between">
             <div>
               <h3 className="font-semibold text-foreground line-clamp-1">
@@ -130,7 +130,7 @@ export function ProductGridItem({ product, viewMode, loading = false }: ProductG
         </div>
 
         {/* Price and Actions */}
-        <div className="flex-shrink-0 text-right space-y-2">
+        <div className="flex-shrink-0 sm:text-right text-left space-y-2">
           <div>
           <div className="text-lg font-bold text-foreground">
             {price.formatted}

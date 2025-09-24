@@ -201,7 +201,7 @@ export function Cart() {
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
               <div key={item.id} className="bg-card border border-border rounded-lg p-6">
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 sm:items-start">
                   {/* Product Image */}
                   <div className="w-24 h-24 bg-muted rounded-md overflow-hidden flex-shrink-0">
                     <img
@@ -241,7 +241,7 @@ export function Cart() {
                     </div>
 
                     {/* Quantity and Price */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex items-center gap-3">
                         <span className="text-sm text-foreground-muted">{t('product.quantity')}:</span>
                         <div className="flex items-center border border-border rounded-md">
@@ -272,7 +272,7 @@ export function Cart() {
                         )}
                       </div>
 
-                      <div className="text-right">
+                      <div className="sm:text-right text-left">
                         <div className="text-lg font-semibold text-foreground">
                           {orderTotal.items[cartItems.indexOf(item)]?.formattedTotal.formatted || '$0.00'}
                         </div>
@@ -287,7 +287,7 @@ export function Cart() {
             ))}
 
             {/* Cart Actions */}
-            <div className="flex justify-between items-center pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center pt-4">
               <Button variant="outline" onClick={handleClearCart} disabled={loading}>
                 Clear Cart
               </Button>
