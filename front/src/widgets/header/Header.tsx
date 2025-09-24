@@ -27,7 +27,8 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // mobile menu
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
