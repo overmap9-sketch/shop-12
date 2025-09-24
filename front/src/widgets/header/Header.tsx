@@ -114,7 +114,7 @@ export function Header() {
                   <span className="hidden md:block text-sm">{user.firstName}</span>
                 </button>
 
-                {isMenuOpen && (
+                {isUserMenuOpen && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setIsMenuOpen(false)} />
                     <div className="absolute right-0 top-full mt-2 w-48 bg-surface border border-border rounded-md shadow-theme-lg z-20">
