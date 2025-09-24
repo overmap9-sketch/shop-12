@@ -33,7 +33,7 @@ export function FavouriteItem({
   if (viewMode === 'list') {
     return (
       <div className="bg-card border rounded-lg p-4 hover:shadow-md transition-shadow">
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           {/* Product Image */}
           <div className="flex-shrink-0">
             <Link to={`/product/${product.id}`}>
@@ -49,7 +49,7 @@ export function FavouriteItem({
           </div>
 
           {/* Product Info */}
-          <div className="flex-grow space-y-2">
+          <div className="flex-grow min-w-0 space-y-2">
             <div className="flex items-start justify-between">
               <div>
                 <Link 
@@ -94,7 +94,7 @@ export function FavouriteItem({
               )}
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="text-lg font-bold text-foreground">
                   ${product.price}
