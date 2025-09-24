@@ -50,8 +50,10 @@ export function Header() {
 
         {/* Main header */}
         <div className="flex items-center justify-between py-4">
-          {/* Logo */}
-          <Logo />
+          {/* Logo (hidden on mobile, shown in burger menu) */}
+          <div className="hidden md:block">
+            <Logo />
+          </div>
 
           {/* Search */}
           <div className="flex-1 max-w-2xl mx-4 md:mx-8">
@@ -148,7 +150,10 @@ export function Header() {
             className="fixed right-0 top-0 h-full w-80 max-w-[85%] bg-background z-[70] border-l border-border shadow-xl flex flex-col"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <h2 className="text-base font-semibold">{t('navigation.settings')}</h2>
+              <div className="flex items-center gap-3">
+                <Logo />
+                <h2 className="text-base font-semibold">{t('navigation.settings')}</h2>
+              </div>
               <button
                 type="button"
                 className="p-2 rounded-md hover:bg-surface-alt"
