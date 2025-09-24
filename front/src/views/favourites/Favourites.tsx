@@ -120,7 +120,7 @@ export function Favourites() {
   // Loading state
   if (loading && favourites.length === 0) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-background py-12 pb-safe-bottom">
         <div className="container mx-auto px-4 flex items-center justify-center">
           <LoadingSpinner size="lg" text={t('favourites.loading', 'Loading favourites...')} />
         </div>
@@ -131,7 +131,7 @@ export function Favourites() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-background py-12 pb-safe-bottom">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="bg-destructive/10 border border-destructive text-destructive p-6 rounded-md text-center">
@@ -150,7 +150,7 @@ export function Favourites() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-background py-8 pb-safe-bottom">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
@@ -252,12 +252,14 @@ export function Favourites() {
                   )}
 
                   {/* View mode toggle */}
-                  <div className="flex items-center border rounded-md">
+                  <div className="flex items-center border rounded-md" role="group" aria-label="View mode">
                     <button
                       onClick={() => setViewMode('grid')}
-                      className={`p-2 transition-colors ${
-                        viewMode === 'grid' 
-                          ? 'bg-primary text-primary-foreground' 
+                      aria-pressed={viewMode === 'grid'}
+                      aria-label="Grid view"
+                      className={`p-2 h-10 w-10 inline-flex items-center justify-center transition-colors ${
+                        viewMode === 'grid'
+                          ? 'bg-primary text-primary-foreground'
                           : 'hover:bg-muted'
                       }`}
                     >
@@ -265,9 +267,11 @@ export function Favourites() {
                     </button>
                     <button
                       onClick={() => setViewMode('list')}
-                      className={`p-2 transition-colors ${
-                        viewMode === 'list' 
-                          ? 'bg-primary text-primary-foreground' 
+                      aria-pressed={viewMode === 'list'}
+                      aria-label="List view"
+                      className={`p-2 h-10 w-10 inline-flex items-center justify-center transition-colors ${
+                        viewMode === 'list'
+                          ? 'bg-primary text-primary-foreground'
                           : 'hover:bg-muted'
                       }`}
                     >
