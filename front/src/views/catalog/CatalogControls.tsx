@@ -106,6 +106,8 @@ export function CatalogControls({
             size="sm"
             onClick={() => onViewModeChange('grid')}
             className="rounded-r-none border-r"
+            aria-pressed={viewMode === 'grid'}
+            aria-label={t('catalog.viewGrid', 'Grid view')}
             disabled={loading}
           >
             <Grid className="h-4 w-4" />
@@ -115,6 +117,8 @@ export function CatalogControls({
             size="sm"
             onClick={() => onViewModeChange('list')}
             className="rounded-l-none"
+            aria-pressed={viewMode === 'list'}
+            aria-label={t('catalog.viewList', 'List view')}
             disabled={loading}
           >
             <List className="h-4 w-4" />
