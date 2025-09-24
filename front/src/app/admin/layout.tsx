@@ -166,6 +166,13 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
     </div>
   );
 
+  const isLoginRoute = (location.pathname || '').startsWith('/admin/login');
+
+  if (isLoginRoute) {
+    // Render children directly on admin login page; no guard/chrome
+    return <>{children}</>;
+  }
+
   return (
     <AdminAuthGuard>
       <div className="h-screen bg-background flex">
