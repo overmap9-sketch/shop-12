@@ -12,7 +12,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
       <AppInit />
       <Header />
       {/* Reserve space for fixed BottomNav on mobile to avoid CLS/overlap */}
-      <main className="flex-1 pb-16 md:pb-0">{children}</main>
+      <main className="flex-1 pb-safe-bottom md:pb-0">{children}</main>
       <Footer />
       <BottomNav />
       <Toaster />
