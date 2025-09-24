@@ -143,7 +143,7 @@ export function Catalog() {
   // Error state
   if (error) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-background py-12 pb-safe-bottom">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="bg-destructive/10 border border-destructive text-destructive p-6 rounded-md text-center">
@@ -165,7 +165,7 @@ export function Catalog() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-8">
+    <div className="min-h-screen bg-background py-8 pb-safe-bottom">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
