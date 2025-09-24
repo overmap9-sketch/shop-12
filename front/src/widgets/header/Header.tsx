@@ -65,8 +65,8 @@ export function Header() {
             />
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-4">
+          {/* Actions (hidden on mobile; use BottomNav) */}
+          <div className="hidden md:flex items-center gap-4">
 
             {/* Favourites */}
             <Link
