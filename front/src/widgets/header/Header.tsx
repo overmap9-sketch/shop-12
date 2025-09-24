@@ -15,18 +15,15 @@ import { Heart, ShoppingCart, User } from 'lucide-react';
 export function Header() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  
+
   const cartItemCount = useAppSelector(selectCartItemCount);
   const favouritesCount = useAppSelector(selectFavouritesCount);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const user = useAppSelector(selectUser);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false); // mobile menu (slide-over)
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
