@@ -159,20 +159,15 @@ export function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
-                <Link
-                  to="/login"
-                  className={buttonVariants({ variant: 'ghost', size: 'sm' })}
-                >
-                  {t('navigation.login')}
-                </Link>
-                <Link
-                  to="/register"
-                  className={buttonVariants({ size: 'sm' })}
-                >
-                  {t('navigation.register')}
-                </Link>
-              </div>
+              <button
+                aria-label={t('navigation.login')}
+                onClick={() => navigate('/login')}
+                className="p-2 hover:bg-surface-alt rounded-md transition-theme"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </button>
             )}
           </div>
         </div>
