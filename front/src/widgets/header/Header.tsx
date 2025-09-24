@@ -148,6 +148,7 @@ export function Header() {
                             setIsMenuOpen(false);
                             dispatch(logout());
                             NotificationService.logoutSuccess();
+                            navigate('/');
                           }}
                         >
                           {t('navigation.logout')}
