@@ -12,6 +12,7 @@ export function Login() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
   const loading = useAppSelector(selectAuthLoading);
   const error = useAppSelector(selectAuthError);
@@ -65,8 +66,11 @@ export function Login() {
       })).unwrap();
 
       NotificationService.loginSuccess(result.user.firstName);
-      // Redirect to home page on successful login
-      navigate('/');
+      // Redirect to intended destination if provided
+      const qsReturn = searchParams.get('returnTo');
+      let target = qsReturn || localStorage.getItem('postLoginRedirect') || '/';
+      try { localStorage.removeItem('postLoginRedirect'); } catch {}
+      navigate(target);
     } catch (error) {
       NotificationService.loginError(error instanceof Error ? error.message : 'Login failed');
     }
