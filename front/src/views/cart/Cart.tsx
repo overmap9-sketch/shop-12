@@ -86,7 +86,7 @@ export function Cart() {
   // Show loading state
   if (loading && cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-background py-12 pb-safe-bottom">
         <div className="container mx-auto px-4 flex items-center justify-center">
           <LoadingSpinner size="lg" text={t('common.loading')} />
         </div>
@@ -97,7 +97,7 @@ export function Cart() {
   // Show error state
   if (error) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-background py-12 pb-safe-bottom">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="bg-destructive/10 border border-destructive text-destructive p-6 rounded-md text-center">
@@ -116,7 +116,7 @@ export function Cart() {
   // Show empty cart state
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-background py-12">
+      <div className="min-h-screen bg-background py-12 pb-safe-bottom">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
             <div className="w-24 h-24 mx-auto mb-6 text-foreground-muted">
@@ -184,7 +184,7 @@ export function Cart() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12">
+    <div className="min-h-screen bg-background py-12 pb-safe-bottom">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
@@ -246,10 +246,11 @@ export function Cart() {
                         <span className="text-sm text-foreground-muted">{t('product.quantity')}:</span>
                         <div className="flex items-center border border-border rounded-md">
                           <button
-                            onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                            className="px-3 py-1 hover:bg-surface-alt transition-colors"
-                            disabled={loading}
-                          >
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                          className="h-10 w-10 inline-flex items-center justify-center hover:bg-surface-alt transition-colors"
+                          aria-label="Decrease quantity"
+                          disabled={loading}
+                        >
                             -
                           </button>
                           <span className="px-3 py-1 bg-surface text-center min-w-[3rem]">
@@ -257,7 +258,8 @@ export function Cart() {
                           </span>
                           <button
                             onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                            className="px-3 py-1 hover:bg-surface-alt transition-colors"
+                            className="h-10 w-10 inline-flex items-center justify-center hover:bg-surface-alt transition-colors"
+                            aria-label="Increase quantity"
                             disabled={loading || (item.product?.stock && item.quantity >= item.product.stock)}
                           >
                             +
@@ -298,7 +300,7 @@ export function Cart() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-lg p-6 sticky top-6">
+            <div className="bg-card border border-border rounded-lg p-6 lg:sticky lg:top-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 Order Summary
               </h2>
