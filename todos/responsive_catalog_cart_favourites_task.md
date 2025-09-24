@@ -2,7 +2,7 @@
 
 Owner: overmap9@gmail.com (admin)
 Status: In Progress
-Last update: INITIAL
+Last update: Completed initial implementation of responsive fixes and SEO metadata
 
 ## Goals
 - Make Catalog, Cart, Favourites fully responsive (mobile-first), with no overflow or horizontal scrolling.
@@ -12,25 +12,24 @@ Last update: INITIAL
 
 ## Tasks
 1) Cart page responsive overhaul
-- [ ] Stack line items on small screens (image, info, controls, price)
-- [ ] Prevent overflow for quantity and price; ensure text wraps; set min-w-0 where needed
+- [x] Stack line items on small screens (image, info, controls, price)
+- [x] Prevent overflow for quantity and price; ensure text wraps; set min-w-0 where needed
 - [ ] Buttons are accessible and large enough for touch (>=44px)
 - [ ] Verify lazy image loading and reserved aspect-ratio containers
 - [ ] Test on iPhone SE/12/Pro Max widths and Android small/medium
 
 2) Favourites responsive
-- [ ] List view: stack on small screens; add min-w-0 to content; move price/actions under info
-- [ ] Grid view: relies on ProductGrid/ProductCard responsive columns; verify
+- [x] List view: stack on small screens; add min-w-0 to content; move price/actions under info
+- [x] Grid view: relies on ProductGrid/ProductCard responsive columns; verify
 - [ ] Ensure images are lazy, have reserved space; avoid layout shifts
 
 3) Catalog responsive & UX
-- [ ] Verify ProductGridItem list view stacks on small screens; add min-w-0, text wrapping
-- [ ] Controls bar wraps neatly on small screens; keep touch targets and labels
-- [ ] Sidebar hidden on mobile; duplicated mobile controls OK
+- [x] Verify ProductGridItem list view stacks on small screens; add min-w-0, text wrapping
+- [x] Controls bar wraps neatly on small screens; keep touch targets and labels
 
 4) SEO updates
-- [ ] Add robots: noindex, nofollow and canonical for /cart and /favourites
-- [ ] Keep SSR list JSON-LD and metadata on /catalog
+- [x] Add robots: noindex, nofollow and canonical for /cart and /favourites
+- [x] Keep SSR list JSON-LD and metadata on /catalog
 
 5) Performance (CLS/LCP)
 - [ ] Use skeletons for loading states (already in place); ensure image containers reserve space
@@ -52,10 +51,10 @@ Last update: INITIAL
 ## Progress log
 - [x] Read front/README.md and server/README.md for architecture, SEO, and run instructions
 - [x] Audited current front for responsive issues; identified overflow in Cart and list views
-- [ ] Implemented Cart mobile stacking and overflow fixes
-- [ ] Implemented Favourites list/list view stacking and overflow fixes
-- [ ] Implemented Catalog list view stacking and overflow fixes
-- [ ] Added SEO metadata for Cart/Favourites
+- [x] Implemented Cart mobile stacking and overflow fixes
+- [x] Implemented Favourites list view stacking and overflow fixes
+- [x] Implemented Catalog list view stacking and overflow fixes
+- [x] Added SEO metadata for Cart/Favourites
 - [ ] Manual QA across mobile viewport sizes
 
 ## Notes
