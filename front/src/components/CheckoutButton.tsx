@@ -4,6 +4,15 @@ import { loadStripe } from '@stripe/stripe-js';
 export default function CheckoutButton({ items }: { items: { productId: string; quantity: number }[] }) {
   const handleCheckout = async () => {
     try {
+      // Require authentication before starting checkout
+      let token = localStorage.getItem('ecommerce_auth_token') || localStorage.getItem('auth_token') || localStorage.getItem('admin-token');
+      if (!token) {
+        const returnTo = (typeof window !== 'undefined') ? (window.location.pathname + (window.location.search || '')) : '/';
+        try { localStorage.setItem('postLoginRedirect', returnTo); } catch {}
+        window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
+        return;
+      }
+
       const res = await fetch('/api/payments/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
