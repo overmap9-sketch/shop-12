@@ -232,16 +232,3 @@ API-клиент: `front/src/shared/api/images.ts`
 
 > Примечание: PUBLIC_ORIGIN также используется для генерации sitemap и канонических ссылок; убедитесь, что это корректный публичный URL в продакшене.
 
----
-
-## Mobile UX — Header & Bottom Navigation
-
-- На мобильных устройствах верхняя панель (top bar) скрыта. Кнопка «бургер» рядом с поиском открывает слайдовер с настройками: CurrencySwitcher, LanguageSwitcher, ThemeSwitcher.
-- Добавлена фиксированная нижняя навигация (BottomNav) с пунктами: Home, Catalog, Favourites, Cart, Account. Для избранного и корзины отображаются бейджи с количеством.
-- Доступность (a11y): добавлены aria-label/aria-current, роли (navigation, dialog), интерактивы доступны с клавиатуры.
-- Избежание CLS: основному контенту добавлен отступ снизу (pb-16) на мобильных, чтобы не перекрывать контент фиксированной панелью.
-
-Затронутые файлы:
-- front/src/widgets/header/Header.tsx — бургер и мобильное меню настроек
-- front/src/app/(shop)/layout.tsx — интеграция BottomNav и отступ снизу
-- front/src/widgets/bottom-nav/BottomNav.tsx — мобильная нижняя навигация (a11y/бейджи)
