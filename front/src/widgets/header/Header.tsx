@@ -63,18 +63,16 @@ export function Header() {
           </div>
 
           {/* Desktop actions (hidden on mobile; mobile gets BottomNav) */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2">
             {/* Favourites */}
             <Link
               to="/favourites"
               className="relative p-2 hover:bg-surface-alt rounded-md transition-theme"
               aria-label={t('navigation.favourites')}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              {favouritesCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center" aria-label={t('a11y.itemsInFavourites', { count: favouritesCount })}>
+              <Heart className="w-6 h-6" aria-hidden="true" />
+              {mounted && favouritesCount > 0 && (
+                <span className="absolute -top-1 -right-2 bg-primary text-primary-foreground text-[10px] rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center" aria-label={t('a11y.itemsInFavourites', { count: favouritesCount })}>
                   {favouritesCount}
                 </span>
               )}
@@ -86,88 +84,22 @@ export function Header() {
               className="relative p-2 hover:bg-surface-alt rounded-md transition-theme"
               aria-label={t('navigation.cart')}
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 2.5M7 13l2.5 2.5" />
-              </svg>
-              {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center" aria-label={t('a11y.itemsInCart', { count: cartItemCount })}>
+              <ShoppingCart className="w-6 h-6" aria-hidden="true" />
+              {mounted && cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-2 bg-primary text-primary-foreground text-[10px] rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center" aria-label={t('a11y.itemsInCart', { count: cartItemCount })}>
                   {cartItemCount}
                 </span>
               )}
             </Link>
 
-            {/* User menu (desktop) */}
-            {mounted && isAuthenticated && user ? (
-              <div className="relative">
-                <button
-                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center gap-2 p-2 hover:bg-surface-alt rounded-md transition-theme"
-                  aria-haspopup="menu"
-                  aria-expanded={isUserMenuOpen}
-                  aria-controls="user-menu-popover"
-                >
-                  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium" aria-hidden="true">
-                    {user.firstName.charAt(0)}{user.lastName.charAt(0)}
-                  </div>
-                  <span className="hidden md:block text-sm">{user.firstName}</span>
-                </button>
-
-                {isUserMenuOpen && (
-                  <>
-                    <div className="fixed inset-0 z-10" onClick={() => setIsUserMenuOpen(false)} />
-                    <div id="user-menu-popover" role="menu" className="absolute right-0 top-full mt-2 w-48 bg-surface border border-border rounded-md shadow-theme-lg z-20">
-                      <div className="py-1">
-                        <Link
-                          to="/profile"
-                          className="block px-4 py-2 text-sm hover:bg-surface-alt transition-theme"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          {t('navigation.profile')}
-                        </Link>
-                        <Link
-                          to="/orders"
-                          className="block px-4 py-2 text-sm hover:bg-surface-alt transition-theme"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          {t('profile.orderHistory')}
-                        </Link>
-                        {(user && user.role && user.role !== 'user') && (
-                          <Link
-                            to="/admin"
-                            className="block px-4 py-2 text-sm hover:bg-surface-alt transition-theme text-primary font-medium"
-                            onClick={() => setIsUserMenuOpen(false)}
-                          >
-                            🛠️ Admin Panel
-                          </Link>
-                        )}
-                        <hr className="my-1 border-border" />
-                        <button
-                          className="block w-full text-left px-4 py-2 text-sm hover:bg-surface-alt transition-theme"
-                          onClick={() => {
-                            setIsUserMenuOpen(false);
-                            dispatch(logout());
-                            NotificationService.logoutSuccess();
-                            navigate('/');
-                          }}
-                        >
-                          {t('navigation.logout')}
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            ) : (
-              <button
-                aria-label={t('navigation.login')}
-                onClick={() => navigate('/login')}
-                className="hidden md:inline-flex p-2 hover:bg-surface-alt rounded-md transition-theme"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </button>
-            )}
+            {/* Account: mirrors BottomNav behavior */}
+            <Link
+              to={mounted && isAuthenticated ? '/profile' : '/login'}
+              className="relative p-2 hover:bg-surface-alt rounded-md transition-theme"
+              aria-label={t('navigation.account')}
+            >
+              <User className="w-6 h-6" aria-hidden="true" />
+            </Link>
           </div>
 
           {/* Mobile: burger beside search opens settings slide-over */}
