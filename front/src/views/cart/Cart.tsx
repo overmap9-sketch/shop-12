@@ -208,6 +208,8 @@ export function Cart() {
                       src={item.product?.images?.[0] || '/placeholder.svg'}
                       alt={item.product?.title || 'Product'}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
 
