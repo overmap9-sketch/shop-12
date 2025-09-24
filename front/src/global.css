@@ -118,6 +118,14 @@
 
 /* Skeleton loading animation */
 @layer utilities {
+  /* Safe-area padding utilities for fixed bottom navigation */
+  .pb-safe-bottom {
+    padding-bottom: calc(var(--bn-h, 64px) + env(safe-area-inset-bottom, 0px));
+  }
+  .bottom-nav-safe-area {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
   .skeleton {
     @apply animate-pulse bg-muted rounded;
   }
