@@ -9,7 +9,7 @@
 - [Переменные окружения](#переменные-окружения)
 - [Скрипты npm](#скрипты-npm)
 - [Архитектура проекта](#архитектура-проекта)
-- [Потоки данных и стейт-менеджмент](#потоки-данных-и-стейт-менеджмент)
+- [Потоки данных и стейт-менеджм��нт](#потоки-данных-и-стейт-менеджмент)
 - [Работа с API и прокси](#работа-с-api-и-прокси)
 - [Загрузка файлов/изо��ражений](#загрузка-файловизображений)
 - [Модули фронтенда](#модули-фронтенда)
@@ -75,7 +75,7 @@ sh -c "cd server && npm run build && node dist/main.js & cd front && npm run dev
 Доступные ключи:
 - `NEXT_PUBLIC_API_ORIGIN` — адрес бэкенда (например, `http://localhost:4000`). Используется для п��оксирования `/api/*` и `/uploads/*`.
 - `PORT` — порт dev-серв��ра Next.js (по умолчанию 3000).
-- `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через запятую), которым разрешён dev-доступ (например, домен предпросмотра).
+- `NEXT_PUBLIC_ALLOWED_DEV_ORIGINS` — список доменов (через запятую), которым разрешён dev-доступ (например, дом��н предпросмотра).
 - `NEXT_TELEMETRY_DISABLED` — опционально выключает телеметрию Next.js (`1` чтобы выключить).
 
 > Примечание: порт бэкенда задаётся на стороне сервера (по умолчанию 4000). В фронте ��н не управляется, но должен совпадать с `NEXT_PUBLIC_API_ORIGIN`.
@@ -184,7 +184,7 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Checkout: SEO и Suspense (Next.js)
 - Страницы `/checkout/success` и `/checkout/cancel` — серверные и рендерят клиентские компоненты внутри `<Suspense>` с доступным `fallback` (aria-busy).
 - Использование `useSearchParams()` в клиентских компонентах требует обёртки в `Suspense`, иначе при сборке возможен CSR bailout.
-- Эти страницы помечены `robots: noindex, nofollow` и имеют канонические ссылки, чтобы не попадать в индекс.
+- Эти страницы помечены `robots: noindex, nofollow` и имеют ��анонические ссылки, чтобы не попадать в индекс.
 - Важные env: `PUBLIC_ORIGIN`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
 
 ## Траблшутинг
@@ -196,13 +196,13 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Конфигурация
 - Все запросы фронта направляются на `${NEXT_PUBLIC_API_ORIGIN}/api` (см. front/.env.example)
 - Токен хранится в localStorage под ключом `ecommerce_auth_token`; фронт автоматически добавляет Authorization
-- Проверка сессии выпол��яется запросом `GET /api/auth/me`
+- Проверка сессии выпол��ается запросом `GET /api/auth/me`
 
 Подробнее: docs/CONFIGURATION.md
 
 ## Быстрое исправление "Failed to fetch" (CORS / прокси)
 
-Если вы увидели в каталоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под ваш фронтенд:
+Если вы увидели в к��талоге ошибку "Error Loading Products / Failed to fetch", рекомендованный и быстрый фикс для разработки — настроить CORS на бэкенде под ваш фронтенд:
 
 1) Скопируйте `server/.env.example` → `server/.env` и убедитесь, что там указано:
 
@@ -223,7 +223,7 @@ API-клиент: `front/src/shared/api/images.ts`
 ## Полный справочник переменных окружения (front/.env.local)
 Скопируйте шаблон: `front/.env.example` → `front/.env.local` и укажите значения.
 
-- PUBLIC_ORIGIN — базовый origin сайта (каноникал, sitemap, Open Graph). Пример: http://localhost:3000 или https://shop.example.com
+- PUBLIC_ORIGIN — базов��й origin сайта (каноникал, sitemap, Open Graph). Пример: http://localhost:3000 или https://shop.example.com
 - PORT — порт dev-сервера Next.js (по умолчанию 3000)
 - NEXT_PUBLIC_API_ORIGIN — origin бэкенда для прокси `/api` и `/uploads`. Пример: http://localhost:4000
 - NEXT_PUBLIC_ALLOWED_DEV_ORIGINS — дополнительные origin через запятую, которым разрешён доступ в dev/preview
@@ -231,3 +231,17 @@ API-клиент: `front/src/shared/api/images.ts`
 - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY — publishable ключ Stripe (pk_test_... в dev) для фронтенда
 
 > Примечание: PUBLIC_ORIGIN также используется для генерации sitemap и канонических ссылок; убедитесь, что это корректный публичный URL в продакшене.
+
+---
+
+## Mobile UX — Header & Bottom Navigation
+
+- На мобильных устройствах верхняя панель (top bar) скрыта. Кнопка «бургер» рядом с поиском открывает слайдовер с настройками: CurrencySwitcher, LanguageSwitcher, ThemeSwitcher.
+- Добавлена фиксированная нижняя навигация (BottomNav) с пунктами: Home, Catalog, Favourites, Cart, Account. Для избранного и корзины отображаются бейджи с количеством.
+- Доступность (a11y): добавлены aria-label/aria-current, роли (navigation, dialog), интерактивы доступны с клавиатуры.
+- Избежание CLS: основному контенту добавлен отступ снизу (pb-16) на мобильных, чтобы не перекрывать контент фиксированной панелью.
+
+Затронутые файлы:
+- front/src/widgets/header/Header.tsx — бургер и мобильное меню настроек
+- front/src/app/(shop)/layout.tsx — интеграция BottomNav и отступ снизу
+- front/src/widgets/bottom-nav/BottomNav.tsx — мобильная нижняя навигация (a11y/бейджи)
