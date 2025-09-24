@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Logo } from '../../components/logo/Logo';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector, useAppDispatch } from '../../core/hooks';
+import { useAppSelector } from '../../core/hooks';
 import { selectCartItemCount } from '../../features/cart/cartSlice';
 import { selectFavouritesCount } from '../../features/favourites/favouritesSlice';
-import { selectIsAuthenticated, selectUser, logout } from '../../features/auth/authSlice';
+import { selectIsAuthenticated } from '../../features/auth/authSlice';
 import { SearchInput } from '../../shared/ui/SearchInput';
-import { NotificationService } from '../../shared/lib/notifications';
 import { LanguageSwitcherDropdown } from '../../features/lang-switcher/LanguageSwitcher';
 import { ThemeSwitcher } from '../../features/theme-switcher/ThemeSwitcher';
 import { CurrencySwitcher } from '../../features/currency/CurrencySwitcher';
+import { Heart, ShoppingCart, User } from 'lucide-react';
 
 export function Header() {
   const { t } = useTranslation();
